@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxWatchFile.h"
+#include "../TriggerBuffer.h"
 
 class ofApp : public ofBaseApp{
 
@@ -21,5 +23,11 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+	private:
+		string adi_path; // .bakファイルの絶対パス
+		ofxWatchFile file_;
+		void fileEvent(ofFile &file);
+		void fileEvent2(const void *sender, ofFile &file);
 		
 };
