@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxWatchFile.h"
+#include "ofxFft.h"
 #include "../TriggerBuffer.h"
 
 class ofApp : public ofBaseApp{
@@ -23,6 +24,16 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		int plotHeight, bufferSize;
+
+		ofxFft* fft;
+		void plot(vector<float>& buffer, float scale, float offset);
+		void audioReceived(float* input, int bufferSize, int nChannels);
+		ofSoundStream soundStream;
+
+		ofMutex soundMutex;
+		vector<float> drawBins, middleBins, audioBins;
 
 	private:
 		string adi_path; // .bakファイルの絶対パス

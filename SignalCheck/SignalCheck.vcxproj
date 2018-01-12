@@ -95,7 +95,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
 		</ClCompile>
@@ -115,7 +115,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -135,7 +135,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -158,7 +158,7 @@
 			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
 			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
 			<WarningLevel>Level3</WarningLevel>
-			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
 			<CompileAs>CompileAsCpp</CompileAs>
 			<ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
 		</ClCompile>
@@ -177,6 +177,13 @@
 	<ItemGroup>
 		<ClCompile Include="src\main.cpp" />
 		<ClCompile Include="src\ofApp.cpp" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxEasyFft.cpp" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFft.cpp" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFftBasic.cpp" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFftw.cpp" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxProcessFFT.cpp" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\kiss_fft.c" />
+		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\kiss_fftr.c" />
 		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxBaseGui.cpp" />
 		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxButton.cpp" />
 		<ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxColorPicker.cpp" />
@@ -195,6 +202,15 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="src\ofApp.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxEasyFft.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFft.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFftBasic.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFftw.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxProcessFFT.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include\fftw3.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\kiss_fft.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\kiss_fftr.h" />
+		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\_kiss_fft_guts.h" />
 		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxBaseGui.h" />
 		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxButton.h" />
 		<ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxColorPicker.h" />
