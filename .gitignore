@@ -240,3 +240,11 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+
+# Mac Xcode Files
+*.xcodeproj
+**/SignalCheck/config.make
+**/SignalCheck/Makefile
+**/SignalCheck/openFrameworks-Info.plist
+**/SignalCheck/Project.xcconfig
