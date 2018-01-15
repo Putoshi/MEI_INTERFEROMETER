@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <iostream>
 #include <string>
 #include <string.h>
@@ -17,8 +18,18 @@ void ofApp::setup(){
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 
-	unsigned short ushortValue2 = 0x017a;
-	ofLogNotice() << "value: " << ushortValue2;
+	/*unsigned short ushortValue0 = 0xffff;
+	ofLogNotice() << "value: " << ushortValue0;
+
+	unsigned short ushortValue1 = 0x478d;
+	ofLogNotice() << "value: " << ushortValue1;
+
+	unsigned short ushortValue2 = 0x6a8d;
+	ofLogNotice() << "value: " << ushortValue2;*/
+
+
+	
+
 
 	//adi_path = ofFilePath::getAbsolutePath("frag.frag", true);
 	adi_path = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
@@ -34,37 +45,74 @@ void ofApp::setup(){
 	string text = string(ofBufferFromFile(fileName));
 	ofLogNotice() << "value: " << text;*/
 
-	/*std::ifstream ifs("C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak", std::ios_base::in | std::ios_base::binary);
+	std::ifstream ifs("C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak", std::ios_base::in | std::ios_base::binary);
 	if (ifs.fail()) {
 		std::cerr << "ファイルオープンに失敗" << std::endl;
 		std::exit(1);
 	}else{
 		std::cerr << "ファイルオープンに成功" << std::endl;
+
+		//int ch;
+		///*while (std::ifstream::traits_type::not_eof(ch = ifs.get()))
+		//	std::cout << std::hex << std::uppercase << ch << ' ';*/
+		//ch = ifs.getline();
+		//std::cout << std::hex << std::uppercase << ch << ' ';
+
+		std::vector<int> bufvec;
+		int length;
+		unique_ptr<unsigned char[]> buf;
+
+
+		// ファイルの終端に移動
+		ifs.seekg(0, ifs.end);
+		// 終端の位置からファイルサイズを取得
+		length = static_cast<int>(ifs.tellg());
+		// バッファとなる配列のメモリを確保
+		buf.reset(new unsigned char[length]);
+		// ファイルの先頭に移動
+		ifs.seekg(0, ifs.beg);
+		// ファイルを読み込む
+		ifs.read(reinterpret_cast<char *>(buf.get()), length);
+
+		// 出力
+		for (int i = 0; i < length; ++i) {
+			printf("%x", static_cast<unsigned>(buf[i]));
+		}
+
+
+		//cout << "0x";
+		//for (int i = 0; i < length; ++i) {
+		//	//printf("%x", static_cast<unsigned>(buf[i]));
+		//	bufvec.push_back(static_cast<unsigned>(buf[i]));
+		//}
+		//cout << endl;
+
+		
+
+		for (int j = 0; j < 30; ++j) {
+			//printf("%x", static_cast<unsigned>(buf[i]));
+			std::cout << std::hex << std::showbase << bufvec[j] << std::endl;
+		}
+			
+
+
 	}
-	std::string str((std::istreambuf_iterator<char>(ifs)),
-		std::istreambuf_iterator<char>());
 
-	std::string destination;*/
 
-	/*for (int i = 0; i < (int)str.size(); ++i) {
-		char buffer[3];
-		snprintf(buffer, sizeof(buffer), "%02x", (unsigned char)str[i]);
-		destination = destination + buffer;
+	
 
-	}
+	/*int len = (int)strlen(destination.c_str());
+	unsigned char data[len / 2];*/
 
-	int len = (int)strlen(destination.c_str());*/
-	/*unsigned char data[len / 2];
+	//ofstream wf;
+	//wf.open("output", ios::trunc);
 
-	ofstream wf;
-	wf.open("output", ios::trunc);
-
-	for (int i = 0; i < len; i += 2) {
-		unsigned int x;
-		sscanf((char *)(str + i), "%02x", &x);
-		data[i / 2] = x;
-		wf << data[i / 2];
-	}*/
+	//for (int i = 0; i < len; i += 2) {
+	//	unsigned int x;
+	//	sscanf((char *)(str + i), "%02x", &x);
+	//	data[i / 2] = x;
+	//	wf << data[i / 2];
+	//}
 
 
 	// FFT
