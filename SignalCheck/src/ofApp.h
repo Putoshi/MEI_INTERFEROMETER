@@ -3,7 +3,18 @@
 #include "ofMain.h"
 #include "ofxWatchFile.h"
 #include "ofxFft.h"
-#include "../TriggerBuffer.h"
+#include "./TriggerBuffer.h"
+#include "./Signal.h"
+
+
+#include <stdio.h>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <iostream>
+#include <string>
+#include <string.h>
+#include <iterator>
 
 class ofApp : public ofBaseApp{
 
@@ -49,6 +60,10 @@ class ofApp : public ofBaseApp{
 		bool writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& targetVector);
 		
 		void parseBinary(const std::vector<int16_t>& targetVector);
+
+		void addSignalSeg(const std::vector<int16_t>& targetVector);
+
+		Signal signal;
 
 		
 

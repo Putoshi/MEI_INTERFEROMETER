@@ -1,14 +1,4 @@
 #include "ofApp.h"
-#include "../TriggerBuffer.h"
-
-#include <stdio.h>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <iostream>
-#include <string>
-#include <string.h>
-#include <iterator>
 
 using namespace std;
 
@@ -17,12 +7,14 @@ const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
 
 const int IDX_BODY = 8 * 4 + 4;
 const int AD_SAMPLING_SPEED = 353980;
+const int FPS = 60;
+int deltaTime, connectTime;
 
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
+	ofSetFrameRate(FPS);
 
 	/*unsigned short ushortValue0 = 0xffff;
 	ofLogNotice() << "value: " << ushortValue0;*/
@@ -46,6 +38,14 @@ void ofApp::setup(){
 	}
 
 	parseBinary(binValues);
+
+
+	plotHeight = 128;
+	bufferSize = 2048;
+	fft = ofxFft::create(bufferSize, OF_FFT_WINDOW_HAMMING);
+
+
+	/*
 
 	// FFT
 	plotHeight = 128;
@@ -82,6 +82,8 @@ void ofApp::setup(){
 
 	//ofSoundStreamSetup(0, 1, this, 44100, bufferSize, 4);
 
+	*/
+
 	ofBackground(0, 0, 0);
 }
 
@@ -90,6 +92,13 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	deltaTime = ofGetElapsedTimeMillis() - connectTime;
+
+
+	if (deltaTime >= 100) {
+		connectTime = ofGetElapsedTimeMillis();
+		//std::cerr << connectTime << std::endl;
+	}
 }
 
 //--------------------------------------------------------------
@@ -220,12 +229,21 @@ void ofApp::audioReceived(float* input, int bufferSize, int nChannels) {
 }
 
 
+void ofApp::addSignalSeg(const std::vector<int16_t>& targetVector) {
+
+}
+
+
+
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
 	const int loopCnt = (fileSize - fileSize % 16) / 16;
 
 	for (int j = 0, size = 10; j < size; ++j) {
+
+		std::vector<unsigned short> data(8);
+
 		for (int k = 0, size = 8; k < size; ++k) {
 
 
@@ -248,7 +266,10 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 			//puts(hexStr);
 
 			unsigned short number = (unsigned short)strtoul(hexStr, NULL, 0);
-			std::cerr << number << " ";
+			//std::cerr << number << " ";
+
+			//data.push_back(number);
+			data[k] = number;
 
 		}
 		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 0]);
@@ -259,7 +280,10 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 10]);
 		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 12]);
 		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 14]);
-		cout << endl;
+		
+		//cout << endl;
+
+		signal.add(data);
 	}
 
 	//cout << endl;
@@ -330,6 +354,7 @@ bool ofApp::writeSigned16bitIntBinary(const std::string& file_full_path, const s
 	file.close();
 	return true;
 }
+
 
 
 
