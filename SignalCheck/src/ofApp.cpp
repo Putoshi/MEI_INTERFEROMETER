@@ -16,6 +16,7 @@ const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.adi";
 const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
 
 const int IDX_BODY = 8 * 4 + 4;
+const int AD_SAMPLING_SPEED = 353980;
 
 
 //--------------------------------------------------------------
