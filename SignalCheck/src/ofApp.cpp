@@ -41,56 +41,10 @@ void ofApp::setup(){
 	bool isWrote = writeSigned16bitIntBinary(DST_FILE, binValues);
 
 	if (isReaded && isWrote) {
-		remove(DST_FILE); // ファイル削除 (cstdioより)
+		remove(DST_FILE); // ファイル削除
 	}
 
-	const size_t fileSize = binValues.size() * 2; // int16_t (16 bit) is 2 byte.
-
-	const int loopCnt = (fileSize - fileSize % 16) / 16;
-
-	for (int j = 0, size = 10; j < size; ++j) {
-		for (int k = 0, size = 8; k < size; ++k) {
-
-
-			char buf[20];
-
-			snprintf(buf, 20, "%#x", binValues[j * 16 + k * 2 + IDX_BODY]);
-
-			char t[5];
-			strncpy(t, &buf[strlen(buf) - 4], 4);
-			t[4] = '\0';            //取り出した文字数分の最後に'\0'を入れる
-
-			char hexStr[7];
-			hexStr[0] = '0';
-			hexStr[1] = 'x';
-			hexStr[2] = t[0];
-			hexStr[3] = t[1];
-			hexStr[4] = t[2];
-			hexStr[5] = t[3];
-			hexStr[6] = '\0';
-			//puts(hexStr);
-
-			unsigned short number = (unsigned short)strtoul(hexStr, NULL, 0);
-			std::cerr << number << " ";
-
-		}
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 0]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 2]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 4]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 6]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 8]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 10]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 12]);
-		//printf("%02x ", binValues[j * 16 + IDX_BODY + 14]);
-		cout << endl;
-	}
-
-	//cout << endl;
-	//std::cerr << binValues[4].data() << std::endl;
-
-
-
-
+	parseBinary(binValues);
 
 	// FFT
 	plotHeight = 128;
@@ -130,68 +84,7 @@ void ofApp::setup(){
 	ofBackground(0, 0, 0);
 }
 
-bool ofApp::checkIsLittleEndian() {
-	const int16_t value = 1;
-	return (*(char*)&value) ? true : false;
-}
 
-const size_t ofApp::getFileByteSize(std::ifstream& file) {
-	file.seekg(0, std::ios::end);
-	const size_t fileSize = (size_t)file.tellg();
-	file.seekg(0, std::ios::beg);
-
-	return fileSize;
-}
-
-void ofApp::convertSigned16bitIntEndian(std::vector<int16_t>* target_vector) {
-	for (auto& value : *target_vector) {
-		value = (value << 8) | ((value >> 8) & 0xFF); // The most left value does not change even if bit-shifted, so the mask by 0xFF is necessary.
-	}
-}
-
-bool ofApp::readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* target_vector) {
-	std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
-	if (!file) {
-		std::cout << "Error: The file path is incorrect. There is no file." << std::endl;
-		return false;
-	}
-	const size_t fileSize = getFileByteSize(file);
-	target_vector->clear();
-	target_vector->resize(fileSize / 2); // 16 bit is 2 bytes.
-
-	file.read((char*)target_vector->data(), fileSize);
-	/*if (checkIsLlittleEndian()) {
-		std::cout << "is Little endian" << std::endl;
-		convertSigned16bitIntEndian(target_vector);
-	}
-	else {
-		std::cout << "is Big endian" << std::endl;
-	}*/
-
-	//convertSigned16bitIntEndian(target_vector);
-	file.close();
-	return true;
-}
-
-bool ofApp::writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& target_vector) {
-	std::ofstream file(file_full_path, std::ios::out | std::ios::binary);
-	if (!file) {
-		std::cout << "Error: The file to write could not be opend." << std::endl;
-		return false;
-	}
-	const size_t fileSize = target_vector.size() * 2; // int16_t (16 bit) is 2 byte.
-	if (checkIsLittleEndian()) {
-		std::vector<int16_t> temp_vector = target_vector; // deep copy.
-		convertSigned16bitIntEndian(&temp_vector);
-		file.write((char*)temp_vector.data(), fileSize);
-	}
-	else {
-		file.write((char*)target_vector.data(), fileSize);
-	}
-
-	file.close();
-	return true;
-}
 
 
 //--------------------------------------------------------------
@@ -324,3 +217,119 @@ void ofApp::audioReceived(float* input, int bufferSize, int nChannels) {
 	middleBins = audioBins;
 	soundMutex.unlock();
 }
+
+
+void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
+	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
+
+	const int loopCnt = (fileSize - fileSize % 16) / 16;
+
+	for (int j = 0, size = 10; j < size; ++j) {
+		for (int k = 0, size = 8; k < size; ++k) {
+
+
+			char buf[20];
+
+			snprintf(buf, 20, "%#x", targetVector[j * 16 + k * 2 + IDX_BODY]);
+
+			char t[5];
+			strncpy(t, &buf[strlen(buf) - 4], 4);
+			t[4] = '\0';            //取り出した文字数分の最後に'\0'を入れる
+
+			char hexStr[7];
+			hexStr[0] = '0';
+			hexStr[1] = 'x';
+			hexStr[2] = t[0];
+			hexStr[3] = t[1];
+			hexStr[4] = t[2];
+			hexStr[5] = t[3];
+			hexStr[6] = '\0';
+			//puts(hexStr);
+
+			unsigned short number = (unsigned short)strtoul(hexStr, NULL, 0);
+			std::cerr << number << " ";
+
+		}
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 0]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 2]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 4]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 6]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 8]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 10]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 12]);
+		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 14]);
+		cout << endl;
+	}
+
+	//cout << endl;
+	//std::cerr << targetVector[4].data() << std::endl;
+}
+
+
+
+bool ofApp::checkIsLittleEndian() {
+	const int16_t value = 1;
+	return (*(char*)&value) ? true : false;
+}
+
+const size_t ofApp::getFileByteSize(std::ifstream& file) {
+	file.seekg(0, std::ios::end);
+	const size_t fileSize = (size_t)file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	return fileSize;
+}
+
+void ofApp::convertSigned16bitIntEndian(std::vector<int16_t>* targetVector) {
+	for (auto& value : *targetVector) {
+		value = (value << 8) | ((value >> 8) & 0xFF); // The most left value does not change even if bit-shifted, so the mask by 0xFF is necessary.
+	}
+}
+
+bool ofApp::readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* targetVector) {
+	std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
+	if (!file) {
+		std::cout << "Error: The file path is incorrect. There is no file." << std::endl;
+		return false;
+	}
+	const size_t fileSize = getFileByteSize(file);
+	targetVector->clear();
+	targetVector->resize(fileSize / 2); // 16 bit is 2 bytes.
+
+	file.read((char*)targetVector->data(), fileSize);
+	/*if (checkIsLlittleEndian()) {
+	std::cout << "is Little endian" << std::endl;
+	convertSigned16bitIntEndian(targetVector);
+	}
+	else {
+	std::cout << "is Big endian" << std::endl;
+	}*/
+
+	//convertSigned16bitIntEndian(targetVector);
+	file.close();
+	return true;
+}
+
+bool ofApp::writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& targetVector) {
+	std::ofstream file(file_full_path, std::ios::out | std::ios::binary);
+	if (!file) {
+		std::cout << "Error: The file to write could not be opend." << std::endl;
+		return false;
+	}
+	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
+	if (checkIsLittleEndian()) {
+		std::vector<int16_t> temp_vector = targetVector; // deep copy.
+		convertSigned16bitIntEndian(&temp_vector);
+		file.write((char*)temp_vector.data(), fileSize);
+	}
+	else {
+		file.write((char*)targetVector.data(), fileSize);
+	}
+
+	file.close();
+	return true;
+}
+
+
+
+
