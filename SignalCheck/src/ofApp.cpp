@@ -240,7 +240,12 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 
 	const int loopCnt = (fileSize - fileSize % 16) / 16;
 
-	for (int j = 0, size = 10; j < size; ++j) {
+	//std::cerr << loopCnt << " ";
+	std::cerr << AD_SAMPLING_SPEED * 0.1 << " ";
+
+	
+
+	for (int j = 0, size = AD_SAMPLING_SPEED * 0.1; j < size; ++j) {
 
 		std::vector<unsigned short> data(8);
 
