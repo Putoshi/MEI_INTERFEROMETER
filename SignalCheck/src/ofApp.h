@@ -35,10 +35,20 @@ class ofApp : public ofBaseApp{
 		ofMutex soundMutex;
 		vector<float> drawBins, middleBins, audioBins;
 
+
 	private:
-		string adi_path; // .bakファイルの絶対パス
 		ofxWatchFile file_;
 		void fileEvent(ofFile &file);
 		void fileEvent2(const void *sender, ofFile &file);
+
+		bool checkIsLittleEndian();
+		const size_t getFileByteSize(std::ifstream& file);
+		void convertSigned16bitIntEndian(std::vector<int16_t>* target_vector);
+
+		bool readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* target_vector);
+		bool writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& target_vector);
+
+		
+
 		
 };

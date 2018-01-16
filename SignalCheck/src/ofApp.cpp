@@ -12,10 +12,10 @@
 
 using namespace std;
 
-const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
-const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog_.bak";
-const int BUF_SIZE = 16; // バイト
-const int HEADER_BUF_SIZE = 4;
+const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.adi";
+const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
+
+const int IDX_BODY = 8 * 4 + 4;
 
 
 //--------------------------------------------------------------
@@ -24,14 +24,7 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 
 	/*unsigned short ushortValue0 = 0xffff;
-	ofLogNotice() << "value: " << ushortValue0;
-
-	unsigned short ushortValue1 = 0x478d;
-	ofLogNotice() << "value: " << ushortValue1;
-
-	unsigned short ushortValue2 = 0x6a8d;
-	ofLogNotice() << "value: " << ushortValue2;*/
-
+	ofLogNotice() << "value: " << ushortValue0;*/
 
 	//adi_path = ofFilePath::getAbsolutePath("frag.frag", true);
 
@@ -40,89 +33,63 @@ void ofApp::setup(){
 	file_.setTargetPath(SRC_FILE);
 
 
+	std::vector<int16_t> binValues;
 
-	/*ofLogNotice() << "value: " << 1;
-	string fileName = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
-	string text = string(ofBufferFromFile(fileName));
-	ofLogNotice() << "value: " << text;*/
+	// .adiファイルを開く
+	bool isReaded = readSigned16bitIntBinary(SRC_FILE, &binValues);
+	// _DaqLog.bakファイルに保存
+	bool isWrote = writeSigned16bitIntBinary(DST_FILE, binValues);
 
-	fstream src, dst;
-
-	// ファイルを開く
-	src.open(SRC_FILE, ios::in | ios::binary);
-
-	dst.open(DST_FILE, ios::out | ios::binary);
-	if (!dst.is_open()) {
-		src.close();
-	}
-
-
-	bool error = false;
-	char buf[BUF_SIZE];
-	char mix_buf[BUF_SIZE];
-
-	int read_cnt = 0;
-	do {
-
-		//char buf[BUF_SIZE];
-		// 読み込み
-		src.read(buf, sizeof buf); // BUF_SIZE バイトずつ
-		if (src.fail() && !src.eof()) { // ! src && ! src.eof としても同じです
-			error = true;
-			break;
-		}
-
-		// 内容を16進ダンプ
-		//std::cerr << src.gcount() << std::endl;
-		for (int i = 0, size = src.gcount(); i < size; ++i) { // get count
-															  //printf("%02X ", (unsigned char)buf[i]); // 2桁の16進数大文字表示 (小文字表示は %x)
-															  // ↑char型のままでは負の値として扱われる可能性がある
-		}
-		//cout << endl;
-
-		// データを操作
-		mix_buf[0] = (unsigned char)buf[3];
-		mix_buf[1] = (unsigned char)buf[2];
-		mix_buf[2] = (unsigned char)buf[1];
-		mix_buf[3] = (unsigned char)buf[0];
-		mix_buf[4] = (unsigned char)buf[7];
-		mix_buf[5] = (unsigned char)buf[6];
-		mix_buf[6] = (unsigned char)buf[5];
-		mix_buf[7] = (unsigned char)buf[4];
-		mix_buf[8] = (unsigned char)buf[11];
-		mix_buf[9] = (unsigned char)buf[10];
-		mix_buf[10] = (unsigned char)buf[9];
-		mix_buf[11] = (unsigned char)buf[8];
-		mix_buf[12] = (unsigned char)buf[15];
-		mix_buf[13] = (unsigned char)buf[14];
-		mix_buf[14] = (unsigned char)buf[13];
-		mix_buf[15] = (unsigned char)buf[12];
-
-
-		// LOG_FRONTEND を抜いて書き込み
-		if (read_cnt >= HEADER_BUF_SIZE) {
-			dst.write(mix_buf, src.gcount());
-		}
-
-		read_cnt++;
-
-		if (dst.fail()) { // ! dst としても同じです
-			error = true;
-			break;
-		}
-
-	} while (!src.eof()); // eof: ファイル終端にファイルポインタがあってもfalseです。
-						  // 終端を越えようとしていればtrueです。そのため、input.bin が空であっても最初はfalseです
-						  // よって、do-while であっても while であっても表示結果は同じで最低1ループは実行されます。
-						  // ここでは現実をそのまま直感的に表現したdo-whileを採用しました。
-
-
-	src.close();
-	dst.close();
-
-	if (error) {
+	if (isReaded && isWrote) {
 		remove(DST_FILE); // ファイル削除 (cstdioより)
 	}
+
+	const size_t fileSize = binValues.size() * 2; // int16_t (16 bit) is 2 byte.
+
+	const int loopCnt = (fileSize - fileSize % 16) / 16;
+
+	for (int j = 0, size = 10; j < size; ++j) {
+		for (int k = 0, size = 8; k < size; ++k) {
+
+
+			char buf[20];
+
+			snprintf(buf, 20, "%#x", binValues[j * 16 + k * 2 + IDX_BODY]);
+
+			char t[5];
+			strncpy(t, &buf[strlen(buf) - 4], 4);
+			t[4] = '\0';            //取り出した文字数分の最後に'\0'を入れる
+
+			char hexStr[7];
+			hexStr[0] = '0';
+			hexStr[1] = 'x';
+			hexStr[2] = t[0];
+			hexStr[3] = t[1];
+			hexStr[4] = t[2];
+			hexStr[5] = t[3];
+			hexStr[6] = '\0';
+			//puts(hexStr);
+
+			unsigned short number = (unsigned short)strtoul(hexStr, NULL, 0);
+			std::cerr << number << " ";
+
+		}
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 0]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 2]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 4]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 6]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 8]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 10]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 12]);
+		//printf("%02x ", binValues[j * 16 + IDX_BODY + 14]);
+		cout << endl;
+	}
+
+	//cout << endl;
+	//std::cerr << binValues[4].data() << std::endl;
+
+
+
 
 
 	// FFT
@@ -162,6 +129,70 @@ void ofApp::setup(){
 
 	ofBackground(0, 0, 0);
 }
+
+bool ofApp::checkIsLittleEndian() {
+	const int16_t value = 1;
+	return (*(char*)&value) ? true : false;
+}
+
+const size_t ofApp::getFileByteSize(std::ifstream& file) {
+	file.seekg(0, std::ios::end);
+	const size_t fileSize = (size_t)file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	return fileSize;
+}
+
+void ofApp::convertSigned16bitIntEndian(std::vector<int16_t>* target_vector) {
+	for (auto& value : *target_vector) {
+		value = (value << 8) | ((value >> 8) & 0xFF); // The most left value does not change even if bit-shifted, so the mask by 0xFF is necessary.
+	}
+}
+
+bool ofApp::readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* target_vector) {
+	std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
+	if (!file) {
+		std::cout << "Error: The file path is incorrect. There is no file." << std::endl;
+		return false;
+	}
+	const size_t fileSize = getFileByteSize(file);
+	target_vector->clear();
+	target_vector->resize(fileSize / 2); // 16 bit is 2 bytes.
+
+	file.read((char*)target_vector->data(), fileSize);
+	/*if (checkIsLlittleEndian()) {
+		std::cout << "is Little endian" << std::endl;
+		convertSigned16bitIntEndian(target_vector);
+	}
+	else {
+		std::cout << "is Big endian" << std::endl;
+	}*/
+
+	//convertSigned16bitIntEndian(target_vector);
+	file.close();
+	return true;
+}
+
+bool ofApp::writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& target_vector) {
+	std::ofstream file(file_full_path, std::ios::out | std::ios::binary);
+	if (!file) {
+		std::cout << "Error: The file to write could not be opend." << std::endl;
+		return false;
+	}
+	const size_t fileSize = target_vector.size() * 2; // int16_t (16 bit) is 2 byte.
+	if (checkIsLittleEndian()) {
+		std::vector<int16_t> temp_vector = target_vector; // deep copy.
+		convertSigned16bitIntEndian(&temp_vector);
+		file.write((char*)temp_vector.data(), fileSize);
+	}
+	else {
+		file.write((char*)target_vector.data(), fileSize);
+	}
+
+	file.close();
+	return true;
+}
+
 
 //--------------------------------------------------------------
 void ofApp::update(){
