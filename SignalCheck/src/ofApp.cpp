@@ -12,6 +12,11 @@
 
 using namespace std;
 
+const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
+const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog_.bak";
+const int BUF_SIZE = 16; // バイト
+const int HEADER_BUF_SIZE = 4;
+
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -28,15 +33,11 @@ void ofApp::setup(){
 	ofLogNotice() << "value: " << ushortValue2;*/
 
 
-	
-
-
 	//adi_path = ofFilePath::getAbsolutePath("frag.frag", true);
-	adi_path = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
 
 	file_.addListener(this, &ofApp::fileEvent);
 	file_.addListener(this, &ofApp::fileEvent2);
-	file_.setTargetPath(adi_path);
+	file_.setTargetPath(SRC_FILE);
 
 
 
@@ -45,74 +46,83 @@ void ofApp::setup(){
 	string text = string(ofBufferFromFile(fileName));
 	ofLogNotice() << "value: " << text;*/
 
-	std::ifstream ifs("C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak", std::ios_base::in | std::ios_base::binary);
-	if (ifs.fail()) {
-		std::cerr << "ファイルオープンに失敗" << std::endl;
-		std::exit(1);
-	}else{
-		std::cerr << "ファイルオープンに成功" << std::endl;
+	fstream src, dst;
 
-		//int ch;
-		///*while (std::ifstream::traits_type::not_eof(ch = ifs.get()))
-		//	std::cout << std::hex << std::uppercase << ch << ' ';*/
-		//ch = ifs.getline();
-		//std::cout << std::hex << std::uppercase << ch << ' ';
+	// ファイルを開く
+	src.open(SRC_FILE, ios::in | ios::binary);
 
-		std::vector<int> bufvec;
-		int length;
-		unique_ptr<unsigned char[]> buf;
-
-
-		// ファイルの終端に移動
-		ifs.seekg(0, ifs.end);
-		// 終端の位置からファイルサイズを取得
-		length = static_cast<int>(ifs.tellg());
-		// バッファとなる配列のメモリを確保
-		buf.reset(new unsigned char[length]);
-		// ファイルの先頭に移動
-		ifs.seekg(0, ifs.beg);
-		// ファイルを読み込む
-		ifs.read(reinterpret_cast<char *>(buf.get()), length);
-
-		// 出力
-		for (int i = 0; i < length; ++i) {
-			printf("%x", static_cast<unsigned>(buf[i]));
-		}
-
-
-		//cout << "0x";
-		//for (int i = 0; i < length; ++i) {
-		//	//printf("%x", static_cast<unsigned>(buf[i]));
-		//	bufvec.push_back(static_cast<unsigned>(buf[i]));
-		//}
-		//cout << endl;
-
-		
-
-		for (int j = 0; j < 30; ++j) {
-			//printf("%x", static_cast<unsigned>(buf[i]));
-			std::cout << std::hex << std::showbase << bufvec[j] << std::endl;
-		}
-			
-
-
+	dst.open(DST_FILE, ios::out | ios::binary);
+	if (!dst.is_open()) {
+		src.close();
 	}
 
 
-	
+	bool error = false;
+	char buf[BUF_SIZE];
+	char mix_buf[BUF_SIZE];
 
-	/*int len = (int)strlen(destination.c_str());
-	unsigned char data[len / 2];*/
+	int read_cnt = 0;
+	do {
 
-	//ofstream wf;
-	//wf.open("output", ios::trunc);
+		//char buf[BUF_SIZE];
+		// 読み込み
+		src.read(buf, sizeof buf); // BUF_SIZE バイトずつ
+		if (src.fail() && !src.eof()) { // ! src && ! src.eof としても同じです
+			error = true;
+			break;
+		}
 
-	//for (int i = 0; i < len; i += 2) {
-	//	unsigned int x;
-	//	sscanf((char *)(str + i), "%02x", &x);
-	//	data[i / 2] = x;
-	//	wf << data[i / 2];
-	//}
+		// 内容を16進ダンプ
+		//std::cerr << src.gcount() << std::endl;
+		for (int i = 0, size = src.gcount(); i < size; ++i) { // get count
+															  //printf("%02X ", (unsigned char)buf[i]); // 2桁の16進数大文字表示 (小文字表示は %x)
+															  // ↑char型のままでは負の値として扱われる可能性がある
+		}
+		//cout << endl;
+
+		// データを操作
+		mix_buf[0] = (unsigned char)buf[3];
+		mix_buf[1] = (unsigned char)buf[2];
+		mix_buf[2] = (unsigned char)buf[1];
+		mix_buf[3] = (unsigned char)buf[0];
+		mix_buf[4] = (unsigned char)buf[7];
+		mix_buf[5] = (unsigned char)buf[6];
+		mix_buf[6] = (unsigned char)buf[5];
+		mix_buf[7] = (unsigned char)buf[4];
+		mix_buf[8] = (unsigned char)buf[11];
+		mix_buf[9] = (unsigned char)buf[10];
+		mix_buf[10] = (unsigned char)buf[9];
+		mix_buf[11] = (unsigned char)buf[8];
+		mix_buf[12] = (unsigned char)buf[15];
+		mix_buf[13] = (unsigned char)buf[14];
+		mix_buf[14] = (unsigned char)buf[13];
+		mix_buf[15] = (unsigned char)buf[12];
+
+
+		// LOG_FRONTEND を抜いて書き込み
+		if (read_cnt >= HEADER_BUF_SIZE) {
+			dst.write(mix_buf, src.gcount());
+		}
+
+		read_cnt++;
+
+		if (dst.fail()) { // ! dst としても同じです
+			error = true;
+			break;
+		}
+
+	} while (!src.eof()); // eof: ファイル終端にファイルポインタがあってもfalseです。
+						  // 終端を越えようとしていればtrueです。そのため、input.bin が空であっても最初はfalseです
+						  // よって、do-while であっても while であっても表示結果は同じで最低1ループは実行されます。
+						  // ここでは現実をそのまま直感的に表現したdo-whileを採用しました。
+
+
+	src.close();
+	dst.close();
+
+	if (error) {
+		remove(DST_FILE); // ファイル削除 (cstdioより)
+	}
 
 
 	// FFT
