@@ -126,6 +126,8 @@ void ofApp::update(){
 void ofApp::fftUpdate() {
 
 	//std::cerr << "fftUpdate" << std::endl;
+
+	// Binary Analyze
 	parseBinary(binValues);
 
 	float* curFft = fft->getAmplitude();
