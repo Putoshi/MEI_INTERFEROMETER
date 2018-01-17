@@ -11,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <string.h>

@@ -7,9 +7,10 @@ const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
 
 const int IDX_BODY = 8 * 4 + 4;
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
-//const int AD_1S_N = 44643;
-const int N = 4096;
+const float AD_1S_N = 44643; // ADボードの1秒ごとの標本数
+const int N = 4096 ;
 const int FPS = 60;
+float FFT_SPAN = 100; //FFTする間隔 ms
 int deltaTime, connectTime;
 
 std::vector<int16_t> binValues;
@@ -46,9 +47,6 @@ void ofApp::setup(){
 		remove(DST_FILE); // ファイル削除
 	}
 
-	
-
-
 	plotHeight = 128;
 	fft = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
 	drawBins.resize(fft->getBinSize());
@@ -56,10 +54,6 @@ void ofApp::setup(){
 	audioBins.resize(fft->getBinSize());
 
 	parseBinary(binValues);
-	
-
-	
-
 	/*
 	
 
@@ -111,14 +105,11 @@ void ofApp::update(){
 	deltaTime = ofGetElapsedTimeMillis() - connectTime;
 
 
-	if (deltaTime >= 100) {
+	if (deltaTime >= FFT_SPAN) {
 		connectTime = ofGetElapsedTimeMillis();
-		//std::cerr << connectTime << std::endl;
-		//std::cerr << sig[0] << std::endl;
-
-
+		//std::cerr << (AD_1S_N * (FFT_SPAN / 1000)) << std::endl;
 		
-		if (ppsLoopCnt >= 10) ppsLoopCnt = 0;
+		if (ppsLoopCnt >= 1000 / FFT_SPAN) ppsLoopCnt = 0;
 		ppsLoopCnt++;
 
 		parseBinary(binValues);
@@ -130,7 +121,7 @@ void ofApp::update(){
 		for (int i = 0; i < fft->getBinSize(); i++) {
 			if (abs(audioBins[i]) > maxValue) {
 				maxValue = abs(audioBins[i]);
-				std::cerr << i << std::endl; //2094
+				//std::cerr << i << std::endl; //300
 				
 			}
 		}
@@ -291,16 +282,15 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const int loopCnt = (fileSize - fileSize % 16) / 16;
 
 	//std::cerr << loopCnt << " ";
-	//std::cerr << AD_SAMPLING_SPEED * 0.1 << " ";
-
-	//std::vector<float>& sig1;
-	float * sig1 = (float *)malloc(sizeof(float) * N);
 
 	for (int j = 0, size = N; j < size; ++j) {
 
-		std::vector<unsigned short> data(8);
+		// インデックスADボードの時間単位の標本数と
+		// FFTに掛ける時間単位の標本数(2のべき乗)が合わないので、
+		// ADボードの標本数に合わせたインデックスを与える
+		int idx = ppsLoopCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
 
-		int idx = ppsLoopCnt * N + j;
+		std::vector<unsigned short> data(8);
 
 		for (int k = 0, size = 8; k < size; ++k) {
 
@@ -351,16 +341,13 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 
 		long lon = (long)data[1];
 		float flo  = (float)lon;
-		//sig1[j] = (flo - 65535 / 2) / (65535 / 2);
 		sig[j] = (flo - 65535 / 2) / (65535 / 2);
-		//std::cerr << sig1[j] << std::endl;
+		//std::cerr << sig[j] << std::endl;
 	}
-	//std::cerr << sig1[0] << std::endl;
 	fft->setSignal(sig);
 	fft->getImaginary();
 
 	//cout << endl;
-	//std::cerr << targetVector[4].data() << std::endl;
 }
 
 
