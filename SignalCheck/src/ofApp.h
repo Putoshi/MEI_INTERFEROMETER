@@ -40,18 +40,14 @@ class ofApp : public ofBaseApp{
 
 		int plotHeight, bufferSize;
 
-		ofxFft* fft;
-		
-		//void audioReceived(float* input, int bufferSize, int nChannels);
-		ofSoundStream soundStream;
+		//vector<ofxFft*> fft;
 		ofMutex soundMutex;
-		vector<float> drawBins, middleBins, audioBins;
-
-		ofxFft* fft2;
-		vector<float> drawBins2, middleBins2, audioBins2;
+		//vector<vector<float>> drawBins, middleBins, audioBins;
 
 	private:
 		ofxWatchFile file_;
+		void init();
+		void load();
 		void fileEvent(ofFile &file);
 		void fileEvent2(const void *sender, ofFile &file);
 
@@ -64,9 +60,9 @@ class ofApp : public ofBaseApp{
 		
 		void parseBinary(const std::vector<int16_t>& targetVector);
 
-		Signal signal;
+		//Signal signal;
 
 		void fftUpdate();
-		void plot(vector<float>& buffer, float scale, int idx);
+		void plot(vector<float>& buffer, float scale);
 			
 };

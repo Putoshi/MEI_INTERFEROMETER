@@ -7,22 +7,32 @@ const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
 
 const int IDX_BODY = 8 * 4 + 4;
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
-const float AD_1S_N = 44643; // ADボードの1秒ごとの標本数
+
+// CONFIG
+const int CHANNELS = 6;
+
+// FFT SETTING
+const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
 const int N = 4096;
 const int FPS = 60;
-float FFT_SPAN = 100; //FFTする間隔 ms
+float FFT_SPAN = 100;								//FFTする間隔 ms
 
 const float lowFreq = 2000;
 const float highFreq = 4000;
 
+int deltaTime, connectTime, fftAryCnt;
+
+std::vector<int16_t> binValues;						// バイナリ
+
+std::vector<float *> signal(CHANNELS);
+
+vector<ofxFft*> fft(CHANNELS);
+//vector<vector<float>> drawBins(CHANNELS);
+vector<float *> drawBins(CHANNELS);
+vector<float *> middleBins(CHANNELS);
+vector<float *> audioBins(CHANNELS);
 
 
-
-int deltaTime, connectTime;
-
-std::vector<int16_t> binValues;
-float * sig = (float *)malloc(sizeof(float) * N);
-float * sig2 = (float *)malloc(sizeof(float) * N);
 
 // ループ回数
 int frameCnt;
@@ -31,20 +41,18 @@ int frameCnt;
 void ofApp::setup(){
 	ofSetVerticalSync(true);
 	ofSetFrameRate(FPS);
+	ofBackground(3, 3, 6);
 
-	/*unsigned short ushortValue0 = 0xffff;
-	ofLogNotice() << "value: " << ushortValue0;*/
+	load();
 
-	//adi_path = ofFilePath::getAbsolutePath("frag.frag", true);
+}
 
-	frameCnt = 0;
-
+//--------------------------------------------------------------
+void ofApp::load() {
+	
 	file_.addListener(this, &ofApp::fileEvent);
 	file_.addListener(this, &ofApp::fileEvent2);
 	file_.setTargetPath(SRC_FILE);
-
-
-	
 
 	// .adiファイルを開く
 	bool isReaded = readSigned16bitIntBinary(SRC_FILE, &binValues);
@@ -55,25 +63,32 @@ void ofApp::setup(){
 		remove(DST_FILE); // ファイル削除
 	}
 
-	plotHeight = 128;
-
-	fft = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
-	drawBins.resize(fft->getBinSize());
-	middleBins.resize(fft->getBinSize());
-	audioBins.resize(fft->getBinSize());
-
-	fft2 = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
-	drawBins2.resize(fft2->getBinSize());
-	middleBins2.resize(fft2->getBinSize());
-	audioBins2.resize(fft2->getBinSize());
-
-
+	init();
 	parseBinary(binValues);
-
-	ofBackground(3, 3, 6);
+	
 }
 
+//--------------------------------------------------------------
+void ofApp::init() {
+	
+	frameCnt = 0;
+	fftAryCnt = 0;
 
+
+	for (int i = 0; i < CHANNELS; i++) {
+
+		float * sig = (float *)malloc(sizeof(float) * N);
+		signal[i] = sig;
+
+		//audioBins[i] = new(vector<float>);
+		fft[i] = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
+		//drawBins[i].resize(fft[i]->getBinSize());
+		//middleBins[i].resize(fft[i]->getBinSize());
+		//audioBins[i].resize(fft[i]->getBinSize());
+	}
+
+	plotHeight = 128;
+}
 
 
 //--------------------------------------------------------------
@@ -99,44 +114,36 @@ void ofApp::fftUpdate() {
 	// Binary Analyze
 	parseBinary(binValues);
 
-	float* curFft = fft->getAmplitude();
-	memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
+	vector<float> maxValue(CHANNELS);
+	for (int i = 0; i < CHANNELS; i++) {
 
+		//memcpy(&audioBins[i], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
 
+		maxValue[i] = 0;
+		audioBins[i] = fft[i]->getAmplitude();
+		//std::cerr << audioBins[i][0] << std::endl;
 
-	float maxValue = 0;
-	for (int i = 0; i < fft->getBinSize(); i++) {
-		if (abs(audioBins[i]) > maxValue) {
-			maxValue = abs(audioBins[i]);
-			//std::cerr << i << std::endl; //300
+		bool initFlg = false;
+		if(fftAryCnt == 0) initFlg = true;
+
+		for (int j = 0; j < fft[i]->getBinSize(); j++) {
+			if(initFlg) fftAryCnt++;
+			
+			if (abs(audioBins[i][j]) > maxValue[i]) {
+				maxValue[i] = abs(audioBins[i][j]);
+				//std::cerr << i << std::endl; //300
+			}
+		}
+
+		for (int k = 0; k < fft[i]->getBinSize(); k++) {
+			audioBins[i][k] /= maxValue[i];
 		}
 	}
-	for (int i = 0; i < fft->getBinSize(); i++) {
-		audioBins[i] /= maxValue;
-	}
+
 	soundMutex.lock();
 	middleBins = audioBins;
 	soundMutex.unlock();
 
-
-
-	float* curFft2 = fft2->getAmplitude();
-	memcpy(&audioBins2[0], curFft2, sizeof(float) * fft2->getBinSize());
-
-	float maxValue2 = 0;
-	for (int i = 0; i < fft2->getBinSize(); i++) {
-		if (abs(audioBins2[i]) > maxValue2) {
-			maxValue2 = abs(audioBins2[i]);
-			//std::cerr << i << std::endl; //300
-		}
-	}
-	for (int i = 0; i < fft2->getBinSize(); i++) {
-		audioBins2[i] /= maxValue2;
-	}
-
-	soundMutex.lock();
-	middleBins2 = audioBins2;
-	soundMutex.unlock();
 }
 
 //--------------------------------------------------------------
@@ -144,7 +151,7 @@ void ofApp::draw(){
 	ofSetColor(252);
 	ofPushMatrix();
 	ofTranslate(16, 16);
-
+	
 	soundMutex.lock();
 	drawBins = middleBins;
 	soundMutex.unlock();
@@ -153,55 +160,61 @@ void ofApp::draw(){
 
 	// 指定された周波数でvectorを切り抜いちゃう
 	float sampleRate = N * (1000 / FFT_SPAN);
-	int startIdx = roundf((lowFreq / sampleRate * 2) * drawBins.size());
-	int endIdx = roundf((highFreq / sampleRate * 2) * drawBins.size());
+	int startIdx = roundf((lowFreq / sampleRate * 2) * fftAryCnt);
+	int endIdx = roundf((highFreq / sampleRate * 2) * fftAryCnt);
 
-	vector<float> vec((endIdx - startIdx), 0);
-	for (int i = 0; i<vec.size(); i++)
-	{
-		vec[i] = drawBins[i + startIdx];
+	vector<vector<float>> vec(CHANNELS);
+	
+	for (int i = 0; i < CHANNELS; i++) {
+		vector<float> _vec(endIdx - startIdx, 0);
+		vec[i] = _vec;
 	}
-	//std::cerr << middleBins[10] << std::endl;
 
-	ofDrawBitmapString("Frequency Domain", 0, 0);
-	plot(vec, -plotHeight, 0);
-	ofPopMatrix();
+	
 	string msg = ofToString((int)ofGetFrameRate()) + " fps";
 	ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
-
-
-	ofPushMatrix();
-	ofTranslate(16, 16 + plotHeight + 30);
-
-	soundMutex.lock();
-	drawBins2 = middleBins2;
-	soundMutex.unlock();
-
-
-	// 指定された周波数でvectorを切り抜いちゃう
-	startIdx = roundf((lowFreq / sampleRate * 2) * drawBins2.size());
-	endIdx = roundf((highFreq / sampleRate * 2) * drawBins2.size());
-
-	vector<float> vec2((endIdx - startIdx), 0);
-	for (int i = 0; i<vec2.size(); i++)
+	
+	for (int j = 0; j < CHANNELS; j++)
 	{
-		vec2[i] = drawBins2[i + startIdx];
-	}
+		for (int k = 0; k < vec[j].size(); k++)
+		{
+			vec[j][k] = drawBins[j][k + startIdx];
+		}
 
-	ofDrawBitmapString("Frequency Domain 2", 0, 0);
-	plot(vec2, -plotHeight, 0);
-	ofPopMatrix();
+		// 表示位置の初期化
+		ofPushMatrix();
+		if (j == 1) {
+			ofTranslate(16, 16 + plotHeight + 30);
+		}
+		else if (j == 2) {
+			ofTranslate(16, 16 + (plotHeight + 30) * 2);
+		}
+		else if (j == 3) {
+			ofTranslate(16 + 220, 16);
+		}
+		else if (j == 4) {
+			ofTranslate(16 + 220, 16 + plotHeight + 30);
+		}
+		else if (j == 5) {
+			ofTranslate(16 + 220, 16 + (plotHeight + 30) * 2);
+		}
+
+		ofDrawBitmapString("Frequency Domain " + ofToString(j), 0, 0);
+		plot(vec[j], -plotHeight);
+		ofPopMatrix();
+	}
 }
 
-void ofApp::plot(vector<float>& buffer, float scale, int idx) {
+void ofApp::plot(vector<float>& buffer, float scale) {
 
+	float marginY = 3;
 	float offset = plotHeight / 2;
 	ofNoFill();
 	int n = buffer.size();
 	ofSetLineWidth(0.5);
-	ofDrawRectangle(0, plotHeight * idx, n, plotHeight);
+	ofDrawRectangle(0, marginY, n, plotHeight);
 	glPushMatrix();
-	glTranslatef(0, plotHeight / 2 + offset, 0);
+	glTranslatef(0, plotHeight / 2 + offset + marginY, 0);
 	ofBeginShape();
 
 	for (int i = 0; i < n; i++) {
@@ -282,8 +295,6 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
-	//const int loopCnt = (fileSize - fileSize % 16) / 16;
-
 	for (int j = 0, size = N; j < size; ++j) {
 
 		// インデックスADボードの時間単位の標本数と
@@ -330,31 +341,19 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 10]);
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 12]);
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 14]);
-		
-		//cout << endl;
 
-		
-
-		//for (int l = 0; l < AD_SAMPLING_SPEED * 0.1; l++) {
-		//	float vOut = (float)vIn;
-		//}
-
-		//signal.add(data);
-
-		long lon = (long)data[1];
-		float flo  = (float)lon;
-		sig[j] = (flo - 65535 / 2) / (65535 / 2);
-
-		lon = (long)data[3];
-		flo = (float)lon;
-		sig2[j] = (flo - 65535 / 2) / (65535 / 2);
+		for (int i = 0; i < CHANNELS; ++i) {
+			long lon = (long)data[i];
+			float flo = (float)lon;
+			signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
+		}
 		//std::cerr << sig[j] << std::endl;
 	}
-	fft->setSignal(sig);
-	fft->getImaginary();
 
-	fft2->setSignal(sig2);
-	fft2->getImaginary();
+	for (int l = 0; l < CHANNELS; ++l) {
+		fft[l]->setSignal(signal[l]);
+		fft[l]->getImaginary();
+	}
 
 	//cout << endl;
 }
