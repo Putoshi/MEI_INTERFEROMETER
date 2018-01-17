@@ -8,9 +8,16 @@ const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
 const int IDX_BODY = 8 * 4 + 4;
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
 const float AD_1S_N = 44643; // ADボードの1秒ごとの標本数
-const int N = 4096 ;
+const int N = 4096;
 const int FPS = 60;
 float FFT_SPAN = 100; //FFTする間隔 ms
+
+const float lowFreq = 2000;
+const float highFreq = 4000;
+
+
+
+
 int deltaTime, connectTime;
 
 std::vector<int16_t> binValues;
@@ -150,8 +157,21 @@ void ofApp::draw(){
 	drawBins = middleBins;
 	soundMutex.unlock();
 
+	//std::cerr << drawBins.size() << std::endl;
+
+	// 指定された周波数でvectorを切り抜いちゃう
+	float sampleRate = N * (1000 / FFT_SPAN);
+	int startIdx = roundf((lowFreq / sampleRate * 2) * drawBins.size());
+	int endIdx = roundf((highFreq / sampleRate * 2) * drawBins.size());
+
+	vector<float> vec((endIdx - startIdx), 0);
+	for (int i = 0; i<vec.size(); i++)
+	{
+		vec[i] = drawBins[i + startIdx];
+	}
+
 	ofDrawBitmapString("Frequency Domain", 0, 0);
-	plot(drawBins, -plotHeight, plotHeight / 2);
+	plot(vec, -plotHeight, plotHeight / 2);
 	ofPopMatrix();
 	string msg = ofToString((int)ofGetFrameRate()) + " fps";
 	ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
@@ -160,14 +180,16 @@ void ofApp::draw(){
 void ofApp::plot(vector<float>& buffer, float scale, float offset) {
 	ofNoFill();
 	int n = buffer.size();
+	ofSetLineWidth(0.5);
 	ofDrawRectangle(0, 0, n, plotHeight);
 	glPushMatrix();
 	glTranslatef(0, plotHeight / 2 + offset, 0);
 	ofBeginShape();
+
 	for (int i = 0; i < n; i++) {
 		ofVertex(i, sqrt(buffer[i]) * scale);
 	}
-	//std::cerr << n << std::endl; //2094
+	//std::cerr << buffer[10] << std::endl; //2094
 	//std::cerr << buffer[n - 1] << std::endl;
 	ofEndShape();
 	glPopMatrix();
