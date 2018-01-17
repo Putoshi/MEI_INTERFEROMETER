@@ -20,17 +20,16 @@ float FFT_SPAN = 100;								//FFTする間隔 ms
 const float lowFreq = 2000;
 const float highFreq = 4000;
 
-int deltaTime, connectTime, fftAryCnt;
+int deltaTime, connectTime;
 
 std::vector<int16_t> binValues;						// バイナリ
 
-std::vector<float *> signal(CHANNELS);
+//std::vector<float *> signal(CHANNELS);
 
 vector<ofxFft*> fft(CHANNELS);
-//vector<vector<float>> drawBins(CHANNELS);
-vector<float *> drawBins(CHANNELS);
-vector<float *> middleBins(CHANNELS);
-vector<float *> audioBins(CHANNELS);
+vector<vector<float>> drawBins(CHANNELS);
+vector<vector<float>> middleBins(CHANNELS);
+vector<vector<float>> audioBins(CHANNELS);
 
 
 
@@ -65,26 +64,22 @@ void ofApp::load() {
 
 	init();
 	parseBinary(binValues);
-	
 }
 
 //--------------------------------------------------------------
 void ofApp::init() {
 	
 	frameCnt = 0;
-	fftAryCnt = 0;
-
 
 	for (int i = 0; i < CHANNELS; i++) {
 
-		float * sig = (float *)malloc(sizeof(float) * N);
-		signal[i] = sig;
+		
 
 		//audioBins[i] = new(vector<float>);
 		fft[i] = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
-		//drawBins[i].resize(fft[i]->getBinSize());
-		//middleBins[i].resize(fft[i]->getBinSize());
-		//audioBins[i].resize(fft[i]->getBinSize());
+		drawBins[i].resize(fft[i]->getBinSize());
+		middleBins[i].resize(fft[i]->getBinSize());
+		audioBins[i].resize(fft[i]->getBinSize());
 	}
 
 	plotHeight = 128;
@@ -117,18 +112,10 @@ void ofApp::fftUpdate() {
 	vector<float> maxValue(CHANNELS);
 	for (int i = 0; i < CHANNELS; i++) {
 
-		//memcpy(&audioBins[i], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
-
+		memcpy(&audioBins[i][0], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
 		maxValue[i] = 0;
-		audioBins[i] = fft[i]->getAmplitude();
-		//std::cerr << audioBins[i][0] << std::endl;
 
-		bool initFlg = false;
-		if(fftAryCnt == 0) initFlg = true;
-
-		for (int j = 0; j < fft[i]->getBinSize(); j++) {
-			if(initFlg) fftAryCnt++;
-			
+		for (int j = 0; j < fft[i]->getBinSize(); j++) {			
 			if (abs(audioBins[i][j]) > maxValue[i]) {
 				maxValue[i] = abs(audioBins[i][j]);
 				//std::cerr << i << std::endl; //300
@@ -156,12 +143,12 @@ void ofApp::draw(){
 	drawBins = middleBins;
 	soundMutex.unlock();
 
-	//std::cerr << drawBins.size() << std::endl;
+	//std::cerr << drawBins[0].size() << std::endl;
 
 	// 指定された周波数でvectorを切り抜いちゃう
 	float sampleRate = N * (1000 / FFT_SPAN);
-	int startIdx = roundf((lowFreq / sampleRate * 2) * fftAryCnt);
-	int endIdx = roundf((highFreq / sampleRate * 2) * fftAryCnt);
+	int startIdx = roundf((lowFreq / sampleRate * 2) * drawBins[0].size());
+	int endIdx = roundf((highFreq / sampleRate * 2) * drawBins[0].size());
 
 	vector<vector<float>> vec(CHANNELS);
 	
@@ -295,7 +282,12 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
+	/*float * sig = (float *)malloc(sizeof(float) * N);
+	signal[i] = sig;*/
+
 	for (int j = 0, size = N; j < size; ++j) {
+
+		float * sig = (float *)malloc(sizeof(float) * N);
 
 		// インデックスADボードの時間単位の標本数と
 		// FFTに掛ける時間単位の標本数(2のべき乗)が合わないので、
@@ -307,9 +299,7 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 
 		for (int k = 0, size = 8; k < size; ++k) {
 
-
 			char buf[20];
-
 			snprintf(buf, 20, "%#x", targetVector[idx * 16 + k * 2 + IDX_BODY]);
 
 			char t[5];
@@ -342,18 +332,24 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 12]);
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 14]);
 
-		for (int i = 0; i < CHANNELS; ++i) {
-			long lon = (long)data[i];
-			float flo = (float)lon;
-			signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
-		}
+		//for (int i = 0; i < CHANNELS; ++i) {
+		//	long lon = (long)data[i];
+		//	float flo = (float)lon;
+		//	signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
+		//}
+
+		long lon = (long)data[0];
+		float flo = (float)lon;
+		signal[j] = (flo - 65535 / 2) / (65535 / 2);
 		//std::cerr << sig[j] << std::endl;
 	}
 
-	for (int l = 0; l < CHANNELS; ++l) {
+	/*for (int l = 0; l < CHANNELS; ++l) {
 		fft[l]->setSignal(signal[l]);
 		fft[l]->getImaginary();
-	}
+	}*/
+	fft[0]->setSignal(signal[0]);
+	fft[0]->getImaginary();
 
 	//cout << endl;
 }
