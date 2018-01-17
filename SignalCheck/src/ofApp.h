@@ -40,7 +40,7 @@ class ofApp : public ofBaseApp{
 
 		ofxFft* fft;
 		void plot(vector<float>& buffer, float scale, float offset);
-		void audioReceived(float* input, int bufferSize, int nChannels);
+		//void audioReceived(float* input, int bufferSize, int nChannels);
 		ofSoundStream soundStream;
 
 		ofMutex soundMutex;
@@ -64,8 +64,5 @@ class ofApp : public ofBaseApp{
 		void addSignalSeg(const std::vector<int16_t>& targetVector);
 
 		Signal signal;
-
-		
-
-		
+			
 };

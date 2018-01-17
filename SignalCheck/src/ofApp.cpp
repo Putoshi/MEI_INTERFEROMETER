@@ -2,14 +2,21 @@
 
 using namespace std;
 
-const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.adi";
+const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
 const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
 
 const int IDX_BODY = 8 * 4 + 4;
-const int AD_SAMPLING_SPEED = 353980;
+//const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
+//const int AD_1S_N = 44643;
+const int N = 4096;
 const int FPS = 60;
 int deltaTime, connectTime;
 
+std::vector<int16_t> binValues;
+float * sig = (float *)malloc(sizeof(float) * N);
+
+// 1秒間での0.1s毎のループ回数 0~10
+int ppsLoopCnt;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -21,12 +28,14 @@ void ofApp::setup(){
 
 	//adi_path = ofFilePath::getAbsolutePath("frag.frag", true);
 
+	ppsLoopCnt = 0;
+
 	file_.addListener(this, &ofApp::fileEvent);
 	file_.addListener(this, &ofApp::fileEvent2);
 	file_.setTargetPath(SRC_FILE);
 
 
-	std::vector<int16_t> binValues;
+	
 
 	// .adiファイルを開く
 	bool isReaded = readSigned16bitIntBinary(SRC_FILE, &binValues);
@@ -37,15 +46,22 @@ void ofApp::setup(){
 		remove(DST_FILE); // ファイル削除
 	}
 
-	parseBinary(binValues);
+	
 
 
 	plotHeight = 128;
-	bufferSize = 2048;
-	fft = ofxFft::create(bufferSize, OF_FFT_WINDOW_HAMMING);
+	fft = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
+	drawBins.resize(fft->getBinSize());
+	middleBins.resize(fft->getBinSize());
+	audioBins.resize(fft->getBinSize());
 
+	parseBinary(binValues);
+	
+
+	
 
 	/*
+	
 
 	// FFT
 	plotHeight = 128;
@@ -98,6 +114,34 @@ void ofApp::update(){
 	if (deltaTime >= 100) {
 		connectTime = ofGetElapsedTimeMillis();
 		//std::cerr << connectTime << std::endl;
+		//std::cerr << sig[0] << std::endl;
+
+
+		
+		if (ppsLoopCnt >= 10) ppsLoopCnt = 0;
+		ppsLoopCnt++;
+
+		parseBinary(binValues);
+
+		float* curFft = fft->getAmplitude();
+		memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
+
+		float maxValue = 0;
+		for (int i = 0; i < fft->getBinSize(); i++) {
+			if (abs(audioBins[i]) > maxValue) {
+				maxValue = abs(audioBins[i]);
+				std::cerr << i << std::endl; //2094
+				
+			}
+		}
+		for (int i = 0; i < fft->getBinSize(); i++) {
+			audioBins[i] /= maxValue;
+		}
+
+		soundMutex.lock();
+		middleBins = audioBins;
+		//std::cerr << curFft[0] << std::endl;
+		soundMutex.unlock();
 	}
 }
 
@@ -117,6 +161,23 @@ void ofApp::draw(){
 	string msg = ofToString((int)ofGetFrameRate()) + " fps";
 	ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
 }
+
+void ofApp::plot(vector<float>& buffer, float scale, float offset) {
+	ofNoFill();
+	int n = buffer.size();
+	ofDrawRectangle(0, 0, n, plotHeight);
+	glPushMatrix();
+	glTranslatef(0, plotHeight / 2 + offset, 0);
+	ofBeginShape();
+	for (int i = 0; i < n; i++) {
+		ofVertex(i, sqrt(buffer[i]) * scale);
+	}
+	//std::cerr << n << std::endl; //2094
+	//std::cerr << buffer[n - 1] << std::endl;
+	ofEndShape();
+	glPopMatrix();
+}
+
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -183,50 +244,39 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 	std::cout << "loaded event function (with sender) called" << std::endl;
 }
 
-void ofApp::plot(vector<float>& buffer, float scale, float offset) {
-	ofNoFill();
-	int n = buffer.size();
-	ofDrawRectangle(0, 0, n, plotHeight);
-	glPushMatrix();
-	glTranslatef(0, plotHeight / 2 + offset, 0);
-	ofBeginShape();
-	for (int i = 0; i < n; i++) {
-		ofVertex(i, sqrt(buffer[i]) * scale);
-	}
-	ofEndShape();
-	glPopMatrix();
-}
 
-void ofApp::audioReceived(float* input, int bufferSize, int nChannels) {
-	float maxValue = 0;
-	for (int i = 0; i < bufferSize; i++) {
-		if (abs(input[i]) > maxValue) {
-			maxValue = abs(input[i]);
-		}
-	}
-	for (int i = 0; i < bufferSize; i++) {
-		input[i] /= maxValue;
-	}
 
-	fft->setSignal(input);
-
-	float* curFft = fft->getAmplitude();
-	memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
-
-	maxValue = 0;
-	for (int i = 0; i < fft->getBinSize(); i++) {
-		if (abs(audioBins[i]) > maxValue) {
-			maxValue = abs(audioBins[i]);
-		}
-	}
-	for (int i = 0; i < fft->getBinSize(); i++) {
-		audioBins[i] /= maxValue;
-	}
-
-	soundMutex.lock();
-	middleBins = audioBins;
-	soundMutex.unlock();
-}
+//void ofApp::audioReceived(float* input, int bufferSize, int nChannels) {
+//	float maxValue = 0;
+//	for (int i = 0; i < bufferSize; i++) {
+//		if (abs(input[i]) > maxValue) {
+//			maxValue = abs(input[i]);
+//		}
+//	}
+//	for (int i = 0; i < bufferSize; i++) {
+//		input[i] /= maxValue;
+//		
+//	}	
+//
+//	fft->setSignal(input);
+//
+//	float* curFft = fft->getAmplitude();
+//	memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
+//
+//	maxValue = 0;
+//	for (int i = 0; i < fft->getBinSize(); i++) {
+//		if (abs(audioBins[i]) > maxValue) {
+//			maxValue = abs(audioBins[i]);
+//		}
+//	}
+//	for (int i = 0; i < fft->getBinSize(); i++) {
+//		audioBins[i] /= maxValue;
+//	}
+//
+//	soundMutex.lock();
+//	middleBins = audioBins;
+//	soundMutex.unlock();
+//}
 
 
 void ofApp::addSignalSeg(const std::vector<int16_t>& targetVector) {
@@ -241,20 +291,23 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const int loopCnt = (fileSize - fileSize % 16) / 16;
 
 	//std::cerr << loopCnt << " ";
-	std::cerr << AD_SAMPLING_SPEED * 0.1 << " ";
+	//std::cerr << AD_SAMPLING_SPEED * 0.1 << " ";
 
-	
+	//std::vector<float>& sig1;
+	float * sig1 = (float *)malloc(sizeof(float) * N);
 
-	for (int j = 0, size = AD_SAMPLING_SPEED * 0.1; j < size; ++j) {
+	for (int j = 0, size = N; j < size; ++j) {
 
 		std::vector<unsigned short> data(8);
+
+		int idx = ppsLoopCnt * N + j;
 
 		for (int k = 0, size = 8; k < size; ++k) {
 
 
 			char buf[20];
 
-			snprintf(buf, 20, "%#x", targetVector[j * 16 + k * 2 + IDX_BODY]);
+			snprintf(buf, 20, "%#x", targetVector[idx * 16 + k * 2 + IDX_BODY]);
 
 			char t[5];
 			strncpy(t, &buf[strlen(buf) - 4], 4);
@@ -273,23 +326,38 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 			unsigned short number = (unsigned short)strtoul(hexStr, NULL, 0);
 			//std::cerr << number << " ";
 
-			//data.push_back(number);
+			//long lon = (long)number;
 			data[k] = number;
 
 		}
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 0]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 2]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 4]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 6]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 8]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 10]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 12]);
-		//printf("%02x ", targetVector[j * 16 + IDX_BODY + 14]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 0]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 2]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 4]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 6]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 8]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 10]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 12]);
+		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 14]);
 		
 		//cout << endl;
 
-		signal.add(data);
+		
+
+		//for (int l = 0; l < AD_SAMPLING_SPEED * 0.1; l++) {
+		//	float vOut = (float)vIn;
+		//}
+
+		//signal.add(data);
+
+		long lon = (long)data[1];
+		float flo  = (float)lon;
+		//sig1[j] = (flo - 65535 / 2) / (65535 / 2);
+		sig[j] = (flo - 65535 / 2) / (65535 / 2);
+		//std::cerr << sig1[j] << std::endl;
 	}
+	//std::cerr << sig1[0] << std::endl;
+	fft->setSignal(sig);
+	fft->getImaginary();
 
 	//cout << endl;
 	//std::cerr << targetVector[4].data() << std::endl;
