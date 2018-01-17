@@ -65,5 +65,7 @@ class ofApp : public ofBaseApp{
 		void addSignalSeg(const std::vector<int16_t>& targetVector);
 
 		Signal signal;
+
+		void fftUpdate();
 			
 };

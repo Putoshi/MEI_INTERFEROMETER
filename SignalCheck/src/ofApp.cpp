@@ -16,8 +16,8 @@ int deltaTime, connectTime;
 std::vector<int16_t> binValues;
 float * sig = (float *)malloc(sizeof(float) * N);
 
-// 1秒間での0.1s毎のループ回数 0~10
-int ppsLoopCnt;
+// ループ回数
+int frameCnt;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -29,7 +29,7 @@ void ofApp::setup(){
 
 	//adi_path = ofFilePath::getAbsolutePath("frag.frag", true);
 
-	ppsLoopCnt = 0;
+	frameCnt = 0;
 
 	file_.addListener(this, &ofApp::fileEvent);
 	file_.addListener(this, &ofApp::fileEvent2);
@@ -102,38 +102,42 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
 	deltaTime = ofGetElapsedTimeMillis() - connectTime;
-
-
 	if (deltaTime >= FFT_SPAN) {
 		connectTime = ofGetElapsedTimeMillis();
 		//std::cerr << (AD_1S_N * (FFT_SPAN / 1000)) << std::endl;
-		
-		if (ppsLoopCnt >= 1000 / FFT_SPAN) ppsLoopCnt = 0;
-		ppsLoopCnt++;
 
-		parseBinary(binValues);
+		if (frameCnt >= 1000 / FFT_SPAN) frameCnt = 0;
+		frameCnt++;
 
-		float* curFft = fft->getAmplitude();
-		memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
-
-		float maxValue = 0;
-		for (int i = 0; i < fft->getBinSize(); i++) {
-			if (abs(audioBins[i]) > maxValue) {
-				maxValue = abs(audioBins[i]);
-				//std::cerr << i << std::endl; //300
-				
-			}
-		}
-		for (int i = 0; i < fft->getBinSize(); i++) {
-			audioBins[i] /= maxValue;
-		}
-
-		soundMutex.lock();
-		middleBins = audioBins;
-		//std::cerr << curFft[0] << std::endl;
-		soundMutex.unlock();
+		// ------- ループ処理 ------- //
+		fftUpdate();
 	}
+}
+
+void ofApp::fftUpdate() {
+
+	//std::cerr << "fftUpdate" << std::endl;
+	parseBinary(binValues);
+
+	float* curFft = fft->getAmplitude();
+	memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
+
+	float maxValue = 0;
+	for (int i = 0; i < fft->getBinSize(); i++) {
+		if (abs(audioBins[i]) > maxValue) {
+			maxValue = abs(audioBins[i]);
+			//std::cerr << i << std::endl; //300
+		}
+	}
+	for (int i = 0; i < fft->getBinSize(); i++) {
+		audioBins[i] /= maxValue;
+	}
+
+	soundMutex.lock();
+	middleBins = audioBins;
+	soundMutex.unlock();
 }
 
 //--------------------------------------------------------------
@@ -279,16 +283,15 @@ void ofApp::addSignalSeg(const std::vector<int16_t>& targetVector) {
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
-	const int loopCnt = (fileSize - fileSize % 16) / 16;
-
-	//std::cerr << loopCnt << " ";
+	//const int loopCnt = (fileSize - fileSize % 16) / 16;
 
 	for (int j = 0, size = N; j < size; ++j) {
 
 		// インデックスADボードの時間単位の標本数と
 		// FFTに掛ける時間単位の標本数(2のべき乗)が合わないので、
 		// ADボードの標本数に合わせたインデックスを与える
-		int idx = ppsLoopCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
+		int idx = frameCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
+		//std::cerr << idx << " ";
 
 		std::vector<unsigned short> data(8);
 
