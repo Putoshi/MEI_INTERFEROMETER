@@ -22,6 +22,7 @@ int deltaTime, connectTime;
 
 std::vector<int16_t> binValues;
 float * sig = (float *)malloc(sizeof(float) * N);
+float * sig2 = (float *)malloc(sizeof(float) * N);
 
 // ƒ‹[ƒv‰ñ”
 int frameCnt;
@@ -55,51 +56,19 @@ void ofApp::setup(){
 	}
 
 	plotHeight = 128;
+
 	fft = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
 	drawBins.resize(fft->getBinSize());
 	middleBins.resize(fft->getBinSize());
 	audioBins.resize(fft->getBinSize());
 
+	fft2 = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
+	drawBins2.resize(fft2->getBinSize());
+	middleBins2.resize(fft2->getBinSize());
+	audioBins2.resize(fft2->getBinSize());
+
+
 	parseBinary(binValues);
-	/*
-	
-
-	// FFT
-	plotHeight = 128;
-	bufferSize = 2048;
-
-	fft = ofxFft::create(bufferSize, OF_FFT_WINDOW_HAMMING);
-
-	drawBins.resize(fft->getBinSize());
-	middleBins.resize(fft->getBinSize());
-	audioBins.resize(fft->getBinSize());
-
-
-	ofSoundStreamSettings settings;
-	settings.setApi(ofSoundDevice::Api::MS_WASAPI);
-
-	// or by name
-	auto devices = soundStream.getMatchingDevices("default");
-	if (!devices.empty()) {
-		settings.setInDevice(devices[0]);
-	}
-
-	settings.setInListener(this);
-	settings.sampleRate = 44100;
-	settings.numOutputChannels = 0;
-	settings.numInputChannels = 2;
-	settings.bufferSize = bufferSize;
-	soundStream.setup(settings);
-
-	// 0 output channels,
-	// 1 input channel
-	// 44100 samples per second
-	// [bins] samples per buffer
-	// 4 num buffers (latency)
-
-	//ofSoundStreamSetup(0, 1, this, 44100, bufferSize, 4);
-
-	*/
 
 	ofBackground(0, 0, 0);
 }
@@ -133,6 +102,8 @@ void ofApp::fftUpdate() {
 	float* curFft = fft->getAmplitude();
 	memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
 
+
+
 	float maxValue = 0;
 	for (int i = 0; i < fft->getBinSize(); i++) {
 		if (abs(audioBins[i]) > maxValue) {
@@ -143,9 +114,28 @@ void ofApp::fftUpdate() {
 	for (int i = 0; i < fft->getBinSize(); i++) {
 		audioBins[i] /= maxValue;
 	}
-
 	soundMutex.lock();
 	middleBins = audioBins;
+	soundMutex.unlock();
+
+
+
+	float* curFft2 = fft2->getAmplitude();
+	memcpy(&audioBins2[0], curFft2, sizeof(float) * fft2->getBinSize());
+
+	float maxValue2 = 0;
+	for (int i = 0; i < fft2->getBinSize(); i++) {
+		if (abs(audioBins2[i]) > maxValue2) {
+			maxValue2 = abs(audioBins2[i]);
+			//std::cerr << i << std::endl; //300
+		}
+	}
+	for (int i = 0; i < fft2->getBinSize(); i++) {
+		audioBins2[i] /= maxValue2;
+	}
+
+	soundMutex.lock();
+	middleBins2 = audioBins2;
 	soundMutex.unlock();
 }
 
@@ -171,19 +161,46 @@ void ofApp::draw(){
 	{
 		vec[i] = drawBins[i + startIdx];
 	}
+	//std::cerr << middleBins[10] << std::endl;
 
 	ofDrawBitmapString("Frequency Domain", 0, 0);
-	plot(vec, -plotHeight, plotHeight / 2);
+	plot(vec, -plotHeight, 0);
 	ofPopMatrix();
 	string msg = ofToString((int)ofGetFrameRate()) + " fps";
 	ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
+
+
+	ofSetColor(255);
+	ofPushMatrix();
+	ofTranslate(16, 16 + plotHeight + 30);
+
+	soundMutex.lock();
+	drawBins2 = middleBins2;
+	soundMutex.unlock();
+
+
+	// Žw’è‚³‚ê‚½Žü”g”‚Åvector‚ðØ‚è”²‚¢‚¿‚á‚¤
+	startIdx = roundf((lowFreq / sampleRate * 2) * drawBins2.size());
+	endIdx = roundf((highFreq / sampleRate * 2) * drawBins2.size());
+
+	vector<float> vec2((endIdx - startIdx), 0);
+	for (int i = 0; i<vec2.size(); i++)
+	{
+		vec2[i] = drawBins2[i + startIdx];
+	}
+
+	ofDrawBitmapString("Frequency Domain 2", 0, 0);
+	plot(vec2, -plotHeight, 0);
+	ofPopMatrix();
 }
 
-void ofApp::plot(vector<float>& buffer, float scale, float offset) {
+void ofApp::plot(vector<float>& buffer, float scale, int idx) {
+
+	float offset = plotHeight / 2;
 	ofNoFill();
 	int n = buffer.size();
 	ofSetLineWidth(0.5);
-	ofDrawRectangle(0, 0, n, plotHeight);
+	ofDrawRectangle(0, plotHeight * idx, n, plotHeight);
 	glPushMatrix();
 	glTranslatef(0, plotHeight / 2 + offset, 0);
 	ofBeginShape();
@@ -191,7 +208,6 @@ void ofApp::plot(vector<float>& buffer, float scale, float offset) {
 	for (int i = 0; i < n; i++) {
 		ofVertex(i, sqrt(buffer[i]) * scale);
 	}
-	//std::cerr << buffer[10] << std::endl; //2094
 	//std::cerr << buffer[n - 1] << std::endl;
 	ofEndShape();
 	glPopMatrix();
@@ -264,39 +280,6 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 }
 
 
-
-//void ofApp::audioReceived(float* input, int bufferSize, int nChannels) {
-//	float maxValue = 0;
-//	for (int i = 0; i < bufferSize; i++) {
-//		if (abs(input[i]) > maxValue) {
-//			maxValue = abs(input[i]);
-//		}
-//	}
-//	for (int i = 0; i < bufferSize; i++) {
-//		input[i] /= maxValue;
-//		
-//	}	
-//
-//	fft->setSignal(input);
-//
-//	float* curFft = fft->getAmplitude();
-//	memcpy(&audioBins[0], curFft, sizeof(float) * fft->getBinSize());
-//
-//	maxValue = 0;
-//	for (int i = 0; i < fft->getBinSize(); i++) {
-//		if (abs(audioBins[i]) > maxValue) {
-//			maxValue = abs(audioBins[i]);
-//		}
-//	}
-//	for (int i = 0; i < fft->getBinSize(); i++) {
-//		audioBins[i] /= maxValue;
-//	}
-//
-//	soundMutex.lock();
-//	middleBins = audioBins;
-//	soundMutex.unlock();
-//}
-
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
@@ -362,10 +345,17 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 		long lon = (long)data[1];
 		float flo  = (float)lon;
 		sig[j] = (flo - 65535 / 2) / (65535 / 2);
+
+		lon = (long)data[3];
+		flo = (float)lon;
+		sig2[j] = (flo - 65535 / 2) / (65535 / 2);
 		//std::cerr << sig[j] << std::endl;
 	}
 	fft->setSignal(sig);
 	fft->getImaginary();
+
+	fft2->setSignal(sig2);
+	fft2->getImaginary();
 
 	//cout << endl;
 }

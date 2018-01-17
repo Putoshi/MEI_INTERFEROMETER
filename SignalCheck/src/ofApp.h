@@ -41,13 +41,14 @@ class ofApp : public ofBaseApp{
 		int plotHeight, bufferSize;
 
 		ofxFft* fft;
-		void plot(vector<float>& buffer, float scale, float offset);
+		
 		//void audioReceived(float* input, int bufferSize, int nChannels);
 		ofSoundStream soundStream;
-
 		ofMutex soundMutex;
 		vector<float> drawBins, middleBins, audioBins;
 
+		ofxFft* fft2;
+		vector<float> drawBins2, middleBins2, audioBins2;
 
 	private:
 		ofxWatchFile file_;
@@ -66,5 +67,6 @@ class ofApp : public ofBaseApp{
 		Signal signal;
 
 		void fftUpdate();
+		void plot(vector<float>& buffer, float scale, int idx);
 			
 };
