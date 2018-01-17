@@ -273,13 +273,6 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 //	soundMutex.unlock();
 //}
 
-
-void ofApp::addSignalSeg(const std::vector<int16_t>& targetVector) {
-
-}
-
-
-
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
