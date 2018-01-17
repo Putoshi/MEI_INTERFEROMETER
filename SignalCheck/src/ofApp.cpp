@@ -24,7 +24,7 @@ int deltaTime, connectTime;
 
 std::vector<int16_t> binValues;						// バイナリ
 
-//std::vector<float *> signal(CHANNELS);
+std::vector<float *> signal(CHANNELS);
 
 vector<ofxFft*> fft(CHANNELS);
 vector<vector<float>> drawBins(CHANNELS);
@@ -73,7 +73,8 @@ void ofApp::init() {
 
 	for (int i = 0; i < CHANNELS; i++) {
 
-		
+		float * sig = (float *)malloc(sizeof(float) * N);
+		signal[i] = sig;
 
 		//audioBins[i] = new(vector<float>);
 		fft[i] = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
@@ -282,12 +283,7 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
-	/*float * sig = (float *)malloc(sizeof(float) * N);
-	signal[i] = sig;*/
-
 	for (int j = 0, size = N; j < size; ++j) {
-
-		float * sig = (float *)malloc(sizeof(float) * N);
 
 		// インデックスADボードの時間単位の標本数と
 		// FFTに掛ける時間単位の標本数(2のべき乗)が合わないので、
@@ -299,7 +295,9 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 
 		for (int k = 0, size = 8; k < size; ++k) {
 
+
 			char buf[20];
+
 			snprintf(buf, 20, "%#x", targetVector[idx * 16 + k * 2 + IDX_BODY]);
 
 			char t[5];
@@ -332,24 +330,18 @@ void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 12]);
 		//printf("%02x ", targetVector[idx * 16 + IDX_BODY + 14]);
 
-		//for (int i = 0; i < CHANNELS; ++i) {
-		//	long lon = (long)data[i];
-		//	float flo = (float)lon;
-		//	signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
-		//}
-
-		long lon = (long)data[0];
-		float flo = (float)lon;
-		signal[j] = (flo - 65535 / 2) / (65535 / 2);
+		for (int i = 0; i < CHANNELS; ++i) {
+			long lon = (long)data[i];
+			float flo = (float)lon;
+			signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
+		}
 		//std::cerr << sig[j] << std::endl;
 	}
 
-	/*for (int l = 0; l < CHANNELS; ++l) {
+	for (int l = 0; l < CHANNELS; ++l) {
 		fft[l]->setSignal(signal[l]);
 		fft[l]->getImaginary();
-	}*/
-	fft[0]->setSignal(signal[0]);
-	fft[0]->getImaginary();
+	}
 
 	//cout << endl;
 }
