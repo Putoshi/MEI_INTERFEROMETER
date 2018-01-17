@@ -70,7 +70,7 @@ void ofApp::setup(){
 
 	parseBinary(binValues);
 
-	ofBackground(0, 0, 0);
+	ofBackground(3, 3, 6);
 }
 
 
@@ -141,7 +141,7 @@ void ofApp::fftUpdate() {
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofSetColor(255);
+	ofSetColor(252);
 	ofPushMatrix();
 	ofTranslate(16, 16);
 
@@ -170,7 +170,6 @@ void ofApp::draw(){
 	ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
 
 
-	ofSetColor(255);
 	ofPushMatrix();
 	ofTranslate(16, 16 + plotHeight + 30);
 
