@@ -14,7 +14,7 @@ const int CHANNELS = 6;
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
 const int N = 4096;
-const int FPS = 60;
+const int FPS = 120;
 float FFT_SPAN = 100;								//FFTする間隔 ms
 
 const float lowFreq = 2000;
@@ -38,7 +38,7 @@ int frameCnt;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofSetVerticalSync(true);
+	ofSetVerticalSync(false);
 	ofSetFrameRate(FPS);
 	ofBackground(3, 3, 6);
 
@@ -281,7 +281,7 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 
 
 void ofApp::parseBinary(const std::vector<int16_t>& targetVector) {
-	const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
+	//const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
 	for (int j = 0, size = N; j < size; ++j) {
 
