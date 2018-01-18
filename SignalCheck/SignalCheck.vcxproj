@@ -201,6 +201,7 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp" />
     <ClCompile Include="src\SignalUtil.cpp" />
     <ClCompile Include="src\TriggerBuffer.cpp" />
+    <ClCompile Include="src\view\AmpSpectrogram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
@@ -235,6 +236,7 @@
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h" />
     <ClInclude Include="src\SignalUtil.h" />
     <ClInclude Include="src\TriggerBuffer.h" />
+    <ClInclude Include="src\view\AmpSpectrogram.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

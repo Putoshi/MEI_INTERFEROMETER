@@ -147,10 +147,10 @@ void ofApp::fftUpdate() {
   phase[1] = fft[1]->getPhase();
   //fft[1]->setPolar(phase[1], fft[1]->getPhase());
 
-  std::cerr << phase[1] << std::endl;
+  /*std::cerr << phase[1] << std::endl;
   for (int j = 0; j < fft[1]->getBinSize(); j++) {
     std::cerr << phase[1][j]/M_PI * 180 << std::endl;
-  }
+  }*/
 
   soundMutex.lock();
   middleBins = audioBins;
