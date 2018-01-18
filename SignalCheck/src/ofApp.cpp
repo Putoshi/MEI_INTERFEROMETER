@@ -26,6 +26,8 @@ int deltaTime, connectTime;
 std::vector<int16_t> binValues;						// バイナリ
 
 std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
+std::vector<float *> phase(CHANNELS);				// 都度読み込んで更新される位相vector
+
 
 vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
 
@@ -84,6 +86,9 @@ void ofApp::init() {
 		float * sig = (float *)malloc(sizeof(float) * N);
 		signal[i] = sig;
 
+		float * pha = (float *)malloc(sizeof(float) * N);
+		phase[i] = pha;
+
 		//audioBins[i] = new(vector<float>);
 		fft[i] = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
 		drawBins[i].resize(fft[i]->getBinSize());
@@ -117,6 +122,7 @@ void ofApp::fftUpdate() {
 
 	// Binary Analyze
 	signal = signalUtil.parseBinary(frameCnt, binValues);
+	
 
 	vector<float> maxValue(CHANNELS);
 	for (int i = 0; i < CHANNELS; i++) {
@@ -137,6 +143,13 @@ void ofApp::fftUpdate() {
 		for (int k = 0; k < fft[i]->getBinSize(); k++) {
 			audioBins[i][k] /= maxValue[i];
 		}
+	}
+	phase[1] = fft[1]->getPhase();
+	//fft[1]->setPolar(phase[1], fft[1]->getPhase());
+
+	std::cerr << phase[1] << std::endl;
+	for (int j = 0; j < fft[1]->getBinSize(); j++) {
+		std::cerr << phase[1][j]/M_PI * 180 << std::endl;
 	}
 
 	soundMutex.lock();
@@ -181,11 +194,6 @@ void ofApp::draw() {
 		}
 
 		// 表示位置の初期化
-		ofPushMatrix();
-		if (j == 1) {
-			ofTranslate(16, 16 + plotHeight + 30);
-		}
-		else if (j == 2) {
 			ofTranslate(16, 16 + (plotHeight + 30) * 2);
 		}
 		else if (j == 3) {

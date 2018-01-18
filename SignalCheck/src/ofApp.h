@@ -14,6 +14,9 @@
 #include <string.h>
 #include <iterator>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 class ofApp : public ofBaseApp {
 
 
