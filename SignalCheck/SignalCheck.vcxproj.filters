@@ -43,6 +43,9 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\kiss_fftr.c">
       <Filter>addons\ofxFft\libs\kiss</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGraphViewer\src\ofxGraphViewer.cpp">
+      <Filter>addons\ofxGraphViewer\src</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxBaseGui.cpp">
       <Filter>addons\ofxGui\src</Filter>
     </ClCompile>
@@ -117,6 +120,12 @@
     <Filter Include="addons\ofxFft\libs\kiss">
       <UniqueIdentifier>{A0BA27B4-C5E4-04C4-6B66-DBD1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="addons\ofxGraphViewer">
+      <UniqueIdentifier>{C52A28DC-DC05-CED2-6FF9-6BA8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGraphViewer\src">
+      <UniqueIdentifier>{78177B95-0DB4-3DF7-122E-8357}</UniqueIdentifier>
+    </Filter>
     <Filter Include="addons\ofxGui">
       <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
     </Filter>
@@ -178,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss\_kiss_fft_guts.h">
       <Filter>addons\ofxFft\libs\kiss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGraphViewer\src\ofxGraphViewer.h">
+      <Filter>addons\ofxGraphViewer\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src\ofxBaseGui.h">
       <Filter>addons\ofxGui\src</Filter>

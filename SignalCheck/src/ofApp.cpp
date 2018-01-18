@@ -38,12 +38,12 @@ int frameCnt;
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+  ofEnableSmoothing();
   ofSetVerticalSync(false);
   ofSetFrameRate(FPS);
   ofBackground(3, 3, 6);
 
   load();
-
 }
 
 //--------------------------------------------------------------
@@ -100,6 +100,14 @@ void ofApp::init() {
   }
 
   ampSpectrogram.init(plotHeight);
+
+  gViewer1.setup(512);
+  gViewer1.setRange(-1.0, 1.0);
+  gViewer1.setSize(512, 200);
+
+  gViewer2.setup(512);
+  gViewer2.setRange(0, 1000);
+  gViewer2.setSize(512, 200);
 }
 
 
@@ -117,6 +125,12 @@ void ofApp::update() {
     // ------- ÉãÅ[Évèàóù ------- //
     fftUpdate();
   }
+
+  float d1 = ofRandom(-1.0, 1.0);
+  gViewer1.pushData(d1);
+
+  float d2 = (float)(ofGetFrameNum() % 1000);
+  gViewer2.pushData(d2);
 }
 
 void ofApp::fftUpdate() {
@@ -218,6 +232,16 @@ void ofApp::draw() {
     ampSpectrogram.plot(vec[j], -plotHeight);
     ofPopMatrix();
   }
+
+
+
+  gViewer1.draw(600, 16);
+
+  gViewer2.draw(600, 220);
+
+  ofSetColor(255, 255, 255);
+  //ofDrawBitmapString("graph 1 <random number>", 600, 316);
+  //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 }
 
 //--------------------------------------------------------------

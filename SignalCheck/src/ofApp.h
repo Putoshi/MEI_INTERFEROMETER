@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxWatchFile.h"
 #include "ofxFft.h"
+#include "ofxGraphViewer.h"
 #include "./TriggerBuffer.h"
 #include "./SignalUtil.h"
 #include "./view/AmpSpectrogram.h"
@@ -46,6 +47,9 @@ private:
   ofxWatchFile file_;
   SignalUtil signalUtil;
   AmpSpectrogram ampSpectrogram;
+
+  ofxGraphViewer gViewer1;
+  ofxGraphViewer gViewer2;
   void init();
   void load();
   void fileEvent(ofFile &file);
