@@ -5,6 +5,7 @@
 #include "ofxFft.h"
 #include "./TriggerBuffer.h"
 #include "./SignalUtil.h"
+#include "./view/AmpSpectrogram.h"
 
 #include <stdio.h>
 #include <vector>
@@ -44,12 +45,13 @@ public:
 private:
   ofxWatchFile file_;
   SignalUtil signalUtil;
+  AmpSpectrogram ampSpectrogram;
   void init();
   void load();
   void fileEvent(ofFile &file);
   void fileEvent2(const void *sender, ofFile &file);
 
   void fftUpdate();
-  void plot(vector<float>& buffer, float scale);
+
 
 };

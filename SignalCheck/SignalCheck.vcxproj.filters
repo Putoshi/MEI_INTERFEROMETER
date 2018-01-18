@@ -13,6 +13,15 @@
     <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\SignalUtil.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TriggerBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\AmpSpectrogram.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxEasyFft.cpp">
       <Filter>addons\ofxFft\src</Filter>
     </ClCompile>
@@ -79,19 +88,13 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp">
       <Filter>addons\ofxWatchFile\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\TriggerBuffer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SignalUtil.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\view\AmpSpectrogram.cpp">
-      <Filter>src\view</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view">
+      <UniqueIdentifier>{8E6A0C1B-4E64-AED4-48EB-4B5C}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons">
       <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
@@ -132,9 +135,6 @@
     <Filter Include="addons\ofxWatchFile\src">
       <UniqueIdentifier>{2FDD0F2F-00EB-B25F-A431-8A09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\view">
-      <UniqueIdentifier>{fd6d369c-ac9e-4729-8fa2-7df79f411a35}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
@@ -142,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SignalUtil.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TriggerBuffer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\view\AmpSpectrogram.h">
+      <Filter>src\view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxEasyFft.h">
       <Filter>addons\ofxFft\src</Filter>
@@ -229,15 +238,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h">
       <Filter>addons\ofxWatchFile\src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TriggerBuffer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SignalUtil.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\view\AmpSpectrogram.h">
-      <Filter>src\view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -69,11 +69,6 @@ void ofApp::load() {
   }
 
   init();
-  signal = signalUtil.parseBinary(frameCnt, binValues);
-  for (int i = 0; i < CHANNELS; ++i) {
-    fft[i]->setSignal(signal[i]);
-    fft[i]->getImaginary();
-  }
 }
 
 //--------------------------------------------------------------
@@ -89,7 +84,6 @@ void ofApp::init() {
     float * pha = (float *)malloc(sizeof(float) * N);
     phase[i] = pha;
 
-    //audioBins[i] = new(vector<float>);
     fft[i] = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
     drawBins[i].resize(fft[i]->getBinSize());
     middleBins[i].resize(fft[i]->getBinSize());
@@ -97,6 +91,15 @@ void ofApp::init() {
   }
 
   plotHeight = 128;
+
+  // êMçÜèàóùÇÃèâä˙âª
+  signal = signalUtil.parseBinary(frameCnt, binValues);
+  for (int i = 0; i < CHANNELS; ++i) {
+    fft[i]->setSignal(signal[i]);
+    fft[i]->getImaginary();
+  }
+
+  ampSpectrogram.init(plotHeight);
 }
 
 
@@ -212,31 +215,10 @@ void ofApp::draw() {
     }
 
     ofDrawBitmapString("Frequency Domain " + ofToString(j), 0, 0);
-    plot(vec[j], -plotHeight);
+    ampSpectrogram.plot(vec[j], -plotHeight);
     ofPopMatrix();
   }
 }
-
-void ofApp::plot(vector<float>& buffer, float scale) {
-
-  float marginY = 3;
-  float offset = plotHeight / 2;
-  ofNoFill();
-  int n = buffer.size();
-  ofSetLineWidth(0.5);
-  ofDrawRectangle(0, marginY, n, plotHeight);
-  glPushMatrix();
-  glTranslatef(0, plotHeight / 2 + offset + marginY, 0);
-  ofBeginShape();
-
-  for (int i = 0; i < n; i++) {
-    ofVertex(i, sqrt(buffer[i]) * scale);
-  }
-  //std::cerr << buffer[n - 1] << std::endl;
-  ofEndShape();
-  glPopMatrix();
-}
-
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {

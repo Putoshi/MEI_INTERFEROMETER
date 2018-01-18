@@ -95,7 +95,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\font;src\view;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -115,7 +115,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\font;src\view;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -135,7 +135,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\font;src\view;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -158,7 +158,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\font;src\view;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src;..\..\..\..\of_v20170714_vs_release\addons\ofxGui\src;..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src;..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -177,6 +177,9 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\SignalUtil.cpp" />
+    <ClCompile Include="src\TriggerBuffer.cpp" />
+    <ClCompile Include="src\view\AmpSpectrogram.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxEasyFft.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFft.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFftBasic.cpp" />
@@ -199,12 +202,12 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxUDPManager.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp" />
-    <ClCompile Include="src\SignalUtil.cpp" />
-    <ClCompile Include="src\TriggerBuffer.cpp" />
-    <ClCompile Include="src\view\AmpSpectrogram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\SignalUtil.h" />
+    <ClInclude Include="src\TriggerBuffer.h" />
+    <ClInclude Include="src\view\AmpSpectrogram.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxEasyFft.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFft.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxFft\src\ofxFftBasic.h" />
@@ -234,9 +237,6 @@
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxUDPSettings.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h" />
-    <ClInclude Include="src\SignalUtil.h" />
-    <ClInclude Include="src\TriggerBuffer.h" />
-    <ClInclude Include="src\view\AmpSpectrogram.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
