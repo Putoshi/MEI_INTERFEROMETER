@@ -19,18 +19,28 @@ public:
 
 	// FFT SETTING
 	float AD_1S_N;						// ADボードの1秒ごとの標本数
-	int N;
-	float FFT_SPAN;						//FFTする間隔 ms
+	int N;								// FFT 標本数
+	float FFT_SPAN;						// FFTする間隔 ms
 
+	// adiバイナリを解析して信号を返す
 	std::vector<float *> parseBinary(const int frameCnt, const std::vector<int16_t>& targetVector);
+
+	// リトルエンディアン ビッグエンディアンの判定
 	bool checkIsLittleEndian();
+
+	// バイナリのファイルサイズ測定
 	const size_t getFileByteSize(std::ifstream& file);
+
+	// 16bit → Int16 Convert
 	void convertSigned16bitIntEndian(std::vector<int16_t>* target_vector);
 
+	// Read 16bit Binary File
 	bool readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* targetVector);
+
+	// Write 16bit Binary File
 	bool writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& targetVector);
 
 private:
-	
+
 };
 

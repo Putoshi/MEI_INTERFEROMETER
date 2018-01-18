@@ -2,42 +2,40 @@
 
 using namespace std;
 
-const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";
-const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";
+// PATH
+const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";		// adiファイルのパス
+const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";	// 一時保存パス
 
 
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
 
 // CONFIG
+const int FPS = 120;								// FPS
 const int CHANNELS = 6;
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
-const int N = 4096;
-const int FPS = 120;
-float FFT_SPAN = 100;								//FFTする間隔 ms
+const int N = 4096;									// FFT 標本数
+float FFT_SPAN = 100;								// FFTする間隔 ms
 
-const float lowFreq = 2000;
-const float highFreq = 4000;
+const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
+const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
 
 int deltaTime, connectTime;
 
 std::vector<int16_t> binValues;						// バイナリ
 
-std::vector<float *> signal(CHANNELS);
+std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 
-vector<ofxFft*> fft(CHANNELS);
-vector<vector<float>> drawBins(CHANNELS);
-vector<vector<float>> middleBins(CHANNELS);
-vector<vector<float>> audioBins(CHANNELS);
+vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
 
-
+vector<vector<float>> drawBins(CHANNELS), middleBins(CHANNELS), audioBins(CHANNELS);
 
 // ループ回数
 int frameCnt;
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup() {
 	ofSetVerticalSync(false);
 	ofSetFrameRate(FPS);
 	ofBackground(3, 3, 6);
@@ -48,7 +46,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::load() {
-	
+
 	file_.addListener(this, &ofApp::fileEvent);
 	file_.addListener(this, &ofApp::fileEvent2);
 	file_.setTargetPath(SRC_FILE);
@@ -78,7 +76,7 @@ void ofApp::load() {
 
 //--------------------------------------------------------------
 void ofApp::init() {
-	
+
 	frameCnt = 0;
 
 	for (int i = 0; i < CHANNELS; i++) {
@@ -98,7 +96,7 @@ void ofApp::init() {
 
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update() {
 
 	deltaTime = ofGetElapsedTimeMillis() - connectTime;
 	if (deltaTime >= FFT_SPAN) {
@@ -129,7 +127,7 @@ void ofApp::fftUpdate() {
 		memcpy(&audioBins[i][0], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
 		maxValue[i] = 0;
 
-		for (int j = 0; j < fft[i]->getBinSize(); j++) {			
+		for (int j = 0; j < fft[i]->getBinSize(); j++) {
 			if (abs(audioBins[i][j]) > maxValue[i]) {
 				maxValue[i] = abs(audioBins[i][j]);
 				//std::cerr << i << std::endl; //300
@@ -148,11 +146,11 @@ void ofApp::fftUpdate() {
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::draw() {
 	ofSetColor(252);
 	ofPushMatrix();
 	ofTranslate(16, 16);
-	
+
 	soundMutex.lock();
 	drawBins = middleBins;
 	soundMutex.unlock();
@@ -165,16 +163,16 @@ void ofApp::draw(){
 	int endIdx = roundf((highFreq / sampleRate * 2) * drawBins[0].size());
 
 	vector<vector<float>> vec(CHANNELS);
-	
+
 	for (int i = 0; i < CHANNELS; i++) {
 		vector<float> _vec(endIdx - startIdx, 0);
 		vec[i] = _vec;
 	}
 
-	
+
 	string msg = ofToString((int)ofGetFrameRate()) + " fps";
 	ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
-	
+
 	for (int j = 0; j < CHANNELS; j++)
 	{
 		for (int k = 0; k < vec[j].size(); k++)
@@ -228,57 +226,57 @@ void ofApp::plot(vector<float>& buffer, float scale) {
 
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
+void ofApp::keyPressed(int key) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
+void ofApp::keyReleased(int key) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
+void ofApp::mouseMoved(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void ofApp::mouseDragged(int x, int y, int button) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(int x, int y, int button) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
+void ofApp::mouseEntered(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
+void ofApp::mouseExited(int x, int y) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
+void ofApp::gotMessage(ofMessage msg) {
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 }
 

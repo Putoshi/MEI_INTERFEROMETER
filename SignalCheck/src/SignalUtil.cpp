@@ -11,7 +11,7 @@ SignalUtil::~SignalUtil()
 {
 }
 
-std::vector<float *> SignalUtil::parseBinary(const int frameCnt,const std::vector<int16_t>& targetVector) {
+std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vector<int16_t>& targetVector) {
 	//const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
 	std::vector<float *> signal(CHANNELS);

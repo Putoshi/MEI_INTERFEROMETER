@@ -14,43 +14,39 @@
 #include <string.h>
 #include <iterator>
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 
 
-	public:
-		void setup();
-		void update();
-		void draw();
+public:
+	void setup();
+	void update();
+	void draw();
 
-		void keyPressed(int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void mouseEntered(int x, int y);
-		void mouseExited(int x, int y);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
+	void keyPressed(int key);
+	void keyReleased(int key);
+	void mouseMoved(int x, int y);
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
+	void mouseEntered(int x, int y);
+	void mouseExited(int x, int y);
+	void windowResized(int w, int h);
+	void dragEvent(ofDragInfo dragInfo);
+	void gotMessage(ofMessage msg);
 
-		int plotHeight, bufferSize;
+	int plotHeight, bufferSize;
 
-		//vector<ofxFft*> fft;
-		ofMutex soundMutex;
-		//vector<vector<float>> drawBins, middleBins, audioBins;
+	ofMutex soundMutex;
 
-	private:
-		ofxWatchFile file_;
-		SignalUtil signalUtil;
-		void init();
-		void load();
-		void fileEvent(ofFile &file);
-		void fileEvent2(const void *sender, ofFile &file);
+private:
+	ofxWatchFile file_;
+	SignalUtil signalUtil;
+	void init();
+	void load();
+	void fileEvent(ofFile &file);
+	void fileEvent2(const void *sender, ofFile &file);
 
-		//Signal signal;
+	void fftUpdate();
+	void plot(vector<float>& buffer, float scale);
 
-		void fftUpdate();
-		void plot(vector<float>& buffer, float scale);
-			
 };
