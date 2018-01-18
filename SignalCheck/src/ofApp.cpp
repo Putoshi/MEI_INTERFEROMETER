@@ -194,6 +194,11 @@ void ofApp::draw() {
 		}
 
 		// •\¦ˆÊ’u‚Ì‰Šú‰»
+    ofPushMatrix();
+    if (j == 1) {
+      ofTranslate(16, 16 + plotHeight + 30);
+    }
+    else if (j == 2) {
 			ofTranslate(16, 16 + (plotHeight + 30) * 2);
 		}
 		else if (j == 3) {
