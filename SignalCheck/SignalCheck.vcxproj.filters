@@ -79,10 +79,10 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp">
       <Filter>addons\ofxWatchFile\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Signal.cpp">
+    <ClCompile Include="src\TriggerBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\TriggerBuffer.cpp">
+    <ClCompile Include="src\SignalUtil.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -224,10 +224,10 @@
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h">
       <Filter>addons\ofxWatchFile\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Signal.h">
+    <ClInclude Include="src\TriggerBuffer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\TriggerBuffer.h">
+    <ClInclude Include="src\SignalUtil.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

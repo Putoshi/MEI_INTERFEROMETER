@@ -4,16 +4,12 @@
 #include "ofxWatchFile.h"
 #include "ofxFft.h"
 #include "./TriggerBuffer.h"
-#include "./Signal.h"
-
+#include "./SignalUtil.h"
 
 #include <stdio.h>
-#include <fstream>
-#include <sstream>
 #include <vector>
 #include <algorithm> 
 #include <cmath>
-#include <iostream>
 #include <string>
 #include <string.h>
 #include <iterator>
@@ -46,19 +42,11 @@ class ofApp : public ofBaseApp{
 
 	private:
 		ofxWatchFile file_;
+		SignalUtil signalUtil;
 		void init();
 		void load();
 		void fileEvent(ofFile &file);
 		void fileEvent2(const void *sender, ofFile &file);
-
-		bool checkIsLittleEndian();
-		const size_t getFileByteSize(std::ifstream& file);
-		void convertSigned16bitIntEndian(std::vector<int16_t>* target_vector);
-
-		bool readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* targetVector);
-		bool writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& targetVector);
-		
-		void parseBinary(const std::vector<int16_t>& targetVector);
 
 		//Signal signal;
 
