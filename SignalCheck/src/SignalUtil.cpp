@@ -72,14 +72,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vect
       signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
     }
     //std::cerr << sig[j] << std::endl;
-
-    
   }
-
-  /*for (int l = 0; l < CHANNELS; ++l) {
-    fft[l]->setSignal(signal[l]);
-    fft[l]->getImaginary();
-  }*/
 
   //cout << endl;
   return signal;

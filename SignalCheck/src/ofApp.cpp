@@ -97,10 +97,8 @@ void ofApp::init() {
   for (int i = 0; i < CHANNELS; ++i) {
     fft[i]->setSignal(signal[i]);
     fft[i]->getImaginary();
-
-   
   }
-  std::vector<float *>().swap(signal); // メモリ開放
+  signalMemRelease();
 
   ampSpectrogram.init(plotHeight);
 
@@ -170,7 +168,8 @@ void ofApp::fftUpdate() {
     }
   }
 
-  std::vector<float *>().swap(signal); // メモリ開放
+  signalMemRelease();
+  std::vector<float>().swap(maxValue); // メモリ開放
 
   soundMutex.lock();
   std::vector<vector<float>>().swap(middleBins); // メモリ開放
@@ -247,6 +246,13 @@ void ofApp::draw() {
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 
   std::vector<vector<float>>().swap(drawBins); // メモリ開放
+}
+
+void ofApp::signalMemRelease() {
+  for (int i = 0; i < CHANNELS; i++) {
+    free(signal[i]);
+  }
+  std::vector<float *>().swap(signal); // メモリ開放
 }
 
 //--------------------------------------------------------------

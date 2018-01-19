@@ -56,6 +56,7 @@ private:
   void fileEvent2(const void *sender, ofFile &file);
 
   void fftUpdate();
+  void ofApp::signalMemRelease();
 
 
 };
