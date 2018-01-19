@@ -86,6 +86,8 @@ void ofApp::init() {
     audioBins[i].resize(fft[i]->getBinSize());
 
     phase[i].resize(fft[i]->getBinSize());
+
+    free(sig);
   }
 
   plotHeight = 128;
@@ -95,7 +97,10 @@ void ofApp::init() {
   for (int i = 0; i < CHANNELS; ++i) {
     fft[i]->setSignal(signal[i]);
     fft[i]->getImaginary();
+
+   
   }
+  std::vector<float *>().swap(signal); // メモリ開放
 
   ampSpectrogram.init(plotHeight);
 
@@ -140,7 +145,6 @@ void ofApp::fftUpdate() {
   // Binary Analyze
   signal = signalUtil.parseBinary(frameCnt, binValues);
   
-
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
 
@@ -166,7 +170,10 @@ void ofApp::fftUpdate() {
     }
   }
 
+  std::vector<float *>().swap(signal); // メモリ開放
+
   soundMutex.lock();
+  std::vector<vector<float>>().swap(middleBins); // メモリ開放
   middleBins = audioBins;
   soundMutex.unlock();
 }
@@ -238,6 +245,8 @@ void ofApp::draw() {
   ofSetColor(255, 255, 255);
   //ofDrawBitmapString("graph 1 <random number>", 600, 316);
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
+
+  std::vector<vector<float>>().swap(drawBins); // メモリ開放
 }
 
 //--------------------------------------------------------------

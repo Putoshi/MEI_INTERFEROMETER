@@ -56,7 +56,6 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vect
 
       //long lon = (long)number;
       data[k] = number;
-
     }
     //printf("%02x ", targetVector[idx * 16 + IDX_BODY + 0]);
     //printf("%02x ", targetVector[idx * 16 + IDX_BODY + 2]);
@@ -73,6 +72,8 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vect
       signal[i][j] = (flo - 65535 / 2) / (65535 / 2);
     }
     //std::cerr << sig[j] << std::endl;
+
+    
   }
 
   /*for (int l = 0; l < CHANNELS; ++l) {
