@@ -26,12 +26,12 @@ int deltaTime, connectTime;
 std::vector<int16_t> binValues;						// バイナリ
 
 std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
-std::vector<float *> phase(CHANNELS);				// 都度読み込んで更新される位相vector
+//vector<vector<float>> phase(CHANNELS);				// 都度読み込んで更新される位相vector
 
 
 vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
 
-vector<vector<float>> drawBins(CHANNELS), middleBins(CHANNELS), audioBins(CHANNELS);
+vector<vector<float>> drawBins(CHANNELS), middleBins(CHANNELS), audioBins(CHANNELS), phase(CHANNELS);
 
 // ループ回数
 int frameCnt;
@@ -73,7 +73,6 @@ void ofApp::load() {
 
 //--------------------------------------------------------------
 void ofApp::init() {
-
   frameCnt = 0;
 
   for (int i = 0; i < CHANNELS; i++) {
@@ -81,13 +80,12 @@ void ofApp::init() {
     float * sig = (float *)malloc(sizeof(float) * N);
     signal[i] = sig;
 
-    float * pha = (float *)malloc(sizeof(float) * N);
-    phase[i] = pha;
-
     fft[i] = ofxFft::create(N, OF_FFT_WINDOW_RECTANGULAR);
     drawBins[i].resize(fft[i]->getBinSize());
     middleBins[i].resize(fft[i]->getBinSize());
     audioBins[i].resize(fft[i]->getBinSize());
+
+    phase[i].resize(fft[i]->getBinSize());
   }
 
   plotHeight = 128;
@@ -101,9 +99,10 @@ void ofApp::init() {
 
   ampSpectrogram.init(plotHeight);
 
-  gViewer1.setup(512);
-  gViewer1.setRange(-1.0, 1.0);
-  gViewer1.setSize(512, 200);
+  phaseViewer.setup(fft[0]->getBinSize());
+  phaseViewer.setRange(-1.0, 1.0);
+  phaseViewer.setSize(1000, 200);
+
 
   gViewer2.setup(512);
   gViewer2.setRange(0, 1000);
@@ -126,8 +125,9 @@ void ofApp::update() {
     fftUpdate();
   }
 
-  float d1 = ofRandom(-1.0, 1.0);
-  gViewer1.pushData(d1);
+  //float d1 = ofRandom(-1.0, 1.0);
+  float d1 = *phase[0].erase(phase[0].begin()) / M_PI;
+  phaseViewer.pushData(d1);
 
   float d2 = (float)(ofGetFrameNum() % 1000);
   gViewer2.pushData(d2);
@@ -150,6 +150,10 @@ void ofApp::fftUpdate() {
     memcpy(&audioBins[i][0], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
     maxValue[i] = 0;
 
+    const int n = fft[i]->getBinSize();
+    phase[i].assign(fft[i]->getPhase(), fft[i]->getPhase() + n);
+  
+
     for (int j = 0; j < fft[i]->getBinSize(); j++) {
       if (abs(audioBins[i][j]) > maxValue[i]) {
         maxValue[i] = abs(audioBins[i][j]);
@@ -161,18 +165,10 @@ void ofApp::fftUpdate() {
       audioBins[i][k] /= maxValue[i];
     }
   }
-  phase[1] = fft[1]->getPhase();
-  //fft[1]->setPolar(phase[1], fft[1]->getPhase());
-
-  /*std::cerr << phase[1] << std::endl;
-  for (int j = 0; j < fft[1]->getBinSize(); j++) {
-    std::cerr << phase[1][j]/M_PI * 180 << std::endl;
-  }*/
 
   soundMutex.lock();
   middleBins = audioBins;
   soundMutex.unlock();
-
 }
 
 //--------------------------------------------------------------
@@ -235,7 +231,7 @@ void ofApp::draw() {
 
 
 
-  gViewer1.draw(600, 16);
+  phaseViewer.draw(600, 16);
 
   gViewer2.draw(600, 220);
 

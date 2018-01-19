@@ -48,7 +48,7 @@ private:
   SignalUtil signalUtil;
   AmpSpectrogram ampSpectrogram;
 
-  ofxGraphViewer gViewer1;
+  ofxGraphViewer phaseViewer;
   ofxGraphViewer gViewer2;
   void init();
   void load();
