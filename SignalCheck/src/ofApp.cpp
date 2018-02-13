@@ -27,6 +27,7 @@ std::vector<int16_t> binValues;						// バイナリ
 
 std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 //vector<vector<float>> phase(CHANNELS);				// 都度読み込んで更新される位相vector
+vector<ofxGraphViewer> phaseViewer(CHANNELS);
 
 
 vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
@@ -87,7 +88,7 @@ void ofApp::init() {
 
     phase[i].resize(fft[i]->getBinSize());
 
-    free(sig);
+    free(sig);  // メモリ開放
   }
 
   plotHeight = 128;
@@ -97,19 +98,16 @@ void ofApp::init() {
   for (int i = 0; i < CHANNELS; ++i) {
     fft[i]->setSignal(signal[i]);
     fft[i]->getImaginary();
+
+    //phaseViewer[i].setup(fft[0]->getBinSize()/20);
+    phaseViewer[i].setup(80);
+    phaseViewer[i].setRange(-1.0, 1.0);
+    phaseViewer[i].setSize(800, 100);
   }
-  signalMemRelease();
+
+  signalMemRelease();  // メモリ開放
 
   ampSpectrogram.init(plotHeight);
-
-  phaseViewer.setup(fft[0]->getBinSize());
-  phaseViewer.setRange(-1.0, 1.0);
-  phaseViewer.setSize(1000, 200);
-
-
-  gViewer2.setup(512);
-  gViewer2.setRange(0, 1000);
-  gViewer2.setSize(512, 200);
 }
 
 
@@ -128,12 +126,10 @@ void ofApp::update() {
     fftUpdate();
   }
 
+  for (int i = 0; i < CHANNELS; i++) {
+    phaseViewer[i].pushData(*phase[i].erase(phase[i].begin()) / M_PI);
+  }
   //float d1 = ofRandom(-1.0, 1.0);
-  float d1 = *phase[0].erase(phase[0].begin()) / M_PI;
-  phaseViewer.pushData(d1);
-
-  float d2 = (float)(ofGetFrameNum() % 1000);
-  gViewer2.pushData(d2);
 }
 
 void ofApp::fftUpdate() {
@@ -142,7 +138,7 @@ void ofApp::fftUpdate() {
 
   // Binary Analyze
   signal = signalUtil.parseBinary(frameCnt, binValues);
-  
+
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
 
@@ -153,8 +149,9 @@ void ofApp::fftUpdate() {
     maxValue[i] = 0;
 
     const int n = fft[i]->getBinSize();
+    //std::cerr << n << std::endl;
     phase[i].assign(fft[i]->getPhase(), fft[i]->getPhase() + n);
-  
+
 
     for (int j = 0; j < fft[i]->getBinSize(); j++) {
       if (abs(audioBins[i][j]) > maxValue[i]) {
@@ -175,6 +172,14 @@ void ofApp::fftUpdate() {
   std::vector<vector<float>>().swap(middleBins); // メモリ開放
   middleBins = audioBins;
   soundMutex.unlock();
+
+  float* p;
+  p = new float[fft[1]->getBinSize()];
+  memcpy(p, fft[1]->getPhase(), sizeof(float) * fft[1]->getBinSize());
+  /*for (int k = 0; k < fft[1]->getBinSize(); k++) {
+    std::cerr << p[k] << std::endl;
+  }*/
+  delete p;
 }
 
 //--------------------------------------------------------------
@@ -233,13 +238,9 @@ void ofApp::draw() {
     ofDrawBitmapString("Frequency Domain " + ofToString(j), 0, 0);
     ampSpectrogram.plot(vec[j], -plotHeight);
     ofPopMatrix();
+
+    phaseViewer[j].draw(500, (100 + 16)*j + 30);
   }
-
-
-
-  phaseViewer.draw(600, 16);
-
-  gViewer2.draw(600, 220);
 
   ofSetColor(255, 255, 255);
   //ofDrawBitmapString("graph 1 <random number>", 600, 316);

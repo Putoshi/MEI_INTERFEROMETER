@@ -48,8 +48,6 @@ private:
   SignalUtil signalUtil;
   AmpSpectrogram ampSpectrogram;
 
-  ofxGraphViewer phaseViewer;
-  ofxGraphViewer gViewer2;
   void init();
   void load();
   void fileEvent(ofFile &file);
