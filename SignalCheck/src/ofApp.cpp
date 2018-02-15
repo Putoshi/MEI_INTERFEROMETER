@@ -47,6 +47,10 @@ void ofApp::setup() {
   ofSetFrameRate(FPS);
   ofBackground(3, 3, 6);
 
+  gui.setup();
+  gui.setPosition(ofPoint(1920 - 220,0));
+  gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
+
   load();
 }
 
@@ -106,11 +110,18 @@ void ofApp::init() {
     fft[i]->getImaginary();
 
     //phaseViewer[i].setup(fft[0]->getBinSize()/20);
-    phaseViewer[i].setup(200);
+    if (i == 1) {
+      phaseViewer[i].setup(200,6);
+    }
+    else {
+      phaseViewer[i].setup(200);
+    }
+    
     phaseViewer[i].setRange(-1.0, 1.0);
     phaseViewer[i].setSize(400, plotHeight);
     phaseViewer[i].setColor(ofColor::magenta);
 
+    
     signalViewer[i].setup(200);
     signalViewer[i].setRange(-1.0, 1.0);
     signalViewer[i].setSize(200, plotHeight);
@@ -145,16 +156,26 @@ void ofApp::update() {
   }
 
   for (int i = 0; i < CHANNELS; i++) {
-    std::cerr << signalafterfft[i].size() << std::endl;
+    //std::cerr << signalafterfft[i].size() << std::endl;
 
     if (signalafterfft[i].size() >= 2049) {
       int size = signalafterfft[i].size();
       
-      for (int j = 0; j < 2049 -1; j++) {
+      for (int j = 0; j < 2049 - 1; j++) {
+
         signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
+
+        //if (i == 0) {
+        //  signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin() + binaryOffset) / M_PI);
+        //}
+        //else {
+        //  signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
+        //}
       }
+      
     } 
   }
+  //std::cerr << binaryOffset << std::endl;
   //float d1 = ofRandom(-1.0, 1.0);
 
   
@@ -296,6 +317,10 @@ void ofApp::draw() {
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 
   std::vector<vector<float>>().swap(drawBins); // ÉÅÉÇÉääJï˙
+
+
+  // GUIÇï\é¶
+  gui.draw();
 }
 
 void ofApp::signalMemRelease() {

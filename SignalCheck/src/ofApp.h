@@ -4,6 +4,8 @@
 #include "ofxWatchFile.h"
 #include "ofxFft.h"
 #include "ofxGraphViewer.h"
+#include "ofxGui.h"
+
 #include "./TriggerBuffer.h"
 #include "./SignalUtil.h"
 #include "./view/AmpSpectrogram.h"
@@ -58,6 +60,9 @@ private:
   void ofApp::signalMemRelease();
 
   vector<Spectrum> spectrums;
+
+  ofxPanel gui;
+  ofxIntSlider binaryOffset;
 
 
 };
