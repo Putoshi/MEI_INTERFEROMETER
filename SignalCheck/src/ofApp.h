@@ -7,6 +7,7 @@
 #include "./TriggerBuffer.h"
 #include "./SignalUtil.h"
 #include "./view/AmpSpectrogram.h"
+#include "./view/Spectrum.h"
 
 #include <stdio.h>
 #include <vector>
@@ -55,6 +56,8 @@ private:
 
   void fftUpdate();
   void ofApp::signalMemRelease();
+
+  vector<Spectrum> spectrums;
 
 
 };

@@ -91,6 +91,9 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp">
       <Filter>addons\ofxWatchFile\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\view\Spectrum.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h">
       <Filter>addons\ofxWatchFile\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\view\Spectrum.h">
+      <Filter>src\view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

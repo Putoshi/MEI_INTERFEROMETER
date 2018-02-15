@@ -203,6 +203,7 @@
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxUDPManager.cpp" />
     <ClCompile Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp" />
+    <ClCompile Include="src\view\Spectrum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
@@ -239,6 +240,7 @@
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxNetwork\src\ofxUDPSettings.h" />
     <ClInclude Include="..\..\..\..\of_v20170714_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h" />
+    <ClInclude Include="src\view\Spectrum.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
