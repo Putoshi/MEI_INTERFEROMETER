@@ -30,6 +30,8 @@ std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 vector<ofxGraphViewer> phaseViewer(CHANNELS);
 vector<ofxGraphViewer> signalViewer(CHANNELS);
 
+vector<ofxGraphViewer> phaseDiffViewer(CHANNELS);
+
 
 vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
 
@@ -106,15 +108,20 @@ void ofApp::init() {
     //phaseViewer[i].setup(fft[0]->getBinSize()/20);
     phaseViewer[i].setup(200);
     phaseViewer[i].setRange(-1.0, 1.0);
-    phaseViewer[i].setSize(500, plotHeight);
+    phaseViewer[i].setSize(400, plotHeight);
     phaseViewer[i].setColor(ofColor::magenta);
 
     signalViewer[i].setup(200);
     signalViewer[i].setRange(-1.0, 1.0);
-    signalViewer[i].setSize(500, plotHeight);
+    signalViewer[i].setSize(200, plotHeight);
     signalViewer[i].setColor(ofColor::green);
-
   }
+
+  // 位相差 0-1
+  phaseDiffViewer[0].setup(400);
+  phaseDiffViewer[0].setRange(-180.0 * 2, 180.0 * 2);
+  phaseDiffViewer[0].setSize(800, plotHeight);
+  phaseDiffViewer[0].setColor(ofColor::blueViolet);
 
   signalMemRelease();  // メモリ開放
 
@@ -232,9 +239,9 @@ void ofApp::draw() {
     vec[i] = _vec;
 
     phaseViewer[i].pushData(phase[i][300] / M_PI);
-    
-    
   }
+
+  phaseDiffViewer[0].pushData((phase[1][300] - phase[5][300]) * 180 / M_PI);
 
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
@@ -272,12 +279,15 @@ void ofApp::draw() {
     ampSpectrogram.plot(vec[j], -plotHeight);
     ofPopMatrix();
 
-    phaseViewer[j].draw(280, 20 + (plotHeight + 30)*j);
+    phaseViewer[j].draw(450, 20 + (plotHeight + 30)*j);
 
-    signalViewer[j].draw(820, 20 + (plotHeight + 30)*j);
+    signalViewer[j].draw(230, 20 + (plotHeight + 30)*j);
 
-    
   }
+
+  phaseDiffViewer[0].draw(870, 20 + (plotHeight + 30) * 0);
+
+
 
   //spectrums[1].draw(fft[1]->getPhase(), fft[1]->getBinSize());
 
