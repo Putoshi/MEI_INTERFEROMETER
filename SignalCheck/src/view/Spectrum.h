@@ -12,6 +12,10 @@
 #pragma once
 
 #include "ofMain.h"
+#include <math.h>
+#include <string>
+#include <string.h>
+#include <iterator>
 
 class Spectrum
 {
@@ -25,14 +29,19 @@ public:
 
   void setup();
   void update();
-  void draw(float* audioInput, int size);
+  //void draw(float* audioInput, int size);
+  void draw();
 
   char title[255];
   int channel;
 
   ofVec2f position;
-  ofColor colour;
+  ofColor color;
 
+private:
+  ofColor getColorMap(float _level = 0.0f);
+  ofPixels colorMap;
+  ofTexture colorMapTex;
 
 };
 

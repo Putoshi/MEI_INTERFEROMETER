@@ -97,6 +97,7 @@ void ofApp::init() {
     signalafterfft[i].resize(fft[i]->getBinSize());
 
     spectrums.push_back(Spectrum(ofVec2f(20, (i * 100 + 20)), i));
+    spectrums[0].setup();
 
     free(sig);  // ƒƒ‚ƒŠŠJ•ú
   }
@@ -318,6 +319,8 @@ void ofApp::draw() {
 
   std::vector<vector<float>>().swap(drawBins); // ƒƒ‚ƒŠŠJ•ú
 
+
+  spectrums[0].draw();
 
   // GUI‚ğ•\¦
   gui.draw();
