@@ -208,7 +208,7 @@ void ofApp::fftUpdate() {
     for (int j = 0; j < fft[i]->getBinSize(); j++) {
       if (abs(audioBins[i][j]) > maxValue[i]) {
         maxValue[i] = abs(audioBins[i][j]);
-        //std::cerr << j << std::endl; //300
+        //std::cerr << maxValue[i] << std::endl; //300
       }
     }
 
@@ -256,13 +256,12 @@ void ofApp::draw() {
 
   vector<vector<float>> vec(CHANNELS);
 
+  // index 300でPhase出してみる
   for (int i = 0; i < CHANNELS; i++) {
     vector<float> _vec(endIdx - startIdx, 0);
     vec[i] = _vec;
-
     phaseViewer[i].pushData(phase[i][300] / M_PI);
   }
-
   phaseDiffViewer[0].pushData((phase[1][300] - phase[5][300]) * 180 / M_PI);
 
 
@@ -276,26 +275,11 @@ void ofApp::draw() {
       vec[j][k] = drawBins[j][k + startIdx];
     }
 
-    // 表示位置の初期化
+    // 周波数スペクトル 表示位置の初期化
     ofPushMatrix();
-    if (j == 1) {
-      ofTranslate(16, 16 + plotHeight + 30);
-    }
-    else if (j == 2) {
-      ofTranslate(16, 16 + (plotHeight + 30) * 2);
-    }
-    else if (j == 3) {
-      //ofTranslate(16 + 220, 16);
-      ofTranslate(16, 16 + (plotHeight + 30) * 3);
-    }
-    else if (j == 4) {
-      //ofTranslate(16 + 220, 16 + plotHeight + 30);
-      ofTranslate(16, 16 + (plotHeight + 30) * 4);
-    }
-    else if (j == 5) {
-      //ofTranslate(16 + 220, 16 + (plotHeight + 30) * 2);
-      ofTranslate(16, 16 + (plotHeight + 30) * 5);
-    }
+    ofTranslate(16, 16 + (plotHeight + 30) * j);
+
+
 
     ofDrawBitmapString("Channel " + ofToString(j), 0, 0);
     ampSpectrogram.plot(vec[j], -plotHeight);
@@ -319,8 +303,8 @@ void ofApp::draw() {
 
   std::vector<vector<float>>().swap(drawBins); // メモリ開放
 
-
-  spectrums[0].draw();
+  //std::cerr << vec[1].size() << std::endl;
+  spectrums[0].draw(vec[1]);
 
   // GUIを表示
   gui.draw();

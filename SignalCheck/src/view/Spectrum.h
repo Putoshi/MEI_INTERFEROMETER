@@ -30,7 +30,7 @@ public:
   void setup();
   void update();
   //void draw(float* audioInput, int size);
-  void draw();
+  void draw(vector<float> _vec);
 
   char title[255];
   int channel;
@@ -42,6 +42,14 @@ private:
   ofColor getColorMap(float _level = 0.0f);
   ofPixels colorMap;
   ofTexture colorMapTex;
+
+  ofPixels spectrogramPix;
+  ofTexture spectrogramTex;
+
+  int spectrumWidth;
+  int spectrumHeight;
+  void drawSpectrogram(vector<float> _vec);
+  void drawSpecPixel();
 
 };
 

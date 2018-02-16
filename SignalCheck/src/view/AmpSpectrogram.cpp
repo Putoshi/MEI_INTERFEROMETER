@@ -28,8 +28,9 @@ void AmpSpectrogram::plot(vector<float>& buffer, float scale) {
 
   for (int i = 0; i < n; i++) {
     ofVertex(i, sqrt(buffer[i]) * scale);
+    //std::cerr << buffer[i] << std::endl;
   }
-  //std::cerr << buffer[n - 1] << std::endl;
+  
   ofEndShape();
   glPopMatrix();
 }
