@@ -7,7 +7,9 @@ Spectrum::Spectrum() {
 }
 
 vector<vector<ofColor>> vecColor(600);
-void Spectrum::setup() {
+void Spectrum::setup(float _x, float _y) {
+  pos.x = _x;
+  pos.y = _y;
   spectrumHeight = 200;
   spectrumWidth = 600;
   
@@ -43,14 +45,13 @@ void Spectrum::setup() {
 
   spectrogramTex.allocate(spectrumHeight, spectrumWidth, GL_RGB);
   spectrogramTex.loadData(spectrogramPix);
-  //drawSpecPixel();
 }
 
 void Spectrum::update() {
 }
 
 void Spectrum::draw(vector<float> _vec) {
-  colorMapTex.draw(0, 0);
+  colorMapTex.draw(pos.x + spectrumWidth + 10, pos.y);
   drawSpectrogram(_vec);
 
   //std::cerr << "draw" << std::endl;
@@ -93,11 +94,10 @@ void Spectrum::drawSpectrogram(vector<float> _vec) {
   img->update();
   spectrogramPix = img->getPixels();
 
-  
-
   ofRotate(-90);
   spectrogramTex.loadData(spectrogramPix);
-  spectrogramTex.draw( - 10 - spectrumHeight, 10);
+  spectrogramTex.draw(- spectrumHeight - pos.y, pos.x);
+  //spectrogramTex.draw( - 10 - spectrumHeight  - pos.x, 10);
   img->clear();
   
 
@@ -106,7 +106,7 @@ void Spectrum::drawSpectrogram(vector<float> _vec) {
   ofPushStyle();
   ofNoFill();
   ofSetColor(ofColor::white);
-  ofDrawRectangle(10, 10, spectrumWidth, spectrumHeight);
+  ofDrawRectangle(pos.x, pos.y, spectrumWidth, spectrumHeight);
 
 }
 

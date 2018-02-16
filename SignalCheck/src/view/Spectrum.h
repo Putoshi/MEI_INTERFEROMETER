@@ -19,7 +19,7 @@ public:
     channel = c;
   }
 
-  void setup();
+  void setup(float _x, float _y);
   void update();
   //void draw(float* audioInput, int size);
   void draw(vector<float> _vec);
@@ -40,8 +40,8 @@ private:
 
   int spectrumWidth;
   int spectrumHeight;
+  ofPoint pos;
   void drawSpectrogram(vector<float> _vec);
-  void drawSpecPixel();
 
 };
 

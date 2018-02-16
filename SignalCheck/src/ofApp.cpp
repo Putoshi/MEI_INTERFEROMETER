@@ -97,7 +97,7 @@ void ofApp::init() {
     signalafterfft[i].resize(fft[i]->getBinSize());
 
     spectrums.push_back(Spectrum(ofVec2f(20, (i * 100 + 20)), i));
-    spectrums[0].setup();
+    spectrums[0].setup(870, 180);
 
     free(sig);  // ƒƒ‚ƒŠŠJ•ú
   }
