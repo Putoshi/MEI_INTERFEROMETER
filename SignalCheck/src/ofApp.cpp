@@ -15,8 +15,8 @@ const int CHANNELS = 6;
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
-const int N = 4096;									// FFT 標本数
-float FFT_SPAN = 100;								// FFTする間隔 ms
+const int N = 4096 / 2 / 2;									// FFT 標本数
+const float FFT_SPAN = 100 / 2 / 2;								// FFTする間隔 ms
 
 const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
 const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
@@ -159,10 +159,10 @@ void ofApp::update() {
   for (int i = 0; i < CHANNELS; i++) {
     //std::cerr << signalafterfft[i].size() << std::endl;
 
-    if (signalafterfft[i].size() >= 2049) {
+    if (signalafterfft[i].size() >= 2049 / 2 / 2) {
       int size = signalafterfft[i].size();
       
-      for (int j = 0; j < 2049 - 1; j++) {
+      for (int j = 0; j < 2049 / 2 / 2 - 1; j++) {
 
         signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
 
@@ -239,6 +239,7 @@ void ofApp::fftUpdate() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+ 
   ofSetColor(252);
   ofPushMatrix();
   ofTranslate(16, 16);
@@ -260,9 +261,9 @@ void ofApp::draw() {
   for (int i = 0; i < CHANNELS; i++) {
     vector<float> _vec(endIdx - startIdx, 0);
     vec[i] = _vec;
-    phaseViewer[i].pushData(phase[i][300] / M_PI);
+    phaseViewer[i].pushData(phase[i][75] / M_PI);
   }
-  phaseDiffViewer[0].pushData((phase[1][300] - phase[5][300]) * 180 / M_PI);
+  phaseDiffViewer[0].pushData((phase[1][75] - phase[5][75]) * 180 / M_PI);
 
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
@@ -290,10 +291,10 @@ void ofApp::draw() {
     signalViewer[j].draw(230, 20 + (plotHeight + 30)*j);
 
   }
-
+  
   phaseDiffViewer[0].draw(870, 20 + (plotHeight + 30) * 0);
 
-
+  
 
   //spectrums[1].draw(fft[1]->getPhase(), fft[1]->getBinSize());
 
@@ -303,8 +304,11 @@ void ofApp::draw() {
 
   std::vector<vector<float>>().swap(drawBins); // メモリ開放
 
+  return;
+
   //std::cerr << vec[1].size() << std::endl;
   spectrums[0].draw(vec[1]);
+
 
   // GUIを表示
   gui.draw();
