@@ -17,11 +17,18 @@ const int CHANNELS = 6;
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
 const int N = 4096 / 2 / 2;									// FFT 標本数
 const float FFT_SPAN = 100 / 2 / 2;								// FFTする間隔 ms
+const float SPECTROGRAM_FFT_SPAN = 500;								// FFTする間隔 ms
 
 const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
 const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
 
 int deltaTime, connectTime;
+
+int spectrogramTimeCnt = 0;  // スペクトログラムだけ別ループなのでその時間計測の変数
+//std::vector<float *> signalForSpectrogram;
+float * signalForSpectrogram[10260];
+ofxFft * fftForSpectrogram;
+
 
 std::vector<int16_t> binValues;						// バイナリ
 
@@ -96,11 +103,13 @@ void ofApp::init() {
     phase[i].resize(fft[i]->getBinSize());
     signalafterfft[i].resize(fft[i]->getBinSize());
 
-    spectrums.push_back(Spectrum(ofVec2f(20, (i * 100 + 20)), i));
-    spectrums[0].setup(870, 180);
+    
 
     free(sig);  // メモリ開放
   }
+
+  spectrums = Spectrum(ofVec2f(20, 20), 0);
+  spectrums.setup(870, 180);
 
   plotHeight = 128;
 
@@ -111,12 +120,13 @@ void ofApp::init() {
     fft[i]->getImaginary();
 
     //phaseViewer[i].setup(fft[0]->getBinSize()/20);
-    if (i == 1) {
-      phaseViewer[i].setup(200,6);
-    }
-    else {
-      phaseViewer[i].setup(200);
-    }
+    //if (i == 1) {
+    //  phaseViewer[i].setup(200,6);
+    //}
+    //else {
+    //  phaseViewer[i].setup(200);
+    //}
+    phaseViewer[i].setup(200);
     
     phaseViewer[i].setRange(-1.0, 1.0);
     phaseViewer[i].setSize(400, plotHeight);
@@ -128,6 +138,12 @@ void ofApp::init() {
     signalViewer[i].setSize(200, plotHeight);
     signalViewer[i].setColor(ofColor::green);
   }
+
+  // スペクトログラムの処理
+  int len = fft[0]->getBinSize() * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
+
+  //signalForSpectrogram[10260];
+  fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
 
   // 位相差 0-1
   phaseDiffViewer[0].setup(400);
@@ -154,6 +170,15 @@ void ofApp::update() {
 
     // ------- ループ処理 ------- //
     fftUpdate();
+
+    // ------- スペクトログラム ループ処理 ------- //
+    spectrogramTimeCnt++;
+    if (spectrogramTimeCnt >= (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) {
+      spectrogramTimeCnt = 0;
+      //std::cerr << "スペクトログラム" << std::endl;
+      spectrogramFftUpdate();
+    }
+    
   }
 
   for (int i = 0; i < CHANNELS; i++) {
@@ -219,6 +244,14 @@ void ofApp::fftUpdate() {
 
   }
 
+  //std::cerr << spectrogramTimeCnt << std::endl;
+  //std::cerr << signalForSpectrogram << std::endl;
+  for (int i = 0; i < fft[1]->getBinSize(); i++) {
+    int idx = i + fft[1]->getBinSize() * spectrogramTimeCnt;
+    //std::cerr << maxValue[i] << std::endl;
+    signalForSpectrogram[idx] = &signal[1][i];
+  }
+
 
   signalMemRelease();
   std::vector<float>().swap(maxValue); // メモリ開放
@@ -254,6 +287,7 @@ void ofApp::draw() {
   float sampleRate = N * (1000 / FFT_SPAN);
   int startIdx = roundf((lowFreq / sampleRate * 2) * drawBins[0].size());
   int endIdx = roundf((highFreq / sampleRate * 2) * drawBins[0].size());
+  //std::cerr << drawBins[0].size() << std::endl;
 
   vector<vector<float>> vec(CHANNELS);
 
@@ -263,7 +297,7 @@ void ofApp::draw() {
     vec[i] = _vec;
     phaseViewer[i].pushData(phase[i][75] / M_PI);
   }
-  phaseDiffViewer[0].pushData((phase[1][75] - phase[5][75]) * 180 / M_PI);
+  phaseDiffViewer[0].pushData((phase[1][75] - phase[4][75]) * 180 / M_PI);
 
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
@@ -297,18 +331,13 @@ void ofApp::draw() {
   
 
   //spectrums[1].draw(fft[1]->getPhase(), fft[1]->getBinSize());
+  spectrums.draw(fft[1]->getPhase(), fft[1]->getBinSize());
 
   ofSetColor(255, 255, 255);
   //ofDrawBitmapString("graph 1 <random number>", 600, 316);
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 
   std::vector<vector<float>>().swap(drawBins); // メモリ開放
-
-  return;
-
-  //std::cerr << vec[1].size() << std::endl;
-  spectrums[0].draw(vec[1]);
-
 
   // GUIを表示
   gui.draw();
@@ -385,3 +414,37 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 {
   std::cout << "loaded event function (with sender) called" << std::endl;
 }
+
+
+
+
+void ofApp::spectrogramFftUpdate() {
+
+  fftForSpectrogram->setSignal(*signalForSpectrogram);
+
+  // 指定された周波数でvectorを切り抜いちゃう
+  float sampleRate = N * (1000 / FFT_SPAN);
+  //float sampleRate = N * SPECTROGRAM_FFT_SPAN / FFT_SPAN * (1000 / SPECTROGRAM_FFT_SPAN);
+  //float sampleRate = N * ((int)1000 / FFT_SPAN);//N * ((int)SPECTROGRAM_FFT_SPAN
+  int startIdx = roundf((lowFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
+  int endIdx = roundf((highFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
+
+  //vector<float> vec(fftForSpectrogram->getBinSize());
+  //std::cerr << startIdx << std::endl;
+  float * bin;
+  bin = new float[fftForSpectrogram->getBinSize()];
+  memcpy(bin, fftForSpectrogram->getAmplitude(), sizeof(float) * fftForSpectrogram->getBinSize());
+  //std::cerr << fftForSpectrogram->getAmplitude() << std::endl;
+
+  vector<float> vec(fftForSpectrogram->getBinSize());
+  for (int k = 0; k <fftForSpectrogram->getBinSize(); k++)
+  {
+    vec[k] = bin[k + startIdx];
+  }
+
+  //std::cerr << vec[1].size() << std::endl;
+  //spectrums.draw(vec);
+  
+
+}
+

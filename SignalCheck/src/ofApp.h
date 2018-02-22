@@ -57,9 +57,10 @@ private:
   void fileEvent2(const void *sender, ofFile &file);
 
   void fftUpdate();
+  void spectrogramFftUpdate();
   void ofApp::signalMemRelease();
 
-  vector<Spectrum> spectrums;
+  Spectrum spectrums;
 
   ofxPanel gui;
   ofxIntSlider binaryOffset;
