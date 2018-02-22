@@ -331,8 +331,8 @@ void ofApp::draw() {
   
 
   //spectrums[1].draw(fft[1]->getPhase(), fft[1]->getBinSize());
-  spectrums.draw(fft[1]->getPhase(), fft[1]->getBinSize());
-
+  //spectrums.draw(fft[1]->getPhase(), fft[1]->getBinSize());
+  //std::cerr << (endIdx - startIdx) << std::endl;
   ofSetColor(255, 255, 255);
   //ofDrawBitmapString("graph 1 <random number>", 600, 316);
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
@@ -436,13 +436,14 @@ void ofApp::spectrogramFftUpdate() {
   memcpy(bin, fftForSpectrogram->getAmplitude(), sizeof(float) * fftForSpectrogram->getBinSize());
   //std::cerr << fftForSpectrogram->getAmplitude() << std::endl;
 
-  vector<float> vec(fftForSpectrogram->getBinSize());
-  for (int k = 0; k <fftForSpectrogram->getBinSize(); k++)
+  //vector<float> vec(fftForSpectrogram->getBinSize());
+  vector<float> vec(endIdx - startIdx, 0);
+  for (int k = 0; k < vec.size(); k++)
   {
     vec[k] = bin[k + startIdx];
   }
 
-  //std::cerr << vec[1].size() << std::endl;
+  //std::cerr << vec.size() << std::endl;
   //spectrums.draw(vec);
   
 
