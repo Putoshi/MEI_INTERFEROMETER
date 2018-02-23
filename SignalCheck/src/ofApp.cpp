@@ -15,18 +15,22 @@ const int CHANNELS = 6;
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
-const int N = 4096 / 2 / 2;									// FFT 標本数
+const int N = 4096 / 2 / 2;									// FFT 標本数 1024
 const float FFT_SPAN = 100 / 2 / 2;								// FFTする間隔 ms
 const float SPECTROGRAM_FFT_SPAN = 500;								// FFTする間隔 ms
 
 const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
 const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
 
+// PhaseDiff Ch
+const int phaseDiffCh[2] = {0, 1};
+
 int deltaTime, connectTime;
 
 int spectrogramTimeCnt = 0;  // スペクトログラムだけ別ループなのでその時間計測の変数
 vector<float> binForSpectrogram;
-float * signalForSpectrogram[10260];
+//float * signalForSpectrogram[10260];
+float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
 
 
@@ -138,6 +142,8 @@ void ofApp::init() {
 
   // スペクトログラムの処理
   int len = fft[0]->getBinSize() * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
+  int _N = (N * (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
+  //std::cerr << _N << std::endl;
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
   spectrums.setup(870, 180);
@@ -211,7 +217,7 @@ void ofApp::fftUpdate() {
 
   // Binary Analyze
   signal = signalUtil.parseBinary(frameCnt, binValues);
-
+  //std::cerr << signal[1][1023] << std::endl;
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
 
@@ -241,13 +247,22 @@ void ofApp::fftUpdate() {
 
   }
 
-  //std::cerr << spectrogramTimeCnt << std::endl;
-  //std::cerr << signalForSpectrogram << std::endl;
-  for (int i = 0; i < fft[1]->getBinSize(); i++) {
-    int idx = i + fft[1]->getBinSize() * spectrogramTimeCnt;
-    //std::cerr << maxValue[i] << std::endl;
-    signalForSpectrogram[idx] = &signal[1][i];
+  //std::cerr << signalafterfft[1].size() << std::endl;
+  //std::cerr << (signalafterfft[1].size() - 1) * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) * 2 << std::endl;
+  //std::cerr << fft[1]->getSignal().size() << std::endl;
+  //std::cerr << signal[1] << std::endl;
+  int _loopCnt = (signalafterfft[1].size() - 1) * 2;
+  for (int i = 0; i < _loopCnt; i++) {
+    int idx = i + _loopCnt * spectrogramTimeCnt;
+    //std::cerr << signal[1][i] << std::endl;
+    signalForSpectrogram[idx] = signal[1][i];
+    //std::cerr << signalForSpectrogram[idx] << std::endl;
+
+    //std::cerr << signalForSpectrogram[idx] << std::endl;
   }
+  //std::cerr << signalForSpectrogram[10] << std::endl;
+
+  //signalForSpectrogram[idx] = &signalafterfft[1][i];
 
 
   signalMemRelease();
@@ -294,7 +309,7 @@ void ofApp::draw() {
     vec[i] = _vec;
     phaseViewer[i].pushData(phase[i][75] / M_PI);
   }
-  phaseDiffViewer[0].pushData((phase[0][75] - phase[1][75]) * 180 / M_PI);
+  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][75] - phase[phaseDiffCh[1]][75]) * 180 / M_PI);
 
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
@@ -340,10 +355,13 @@ void ofApp::draw() {
   vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
   for (int k = 0; k < vecForSpectrogram.size(); k++)
   {
-    vecForSpectrogram[k] = binForSpectrogram[k + startIdxForSpectrogram];
+    //fftForSpectrogram->getAmplitude()
+    vecForSpectrogram[k] = fftForSpectrogram->getAmplitude()[k + startIdxForSpectrogram];
+    //vecForSpectrogram[k] = binForSpectrogram[k + startIdxForSpectrogram];
     //std::cerr << binForSpectrogram[k + startIdxForSpectrogram] << std::endl;
   }
-  //spectrums.draw(vecForSpectrogram);
+  //std::cerr << fftForSpectrogram->getAmplitude()[1] << std::endl;
+  spectrums.draw(vecForSpectrogram);
   //std::cerr << vecForSpectrogram[10] << std::endl;
 
 
@@ -431,12 +449,14 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 
 void ofApp::spectrogramFftUpdate() {
 
-  fftForSpectrogram->setSignal(*signalForSpectrogram);
+  
+  fftForSpectrogram->setSignal(signalForSpectrogram);
 
   // 指定された周波数でvectorを切り抜いちゃう
   //float sampleRate = N * (1000 / FFT_SPAN);
-  memcpy(&binForSpectrogram[0], fftForSpectrogram->getAmplitude(), sizeof(float) * fftForSpectrogram->getBinSize());
-  std::cerr << fftForSpectrogram->getAmplitude()[0] << std::endl;
+  //memcpy(&binForSpectrogram[0], fftForSpectrogram->getAmplitude(), sizeof(float) * fftForSpectrogram->getBinSize());
+  //std::cerr << fftForSpectrogram->getAmplitude()[5] << std::endl;
+  //std::cerr << signalForSpectrogram[0] << std::endl;
   //std::cerr << binForSpectrogram[0] << std::endl;
 
   //vector<float> vec(fftForSpectrogram->getBinSize());
