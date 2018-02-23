@@ -50,15 +50,17 @@ void Spectrum::setup(float _x, float _y) {
 void Spectrum::update() {
 }
 
-void Spectrum::draw(vector<float> _vec) {
+void Spectrum::draw() {
+  
   colorMapTex.draw(pos.x + spectrumWidth + 10, pos.y);
-  drawSpectrogram(_vec);
+  drawSpectrogram();
+  drawFrame();
 
   //std::cerr << "draw" << std::endl;
 }
 
-void Spectrum::drawSpectrogram(vector<float> _vec) {
-
+void Spectrum::setSpectrum(vector<float> _vec) {
+  vec = _vec;
   unsigned char * pixels = spectrogramPix.getPixels();
   unsigned char pixs2[600 * 500 * 3];
   ofImage *img;
@@ -72,18 +74,18 @@ void Spectrum::drawSpectrogram(vector<float> _vec) {
     pixs2[i * 3 + 2] = pixels[i * 3 + 2 + len * 3];
   }
 
-  for (int i = spectrumWidth * spectrumHeight - len; i <  spectrumWidth * spectrumHeight; i++)
+  for (int i = spectrumWidth * spectrumHeight - len; i < spectrumWidth * spectrumHeight; i++)
   {
     int idx = i - (spectrumWidth * spectrumHeight - len);
     ofColor col;
-    //if (_vec[idx]>=0.3) {
-    //  col = getColorMap(_vec[idx]+0.3);
+    //if (vec[idx]>=0.3) {
+    //  col = getColorMap(vec[idx]+0.3);
     //}
     //else {
-    //  col = getColorMap(_vec[idx]);
+    //  col = getColorMap(vec[idx]);
     //}
-    col = getColorMap(_vec[idx]);
-    
+    col = getColorMap(vec[idx]);
+
     pixs2[i * 3] = col.r;
     pixs2[i * 3 + 1] = col.g;
     pixs2[i * 3 + 2] = col.b;
@@ -93,15 +95,18 @@ void Spectrum::drawSpectrogram(vector<float> _vec) {
   img->setFromPixels(pixs2, spectrumHeight, spectrumWidth, OF_IMAGE_COLOR);
   img->update();
   spectrogramPix = img->getPixels();
-
-  ofRotate(-90);
   spectrogramTex.loadData(spectrogramPix);
-  spectrogramTex.draw(- spectrumHeight - pos.y, pos.x);
-  //spectrogramTex.draw( - 10 - spectrumHeight  - pos.x, 10);
   img->clear();
-  
+}
 
+void Spectrum::drawSpectrogram() {
+  ofRotate(-90);
+  spectrogramTex.draw(-spectrumHeight - pos.y, pos.x);
   ofRotate(90);
+}
+
+void Spectrum::drawFrame() {
+  
   // ˜g
   ofPushStyle();
   ofNoFill();

@@ -22,7 +22,8 @@ public:
   void setup(float _x, float _y);
   void update();
   //void draw(float* audioInput, int size);
-  void draw(vector<float> _vec);
+  void draw();
+  void setSpectrum(vector<float> _vec);
 
   char title[255];
   int channel;
@@ -41,7 +42,9 @@ private:
   int spectrumWidth;
   int spectrumHeight;
   ofPoint pos;
-  void drawSpectrogram(vector<float> _vec);
+  void drawSpectrogram();
+  void drawFrame();
+  vector<float> vec;
 
 };
 

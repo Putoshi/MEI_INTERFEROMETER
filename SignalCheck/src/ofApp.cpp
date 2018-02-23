@@ -340,28 +340,13 @@ void ofApp::draw() {
   
   phaseDiffViewer[0].draw(870, 20 + (plotHeight + 30) * 0);
 
-  
-
-  //spectrums[1].draw(fft[1]->getPhase(), fft[1]->getBinSize());
-  //spectrums.draw(fft[1]->getPhase(), fft[1]->getBinSize());
   //std::cerr << (endIdx - startIdx) << std::endl;
   ofSetColor(255, 255, 255);
   //spectrums.draw(vec[1]);
   //ofDrawBitmapString("graph 1 <random number>", 600, 316);
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 
-  int startIdxForSpectrogram = roundf((3000 / sampleRate * 2) * fftForSpectrogram->getBinSize());
-  int endIdxForSpectrogram = roundf((highFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
-  vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
-  for (int k = 0; k < vecForSpectrogram.size(); k++)
-  {
-    //fftForSpectrogram->getAmplitude()
-    vecForSpectrogram[k] = fftForSpectrogram->getAmplitude()[k + startIdxForSpectrogram];
-    //vecForSpectrogram[k] = binForSpectrogram[k + startIdxForSpectrogram];
-    //std::cerr << binForSpectrogram[k + startIdxForSpectrogram] << std::endl;
-  }
-  //std::cerr << fftForSpectrogram->getAmplitude()[1] << std::endl;
-  spectrums.draw(vecForSpectrogram);
+  spectrums.draw();
   //std::cerr << vecForSpectrogram[10] << std::endl;
 
 
@@ -453,17 +438,19 @@ void ofApp::spectrogramFftUpdate() {
   fftForSpectrogram->setSignal(signalForSpectrogram);
 
   // Žw’è‚³‚ê‚½Žü”g”‚Åvector‚ðØ‚è”²‚¢‚¿‚á‚¤
-  //float sampleRate = N * (1000 / FFT_SPAN);
-  //memcpy(&binForSpectrogram[0], fftForSpectrogram->getAmplitude(), sizeof(float) * fftForSpectrogram->getBinSize());
-  //std::cerr << fftForSpectrogram->getAmplitude()[5] << std::endl;
-  //std::cerr << signalForSpectrogram[0] << std::endl;
-  //std::cerr << binForSpectrogram[0] << std::endl;
-
-  //vector<float> vec(fftForSpectrogram->getBinSize());
-  
-
-  //std::cerr << vec.size() << std::endl;
-  //spectrums.draw(vec);
+  float sampleRate = N * (1000 / FFT_SPAN);
+  int startIdxForSpectrogram = roundf((3000 / sampleRate * 2) * fftForSpectrogram->getBinSize());
+  int endIdxForSpectrogram = roundf((highFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
+  vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
+  for (int k = 0; k < vecForSpectrogram.size(); k++)
+  {
+    //fftForSpectrogram->getAmplitude()
+    vecForSpectrogram[k] = fftForSpectrogram->getAmplitude()[k + startIdxForSpectrogram];
+    //vecForSpectrogram[k] = binForSpectrogram[k + startIdxForSpectrogram];
+    //std::cerr << binForSpectrogram[k + startIdxForSpectrogram] << std::endl;
+  }
+  //std::cerr << fftForSpectrogram->getAmplitude()[1] << std::endl;
+  spectrums.setSpectrum(vecForSpectrogram);
   
 
 }
