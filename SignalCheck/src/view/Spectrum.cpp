@@ -10,7 +10,7 @@ vector<vector<ofColor>> vecColor(600);
 void Spectrum::setup(float _x, float _y) {
   pos.x = _x;
   pos.y = _y;
-  spectrumHeight = 200;
+  spectrumHeight = 500;
   spectrumWidth = 600;
   
   color.setHsb(0, 255, 255);
@@ -60,11 +60,11 @@ void Spectrum::draw(vector<float> _vec) {
 void Spectrum::drawSpectrogram(vector<float> _vec) {
 
   unsigned char * pixels = spectrogramPix.getPixels();
-  unsigned char pixs2[600 * 200 * 3];
+  unsigned char pixs2[600 * 500 * 3];
   ofImage *img;
   img = new ofImage;
   img->clear();
-  int len = 200;
+  int len = 500;
   for (int i = 0; i < spectrumWidth * spectrumHeight - len; i++)
   {
     pixs2[i * 3] = pixels[i * 3 + len * 3];
