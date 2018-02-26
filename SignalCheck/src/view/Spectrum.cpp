@@ -78,13 +78,14 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   {
     int idx = i - (spectrumWidth * spectrumHeight - len);
     ofColor col;
-    //if (vec[idx]>=0.3) {
-    //  col = getColorMap(vec[idx]+0.3);
+    //if (vec[idx] > 0.2) {
+    //  col = getColorMap(1);
     //}
     //else {
-    //  col = getColorMap(vec[idx]);
+    //  col = getColorMap(0);
     //}
     col = getColorMap(vec[idx]);
+    
 
     pixs2[i * 3] = col.r;
     pixs2[i * 3 + 1] = col.g;

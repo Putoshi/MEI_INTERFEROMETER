@@ -67,9 +67,9 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::load() {
 
-  file_.addListener(this, &ofApp::fileEvent);
-  file_.addListener(this, &ofApp::fileEvent2);
-  file_.setTargetPath(SRC_FILE);
+  //file_.addListener(this, &ofApp::fileEvent);
+  //file_.addListener(this, &ofApp::fileEvent2);
+  //file_.setTargetPath(SRC_FILE);
 
 
   signalUtil.CHANNELS = CHANNELS;
@@ -423,11 +423,11 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 void ofApp::fileEvent(ofFile &file)
 {
-  std::cout << "loaded event function called" << std::endl;
+  //std::cout << "loaded event function called" << std::endl;
 }
 void ofApp::fileEvent2(const void *sender, ofFile &file)
 {
-  std::cout << "loaded event function (with sender) called" << std::endl;
+  //std::cout << "loaded event function (with sender) called" << std::endl;
 }
 
 
