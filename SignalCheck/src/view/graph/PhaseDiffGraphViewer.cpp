@@ -72,7 +72,7 @@ void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
 
   peekFreq = 3736.0f;
 
-  float diffSampling = 1 / (44643.0f * 8.0f) * peekFreq * 360.0f;
+  float diffSampling = 1 / (44643.0f * 8.0f) * peekFreq * 360.0f / 2;
   //std::cerr << diffSampling << std::endl;
 
 
@@ -80,7 +80,7 @@ void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
   
   1-5ch 12
   */
-  _d += diffSampling * 4 + 12 - 40; //20  1-5ch 12
+  _d += diffSampling * 4; //20  1-5ch 12
 
   // ˆÊ‘Š”½“]‚ÌŽž‚É
   float wid = 0;
@@ -90,23 +90,16 @@ void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
   swingWidth = wid / 4;
   //std::cerr << swingWidth << std::endl;
 
-  //if (abs(swingWidth) < 30) {
-  //  if (abs(abs(prevValue) - abs(_d)) > 90) {
-  //    //std::cerr << _d << std::endl;
-  //    if (_d > 160 && _d <= 300) {
-  //      _d -= 180;
-  //    }
-  //    else if (_d < -160 && _d >= -300) {
-  //      _d += 180;
-  //    }
-  //    else if (_d > 300) {
-  //      _d -= 360;
-  //    }
-  //    else if (_d < 300) {
-  //      _d += 360;
-  //    }
-  //  }
-  //}
+  if (abs(swingWidth) < 10) {
+    if (abs(abs(prevValue) - abs(_d)) > 90) {
+      if (_d > 300) {
+        _d -= 360;
+      }
+      else if (_d < 300) {
+        _d += 360;
+      }
+    }
+  }
   
   last4Plots.push_back(prevValue - _d);
   if (last4Plots.size() > 4) last4Plots.erase(last4Plots.begin());

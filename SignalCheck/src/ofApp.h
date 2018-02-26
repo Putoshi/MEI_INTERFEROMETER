@@ -68,5 +68,7 @@ private:
   ofxPanel gui;
   ofxIntSlider binaryOffset;
 
+  int maxIdxForPhase;
+
 
 };

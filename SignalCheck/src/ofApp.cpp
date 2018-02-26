@@ -233,6 +233,9 @@ void ofApp::fftUpdate() {
     for (int j = 0; j < fft[i]->getBinSize(); j++) {
       if (abs(audioBins[i][j]) > maxValue[i]) {
         maxValue[i] = abs(audioBins[i][j]);
+        if (i == 0) {
+          maxIdxForPhase = j;
+        }
       }
     }
 
@@ -242,6 +245,8 @@ void ofApp::fftUpdate() {
     //}
 
   }
+
+  //std::cerr << maxIdx << std::endl;
 
   //std::cerr << signalafterfft[1].size() << std::endl;
   //std::cerr << (signalafterfft[1].size() - 1) * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) * 2 << std::endl;
@@ -303,9 +308,9 @@ void ofApp::draw() {
   for (int i = 0; i < CHANNELS; i++) {
     vector<float> _vec(endIdx - startIdx, 0);
     vec[i] = _vec;
-    phaseViewer[i].pushData(phase[i][75] / M_PI);
+    phaseViewer[i].pushData(phase[i][maxIdxForPhase] / M_PI);
   }
-  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][75] - phase[phaseDiffCh[1]][75]) * 180 / M_PI, peekFreq);
+  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][maxIdxForPhase] - phase[phaseDiffCh[1]][maxIdxForPhase]) * 180 / M_PI, peekFreq);
 
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
@@ -458,6 +463,7 @@ void ofApp::spectrogramFftUpdate() {
   peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
 
   //std::cerr << peekFreq << std::endl;
+
 
 
   //std::cerr << fftForSpectrogram->getAmplitude()[1] << std::endl;
