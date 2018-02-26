@@ -23,12 +23,11 @@ const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
 const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
 
 // PhaseDiff Ch
-const int phaseDiffCh[2] = {0, 1};
+const int phaseDiffCh[2] = {0, 4};
 
 int deltaTime, connectTime;
 
 int spectrogramTimeCnt = 0;  // スペクトログラムだけ別ループなのでその時間計測の変数
-vector<float> binForSpectrogram;
 //float * signalForSpectrogram[10260];
 float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
@@ -41,7 +40,7 @@ std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 vector<ofxGraphViewer> phaseViewer(CHANNELS);
 vector<ofxGraphViewer> signalViewer(CHANNELS);
 
-vector<ofxGraphViewer> phaseDiffViewer(CHANNELS);
+vector<PhaseDiffGraphViewer> phaseDiffViewer(CHANNELS);
 
 
 vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
@@ -144,11 +143,11 @@ void ofApp::init() {
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
   spectrums.setup(870, 180);
-  binForSpectrogram.resize(fftForSpectrogram->getBinSize());
+  //binForSpectrogram.resize(fftForSpectrogram->getBinSize());
 
   // 位相差 0-1
   phaseDiffViewer[0].setup(400);
-  phaseDiffViewer[0].setRange(-180.0 * 2, 180.0 * 2);
+  phaseDiffViewer[0].setRange(-180.0, 180.0);
   phaseDiffViewer[0].setSize(800, plotHeight);
   phaseDiffViewer[0].setColor(ofColor::blueViolet);
 
@@ -306,7 +305,7 @@ void ofApp::draw() {
     vec[i] = _vec;
     phaseViewer[i].pushData(phase[i][75] / M_PI);
   }
-  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][75] - phase[phaseDiffCh[1]][75]) * 180 / M_PI);
+  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][75] - phase[phaseDiffCh[1]][75]) * 180 / M_PI, peekFreq);
 
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
@@ -439,13 +438,28 @@ void ofApp::spectrogramFftUpdate() {
   int startIdxForSpectrogram = roundf((3000 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   int endIdxForSpectrogram = roundf((highFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
   vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
+
+
+  float max = 0;
+  int maxIdx = 0;
   for (int k = 0; k < vecForSpectrogram.size(); k++)
   {
     //fftForSpectrogram->getAmplitude()
     vecForSpectrogram[k] = fftForSpectrogram->getAmplitude()[k + startIdxForSpectrogram];
+
+    if (max < vecForSpectrogram[k]) {
+      max = vecForSpectrogram[k];
+      maxIdx = k;
+    }
     //vecForSpectrogram[k] = binForSpectrogram[k + startIdxForSpectrogram];
     //std::cerr << binForSpectrogram[k + startIdxForSpectrogram] << std::endl;
   }
+
+  peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
+
+  //std::cerr << peekFreq << std::endl;
+
+
   //std::cerr << fftForSpectrogram->getAmplitude()[1] << std::endl;
   spectrums.setSpectrum(vecForSpectrogram);
   

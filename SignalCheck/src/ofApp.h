@@ -10,6 +10,7 @@
 #include "./SignalUtil.h"
 #include "./view/AmpSpectrogram.h"
 #include "./view/Spectrum.h"
+#include "./view/graph/PhaseDiffGraphViewer.h"
 
 #include <stdio.h>
 #include <vector>
@@ -43,13 +44,15 @@ public:
   void gotMessage(ofMessage msg);
 
   int plotHeight, bufferSize;
+  float peekFreq;
+  //vector<float> tmpPeekFreq;
 
   ofMutex soundMutex;
 
 private:
   ofxWatchFile file_;
   SignalUtil signalUtil;
-  AmpSpectrogram ampSpectrogram;
+  AmpSpectrogram ampSpectrogram; 
 
   void init();
   void load();
