@@ -3,8 +3,8 @@
 using namespace std;
 
 // PATH
-const char SRC_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";		// adiファイルのパス
-const char DST_FILE[] = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";	// 一時保存パス
+char * SRC_FILE = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";		// adiファイルのパス
+char * DST_FILE = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";	// 一時保存パス
 
 
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
@@ -77,20 +77,12 @@ void ofApp::load() {
   signalUtil.AD_1S_N = AD_1S_N;
   signalUtil.N = N;
   signalUtil.FFT_SPAN = FFT_SPAN;
+  signalUtil.SRC_FILE = SRC_FILE;
+  signalUtil.DST_FILE = DST_FILE;
 
-  //// .adiファイルを開く
-  //bool isReaded = signalUtil.readSigned16bitIntBinary(SRC_FILE, &binValues);
-  //// _DaqLog.bakファイルに保存
-  //bool isWrote = signalUtil.writeSigned16bitIntBinary(DST_FILE, binValues);
+  signalUtil.init();
 
-  // .adiファイルを開く
-  bool isReaded = signalUtil.readSigned16bitIntBinary(SRC_FILE);
-  // _DaqLog.bakファイルに保存
-  bool isWrote = signalUtil.writeSigned16bitIntBinary(DST_FILE);
-
-  if (isReaded && isWrote) {
-    remove(DST_FILE); // ファイル削除
-  }
+  
 
   init();
 }

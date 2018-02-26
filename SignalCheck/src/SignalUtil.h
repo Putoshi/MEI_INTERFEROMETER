@@ -14,6 +14,11 @@ public:
   SignalUtil();
   ~SignalUtil();
 
+  void init();
+
+  char * SRC_FILE;		// adiファイルのパス
+  char * DST_FILE;	// 一時保存パス
+
   const int IDX_BODY = 8 * 4 + 4;
   int CHANNELS;
 
@@ -35,15 +40,18 @@ public:
   void convertSigned16bitIntEndian(std::vector<int16_t>* target_vector);
 
   // Read 16bit Binary File
-  bool readSigned16bitIntBinary(const std::string& file_full_path);
+  bool readSigned16bitIntBinary(const std::string& file_full_path, int _binIdx);
 
   // Write 16bit Binary File
   bool writeSigned16bitIntBinary(const std::string& file_full_path);
 
 private:
-  std::vector<int16_t> binValues;						// バイナリ
+  //std::vector<std::vector<int16_t>> binValues;						// バイナリ
+  std::vector<std::vector<int16_t>> binValues;						// バイナリ
+  int binIdx;
   int totalCnt;								// FFT 標本数
   int onceReadRow;            // 一回adiを読み込んだ時に取得できる行数
+  bool isReading;
 
 };
 
