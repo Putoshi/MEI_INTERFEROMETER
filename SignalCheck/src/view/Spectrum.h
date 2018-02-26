@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxOpenCv.h"
 #include <math.h>
 #include <string>
 #include <string.h>
