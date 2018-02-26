@@ -23,7 +23,7 @@ public:
   float FFT_SPAN;						// FFTする間隔 ms
 
   // adiバイナリを解析して信号を返す
-  std::vector<float *> parseBinary(const int frameCnt, const std::vector<int16_t>& targetVector);
+  std::vector<float *> parseBinary(const int frameCnt);
 
   // リトルエンディアン ビッグエンディアンの判定
   bool checkIsLittleEndian();
@@ -35,12 +35,15 @@ public:
   void convertSigned16bitIntEndian(std::vector<int16_t>* target_vector);
 
   // Read 16bit Binary File
-  bool readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* targetVector);
+  bool readSigned16bitIntBinary(const std::string& file_full_path);
 
   // Write 16bit Binary File
-  bool writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& targetVector);
+  bool writeSigned16bitIntBinary(const std::string& file_full_path);
 
 private:
+  std::vector<int16_t> binValues;						// バイナリ
+  int totalCnt;								// FFT 標本数
+  int onceReadRow;            // 一回adiを読み込んだ時に取得できる行数
 
 };
 

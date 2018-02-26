@@ -34,7 +34,7 @@ float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
 
 
-std::vector<int16_t> binValues;						// バイナリ
+
 
 std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 //vector<vector<float>> phase(CHANNELS);				// 都度読み込んで更新される位相vector
@@ -78,10 +78,15 @@ void ofApp::load() {
   signalUtil.N = N;
   signalUtil.FFT_SPAN = FFT_SPAN;
 
+  //// .adiファイルを開く
+  //bool isReaded = signalUtil.readSigned16bitIntBinary(SRC_FILE, &binValues);
+  //// _DaqLog.bakファイルに保存
+  //bool isWrote = signalUtil.writeSigned16bitIntBinary(DST_FILE, binValues);
+
   // .adiファイルを開く
-  bool isReaded = signalUtil.readSigned16bitIntBinary(SRC_FILE, &binValues);
+  bool isReaded = signalUtil.readSigned16bitIntBinary(SRC_FILE);
   // _DaqLog.bakファイルに保存
-  bool isWrote = signalUtil.writeSigned16bitIntBinary(DST_FILE, binValues);
+  bool isWrote = signalUtil.writeSigned16bitIntBinary(DST_FILE);
 
   if (isReaded && isWrote) {
     remove(DST_FILE); // ファイル削除
@@ -115,7 +120,7 @@ void ofApp::init() {
   plotHeight = 128;
 
   // 信号処理の初期化
-  signal = signalUtil.parseBinary(frameCnt, binValues);
+  signal = signalUtil.parseBinary(frameCnt);
   for (int i = 0; i < CHANNELS; ++i) {
     fft[i]->setSignal(signal[i]);
     fft[i]->getImaginary();
@@ -216,7 +221,7 @@ void ofApp::fftUpdate() {
   //std::cerr << "fftUpdate" << std::endl;
 
   // Binary Analyze
-  signal = signalUtil.parseBinary(frameCnt, binValues);
+  signal = signalUtil.parseBinary(frameCnt);
   //std::cerr << signal[1][1023] << std::endl;
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {

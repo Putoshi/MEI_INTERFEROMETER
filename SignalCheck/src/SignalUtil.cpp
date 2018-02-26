@@ -11,9 +11,19 @@ SignalUtil::~SignalUtil()
 {
 }
 
-std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vector<int16_t>& targetVector) {
-  //const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
 
+std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
+
+  totalCnt++;
+  if (totalCnt > (1000 / FFT_SPAN) * floor(onceReadRow / AD_1S_N)) {
+    std::cerr << totalCnt << std::endl;
+    totalCnt = 1;
+    
+    
+  }
+
+  //const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
+  //std::cerr << frameCnt << std::endl;
   std::vector<float *> signal(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
     float * sig = (float *)malloc(sizeof(float) * N);
@@ -25,7 +35,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vect
     // インデックスADボードの時間単位の標本数と
     // FFTに掛ける時間単位の標本数(2のべき乗)が合わないので、
     // ADボードの標本数に合わせたインデックスを与える
-    int idx = frameCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
+    int idx = totalCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
     //std::cerr << idx << " ";
 
     std::vector<unsigned short> data(8);
@@ -35,7 +45,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vect
 
       char buf[20];
 
-      snprintf(buf, 20, "%#x", targetVector[idx * 16 + k * 2 + IDX_BODY]);
+      snprintf(buf, 20, "%#x", binValues[idx * 16 + k * 2 + IDX_BODY]);
 
       char t[5];
       strncpy(t, &buf[strlen(buf) - 4], 4);
@@ -74,6 +84,8 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt, const std::vect
     //std::cerr << sig[j] << std::endl;
   }
 
+  
+
   //cout << endl;
   return signal;
 }
@@ -98,17 +110,17 @@ void SignalUtil::convertSigned16bitIntEndian(std::vector<int16_t>* targetVector)
   }
 }
 
-bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, std::vector<int16_t>* targetVector) {
+bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path) {
   std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
   if (!file) {
     std::cout << "Error: The file path is incorrect. There is no file." << std::endl;
     return false;
   }
   const size_t fileSize = getFileByteSize(file);
-  targetVector->clear();
-  targetVector->resize(fileSize / 2); // 16 bit is 2 bytes.
+  binValues.clear();
+  binValues.resize(fileSize / 2); // 16 bit is 2 bytes.
 
-  file.read((char*)targetVector->data(), fileSize);
+  file.read((char*)binValues.data(), fileSize);
   /*if (checkIsLlittleEndian()) {
   std::cout << "is Little endian" << std::endl;
   convertSigned16bitIntEndian(targetVector);
@@ -119,23 +131,25 @@ bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, std
 
   //convertSigned16bitIntEndian(targetVector);
   file.close();
+
+  onceReadRow = (binValues.size() - IDX_BODY) / 16;
   return true;
 }
 
-bool SignalUtil::writeSigned16bitIntBinary(const std::string& file_full_path, const std::vector<int16_t>& targetVector) {
+bool SignalUtil::writeSigned16bitIntBinary(const std::string& file_full_path) {
   std::ofstream file(file_full_path, std::ios::out | std::ios::binary);
   if (!file) {
     std::cout << "Error: The file to write could not be opend." << std::endl;
     return false;
   }
-  const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
+  const size_t fileSize = binValues.size() * 2; // int16_t (16 bit) is 2 byte.
   if (checkIsLittleEndian()) {
-    std::vector<int16_t> temp_vector = targetVector; // deep copy.
+    std::vector<int16_t> temp_vector = binValues; // deep copy.
     convertSigned16bitIntEndian(&temp_vector);
     file.write((char*)temp_vector.data(), fileSize);
   }
   else {
-    file.write((char*)targetVector.data(), fileSize);
+    file.write((char*)binValues.data(), fileSize);
   }
 
   file.close();
