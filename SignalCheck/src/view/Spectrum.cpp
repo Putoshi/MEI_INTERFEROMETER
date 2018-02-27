@@ -14,6 +14,8 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   FreqRange = 100.0f; // Hz
   peekFreq = 3000.0f;
   marginY = 25;
+  maxValue = 0;
+  avgValue = 0;
   
   color.setHsb(0, 255, 255);
 
@@ -57,6 +59,13 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   }
   specPickupTex.allocate(pickupH, spectrumWidth, GL_RGB);
   specPickupTex.loadData(specPickupPix);
+
+
+  // openCvで解析する領域確保
+  colorImg.allocate(pickupH, spectrumWidth);
+
+  // グレースケール
+  grayImg.allocate(pickupH, spectrumWidth);
 }
 
 void Spectrum::update() {
@@ -84,6 +93,22 @@ void Spectrum::draw(float _peekFreq) {
 
 void Spectrum::setSpectrum(vector<float> _vec) {
   vec = _vec;
+
+  // MaxとAvgを取得
+  float _avgValue = 0;
+  float _maxValue = 0.45;
+  for (int i = 0; i < vec.size(); i++)
+  {
+    _avgValue += vec[i];
+    if (vec[i] > _maxValue) {
+      _maxValue = vec[i];
+    }
+  }
+  avgValue = _avgValue / vec.size();
+  maxValue += (_maxValue - maxValue) / 4;
+  //std::cerr << avgValue + " : " + maxValue << std::endl;
+  //std::cerr << maxValue << std::endl;
+
   unsigned char * pixels = spectrogramPix.getPixels();
 
   unsigned char pixs[600 * 500 * 3];
@@ -135,7 +160,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     }
   }
 
-  std::cerr << pickupIdx << std::endl;
+  //std::cerr << pickupIdx << std::endl;
 
   img->setFromPixels(pixs, spectrumHeight, spectrumWidth, OF_IMAGE_COLOR);
   img->update();
@@ -148,12 +173,26 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   specPickupPix = imgPickup->getPixels();
   specPickupTex.loadData(specPickupPix);
   imgPickup->clear();
+
+
+  // OpenCVで解析するカラー画像領域に取得した映像を格納
+  colorImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
+  // 画像をグレースケールに変換
+  grayImg = colorImg;
+  grayImg.threshold(255 * maxValue * 0.5);
 }
 
 void Spectrum::drawSpectrogram() {
   ofRotate(-90);
   spectrogramTex.draw(-spectrumHeight - pos.y, pos.x);
   specPickupTex.draw(-spectrumHeight - pos.y - pickupH - marginY, pos.x);
+
+  // 取り込んだ画像を表示
+  //colorImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
+
+  // グレースケール画像
+  grayImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
+
   ofRotate(90);
 }
 

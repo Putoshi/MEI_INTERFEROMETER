@@ -58,6 +58,12 @@ private:
   int pickupH;
   int marginY;
 
+  // opencv
+  ofxCvColorImage colorImg; // openCvで扱うイメージ
+  ofxCvGrayscaleImage grayImg; // openCvで扱うグレースケールイメージ
+  float maxValue;
+  float avgValue;
+
 };
 
 #endif
