@@ -16,7 +16,7 @@ PhaseDiffGraphViewer::PhaseDiffGraphViewer()
   max = 1.0;
   width = 200.0;
   height = 50.0;
-  lineColor = ofColor::magenta;
+  lineColor = 0xffffff;
   idx = 0;
   offset = 0;
 
@@ -144,7 +144,7 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
   ofSetColor(120, 120, 120);
   ofLine(posx, posy + h / 2.0, posx + w, posy + h / 2.0);
 
-  ofSetColor(lineColor);
+  ofSetHexColor(lineColor);
   glBegin(GL_LINE_STRIP);
   for (int i = 0; i < bufferLength; i++) {
     //glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(data[i + offset], min, max, 0.0, h), 0.0);
@@ -172,7 +172,7 @@ void PhaseDiffGraphViewer::setRange(float _min, float _max)
   max = _max;
 }
 
-void PhaseDiffGraphViewer::setColor(ofColor _lineColor)
+void PhaseDiffGraphViewer::setColor(int _lineColor)
 {
   lineColor = _lineColor;
 }

@@ -11,7 +11,12 @@ char * DST_FILE = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";	// 一時保
 
 // CONFIG
 const int FPS = 120;								// FPS
-const int CHANNELS = 6;
+const int CHANNELS = 5;
+
+// COLOR
+const int COLOR_SIGNAL = 0x00dd44;
+const int COLOR_PHASE = 0x00ddc7;
+const int COLOR_PHASEDIFF = 0xdd00b6;
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
@@ -61,6 +66,9 @@ void ofApp::setup() {
   gui.setPosition(ofPoint(1920 - 220,0));
   gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
 
+  isLabelVisible = false;
+  font.loadFont("ufonts.com_grotesquemtt.ttf", 8);
+
   load();
 }
 
@@ -108,7 +116,8 @@ void ofApp::init() {
 
   
 
-  plotHeight = 128;
+  plotHeight = 100;
+  marginTop = 45;
 
   // 信号処理の初期化
   signal = signalUtil.parseBinary(frameCnt);
@@ -124,16 +133,14 @@ void ofApp::init() {
     //  phaseViewer[i].setup(200);
     //}
     phaseViewer[i].setup(200);
-    
     phaseViewer[i].setRange(-1.0, 1.0);
     phaseViewer[i].setSize(400, plotHeight);
-    phaseViewer[i].setColor(ofColor::magenta);
+    phaseViewer[i].setColor(COLOR_PHASE);
 
-    
     signalViewer[i].setup(200);
     signalViewer[i].setRange(-1.0, 1.0);
     signalViewer[i].setSize(200, plotHeight);
-    signalViewer[i].setColor(ofColor::green);
+    signalViewer[i].setColor(COLOR_SIGNAL);
   }
 
   // スペクトログラムの処理
@@ -142,14 +149,14 @@ void ofApp::init() {
   //std::cerr << _N << std::endl;
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
-  spectrums.setup(870, 180);
+  spectrums.setup(870, 175);
   //binForSpectrogram.resize(fftForSpectrogram->getBinSize());
 
   // 位相差 0-1
   phaseDiffViewer[0].setup(400);
   phaseDiffViewer[0].setRange(-180.0, 180.0);
   phaseDiffViewer[0].setSize(800, plotHeight);
-  phaseDiffViewer[0].setColor(ofColor::blueViolet);
+  phaseDiffViewer[0].setColor(COLOR_PHASEDIFF);
 
   signalMemRelease();  // メモリ開放
 
@@ -286,9 +293,9 @@ void ofApp::fftUpdate() {
 //--------------------------------------------------------------
 void ofApp::draw() {
  
-  ofSetColor(252);
-  ofPushMatrix();
-  ofTranslate(16, 16);
+  ofSetColor(255);
+  //ofPushMatrix();
+  //ofTranslate(16, 16);
 
   soundMutex.lock();
   drawBins = middleBins;
@@ -324,33 +331,56 @@ void ofApp::draw() {
     }
 
     // 周波数スペクトル 表示位置の初期化
+    if (isLabelVisible) {
+      ofPushMatrix();
+      //ofTranslate(16, 16 + (plotHeight + 30) * j);
+
+      if (j <= 4) {
+        font.drawString("Ant " + ofToString(j), 26, marginTop + (plotHeight + 30) * j - 4);
+        //ofDrawBitmapString("Ant " + ofToString(j), 26, marginTop + (plotHeight + 30) * j - 4);
+      }
+      else if (j == 5) {
+        font.drawString("GPS", 26, marginTop + (plotHeight + 30) * j - 4);
+        //ofDrawBitmapString("GPS", 26, marginTop + (plotHeight + 30) * j - 4);
+      }
+      else if (j == 6) {
+        font.drawString("AGC", 26, marginTop + (plotHeight + 30) * j - 4);
+        //ofDrawBitmapString("AGC", 26, marginTop + (plotHeight + 30) * j - 4);
+      }
+      ofPopMatrix();
+    }
+    
+    // Signal
     ofPushMatrix();
-    ofTranslate(16, 16 + (plotHeight + 30) * j);
-
-
-
-    ofDrawBitmapString("Channel " + ofToString(j), 0, 0);
-    ampSpectrogram.plot(vec[j], -plotHeight);
+    signalViewer[j].draw(26, marginTop + (plotHeight + 30) * j);
     ofPopMatrix();
 
-    phaseViewer[j].draw(450, 20 + (plotHeight + 30)*j);
+    if (j <= 4) {
+      // Freq
+      ofPushMatrix();
+      ofTranslate(250, marginTop + (plotHeight + 30) * j - 3);
+      ampSpectrogram.plot(vec[j], -plotHeight);
+      ofPopMatrix();
 
-    signalViewer[j].draw(230, 20 + (plotHeight + 30)*j);
-
+      // Phase
+      ofPushMatrix();
+      phaseViewer[j].draw(325, marginTop + (plotHeight + 30) * j);
+      ofPopMatrix();
+    }
   }
   
-  phaseDiffViewer[0].draw(870, 20 + (plotHeight + 30) * 0);
+  phaseDiffViewer[0].draw(870, marginTop + (plotHeight + 30) * 0);
 
   //std::cerr << (endIdx - startIdx) << std::endl;
   ofSetColor(255, 255, 255);
+
+  if(isLabelVisible) drawLabel();
+
   //spectrums.draw(vec[1]);
   //ofDrawBitmapString("graph 1 <random number>", 600, 316);
   //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 
   spectrums.draw();
-  //std::cerr << vecForSpectrogram[10] << std::endl;
-
-
 
   std::vector<vector<float>>().swap(drawBins); // メモリ開放
 
@@ -367,7 +397,7 @@ void ofApp::signalMemRelease() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-
+  if (key == 'l') isLabelVisible = !isLabelVisible;
 }
 
 //--------------------------------------------------------------
@@ -430,12 +460,8 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
   //std::cout << "loaded event function (with sender) called" << std::endl;
 }
 
-
-
-
 void ofApp::spectrogramFftUpdate() {
 
-  
   fftForSpectrogram->setSignal(signalForSpectrogram);
 
   // 指定された周波数でvectorを切り抜いちゃう
@@ -463,12 +489,23 @@ void ofApp::spectrogramFftUpdate() {
   peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
 
   //std::cerr << peekFreq << std::endl;
-
-
-
-  //std::cerr << fftForSpectrogram->getAmplitude()[1] << std::endl;
   spectrums.setSpectrum(vecForSpectrogram);
-  
 
+}
+
+void ofApp::drawLabel() {
+  ofPushMatrix();
+  //ofSetHexColor(0xbbbbbb);
+  font.drawString("Signal 1.25V", 157, marginTop - 3);
+  font.drawString("Freq 2-4kHz", 250 - 8, marginTop - 3);
+  font.drawString("Phase +-180", 325, marginTop - 3);
+  font.drawString("PhaseDifference +-180", 870, marginTop - 3);
+  //ofDrawBitmapString("Signal 1.25V ", 117, marginTop - 3);
+  //ofDrawBitmapString("Freq 2-4kHz", 250, marginTop - 3);
+  //ofDrawBitmapString("Phase +-180", 330, marginTop - 3);
+  //ofDrawBitmapString("PhaseDifference  +-180", 870, marginTop - 3);
+  //ofSetHexColor(0xffffff);
+
+  ofPopMatrix();
 }
 

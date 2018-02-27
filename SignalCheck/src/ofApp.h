@@ -45,7 +45,8 @@ public:
 
   int plotHeight, bufferSize;
   float peekFreq;
-  //vector<float> tmpPeekFreq;
+  bool isLabelVisible;
+  ofTrueTypeFont font;
 
   ofMutex soundMutex;
 
@@ -69,6 +70,10 @@ private:
   ofxIntSlider binaryOffset;
 
   int maxIdxForPhase;
+
+  int marginTop;
+
+  void drawLabel();
 
 
 };

@@ -19,13 +19,14 @@ void AmpSpectrogram::plot(vector<float>& buffer, float scale) {
   float marginY = 3;
   float offset = plotHeight / 2;
   ofNoFill();
-  int n = buffer.size();
+  int n = buffer.size();  
   ofSetLineWidth(0.5);
   ofDrawRectangle(0, marginY, n, plotHeight);
   glPushMatrix();
   glTranslatef(0, plotHeight / 2 + offset + marginY, 0);
-  ofBeginShape();
 
+  ofSetHexColor(0xdddddd);
+  ofBeginShape();
   for (int i = 0; i < n; i++) {
     ofVertex(i, sqrt(buffer[i]) * scale);
     //std::cerr << buffer[i] << std::endl;
@@ -33,4 +34,5 @@ void AmpSpectrogram::plot(vector<float>& buffer, float scale) {
   
   ofEndShape();
   glPopMatrix();
+  ofSetHexColor(0xffffff);
 }

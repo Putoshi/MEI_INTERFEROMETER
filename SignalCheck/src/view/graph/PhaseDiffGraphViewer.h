@@ -19,7 +19,7 @@ public:
     
     void setSize(float _width, float _height);
     void setRange(float _min, float _max);
-    void setColor(ofColor _lineColor);
+    void setColor(int _lineColor);
 
     float min, max, width, height;
 
@@ -28,7 +28,7 @@ public:
 private:
     int bufferLength, offset, idx;
     float* data;
-    ofColor lineColor;
+    int lineColor;
     float swingWidth;
     float prevValue;
     float peekFreq;
