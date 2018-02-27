@@ -11,7 +11,7 @@ char * DST_FILE = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";	// 一時保
 
 // CONFIG
 const int FPS = 120;								// FPS
-const int CHANNELS = 5;
+const int CHANNELS = 7;
 
 // COLOR
 const int COLOR_SIGNAL = 0x00dd44;
@@ -36,9 +36,6 @@ int spectrogramTimeCnt = 0;  // スペクトログラムだけ別ループなのでその時間計測の
 //float * signalForSpectrogram[10260];
 float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
-
-
-
 
 std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 //vector<vector<float>> phase(CHANNELS);				// 都度読み込んで更新される位相vector
@@ -79,7 +76,6 @@ void ofApp::load() {
   //file_.addListener(this, &ofApp::fileEvent2);
   //file_.setTargetPath(SRC_FILE);
 
-
   signalUtil.CHANNELS = CHANNELS;
   signalUtil.AD_1S_N = AD_1S_N;
   signalUtil.N = N;
@@ -88,8 +84,6 @@ void ofApp::load() {
   signalUtil.DST_FILE = DST_FILE;
 
   signalUtil.init();
-
-  
 
   init();
 }
@@ -114,8 +108,6 @@ void ofApp::init() {
     free(sig);  // メモリ開放
   }
 
-  
-
   plotHeight = 100;
   marginTop = 45;
 
@@ -125,13 +117,6 @@ void ofApp::init() {
     fft[i]->setSignal(signal[i]);
     fft[i]->getImaginary();
 
-    //phaseViewer[i].setup(fft[0]->getBinSize()/20);
-    //if (i == 1) {
-    //  phaseViewer[i].setup(200,6);
-    //}
-    //else {
-    //  phaseViewer[i].setup(200);
-    //}
     phaseViewer[i].setup(200);
     phaseViewer[i].setRange(-1.0, 1.0);
     phaseViewer[i].setSize(400, plotHeight);
@@ -146,11 +131,10 @@ void ofApp::init() {
   // スペクトログラムの処理
   int len = fft[0]->getBinSize() * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
   int _N = (N * (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
-  //std::cerr << _N << std::endl;
+
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
   spectrums.setup(870, 175);
-  //binForSpectrogram.resize(fftForSpectrogram->getBinSize());
 
   // 位相差 0-1
   phaseDiffViewer[0].setup(400);
@@ -195,23 +179,11 @@ void ofApp::update() {
       int size = signalafterfft[i].size();
       
       for (int j = 0; j < 2049 / 2 / 2 - 1; j++) {
-
         signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
-
-        //if (i == 0) {
-        //  signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin() + binaryOffset) / M_PI);
-        //}
-        //else {
-        //  signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
-        //}
       }
       
     } 
   }
-  //std::cerr << binaryOffset << std::endl;
-  //float d1 = ofRandom(-1.0, 1.0);
-
-  
 }
 
 void ofApp::fftUpdate() {
@@ -220,7 +192,6 @@ void ofApp::fftUpdate() {
 
   // Binary Analyze
   signal = signalUtil.parseBinary(frameCnt);
-  //std::cerr << signal[1][1023] << std::endl;
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
 
@@ -228,14 +199,11 @@ void ofApp::fftUpdate() {
 
     memcpy(&audioBins[i][0], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
     maxValue[i] = 0;
-    //std::cerr << audioBins[i][0] << std::endl;
 
     const int n = fft[i]->getBinSize();
 
     phase[i].assign(fft[i]->getPhase(), fft[i]->getPhase() + n);
     signalafterfft[i].assign(fft[i]->getSignal(), fft[i]->getSignal() + n);
-    //phase[i].assign(fft[i]->getSignal(), fft[i]->getSignal() + n);
-    //phase[i].assign(fft[i]->getReal(), fft[i]->getReal() + n);
 
     for (int j = 0; j < fft[i]->getBinSize(); j++) {
       if (abs(audioBins[i][j]) > maxValue[i]) {
@@ -253,25 +221,12 @@ void ofApp::fftUpdate() {
 
   }
 
-  //std::cerr << maxIdx << std::endl;
-
-  //std::cerr << signalafterfft[1].size() << std::endl;
-  //std::cerr << (signalafterfft[1].size() - 1) * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) * 2 << std::endl;
-  //std::cerr << fft[1]->getSignal().size() << std::endl;
-  //std::cerr << signal[1] << std::endl;
   int _loopCnt = (signalafterfft[1].size() - 1) * 2;
   for (int i = 0; i < _loopCnt; i++) {
     int idx = i + _loopCnt * spectrogramTimeCnt;
-    //std::cerr << signal[1][i] << std::endl;
     signalForSpectrogram[idx] = signal[1][i];
-    //std::cerr << signalForSpectrogram[idx] << std::endl;
-
-    //std::cerr << signalForSpectrogram[idx] << std::endl;
   }
   //std::cerr << signalForSpectrogram[10] << std::endl;
-
-  //signalForSpectrogram[idx] = &signalafterfft[1][i];
-
 
   signalMemRelease();
   std::vector<float>().swap(maxValue); // メモリ開放
@@ -280,22 +235,12 @@ void ofApp::fftUpdate() {
   std::vector<vector<float>>().swap(middleBins); // メモリ開放
   middleBins = audioBins;
   soundMutex.unlock();
-
-  //float* p;
-  //p = new float[fft[1]->getBinSize()];
-  //memcpy(p, fft[1]->getPhase(), sizeof(float) * fft[1]->getBinSize());
-  ///*for (int k = 0; k < fft[1]->getBinSize(); k++) {
-  //  std::cerr << p[k] << std::endl;
-  //}*/
-  //delete p;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
  
   ofSetColor(255);
-  //ofPushMatrix();
-  //ofTranslate(16, 16);
 
   soundMutex.lock();
   drawBins = middleBins;
@@ -375,10 +320,6 @@ void ofApp::draw() {
   ofSetColor(255, 255, 255);
 
   if(isLabelVisible) drawLabel();
-
-  //spectrums.draw(vec[1]);
-  //ofDrawBitmapString("graph 1 <random number>", 600, 316);
-  //ofDrawBitmapString("graph 2 <frame number % 1000>", 600, 520);
 
   spectrums.draw();
 
@@ -482,8 +423,6 @@ void ofApp::spectrogramFftUpdate() {
       max = vecForSpectrogram[k];
       maxIdx = k;
     }
-    //vecForSpectrogram[k] = binForSpectrogram[k + startIdxForSpectrogram];
-    //std::cerr << binForSpectrogram[k + startIdxForSpectrogram] << std::endl;
   }
 
   peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
@@ -500,6 +439,9 @@ void ofApp::drawLabel() {
   font.drawString("Freq 2-4kHz", 250 - 8, marginTop - 3);
   font.drawString("Phase +-180", 325, marginTop - 3);
   font.drawString("PhaseDifference +-180", 870, marginTop - 3);
+  font.drawString("Spectrogram 3-4kHz", 870, 175 - 3);
+
+  
   //ofDrawBitmapString("Signal 1.25V ", 117, marginTop - 3);
   //ofDrawBitmapString("Freq 2-4kHz", 250, marginTop - 3);
   //ofDrawBitmapString("Phase +-180", 330, marginTop - 3);
