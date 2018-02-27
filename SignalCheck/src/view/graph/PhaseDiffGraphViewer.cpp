@@ -28,8 +28,6 @@ PhaseDiffGraphViewer::PhaseDiffGraphViewer()
   for (int i = 0; i < 4; i++) {
     last4Plots.push_back(0.1);
   }
-
-  prevFreq = 3000;
 }
 
 PhaseDiffGraphViewer::~PhaseDiffGraphViewer()

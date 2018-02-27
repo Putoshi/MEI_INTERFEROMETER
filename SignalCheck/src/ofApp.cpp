@@ -136,7 +136,7 @@ void ofApp::init() {
 
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
-  spectrums.setup(870, 175);
+  spectrums.setup(870, 175, highFreq, 3000);
 
   // ˆÊ‘Š· 0-1
   phaseDiffViewer[0].setup(400);
@@ -327,7 +327,7 @@ void ofApp::draw() {
 
   if(isLabelVisible) drawLabel();
 
-  spectrums.draw();
+  spectrums.draw(peekFreq);
 
   std::vector<vector<float>>().swap(drawBins); // ƒƒ‚ƒŠŠJ•ú
 

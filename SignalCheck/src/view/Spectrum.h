@@ -20,10 +20,10 @@ public:
     channel = c;
   }
 
-  void setup(float _x, float _y);
+  void setup(float _x, float _y, float _highFreq, float _lowFreq);
   void update();
   //void draw(float* audioInput, int size);
-  void draw();
+  void draw(float _peekFreq);
   void setSpectrum(vector<float> _vec);
 
   char title[255];
@@ -40,12 +40,23 @@ private:
   ofPixels spectrogramPix;
   ofTexture spectrogramTex;
 
+  ofPixels specPickupPix;
+  ofTexture specPickupTex;
+
+  
+
   int spectrumWidth;
   int spectrumHeight;
   ofPoint pos;
   void drawSpectrogram();
   void drawFrame();
   vector<float> vec;
+  float highFreq;
+  float lowFreq;
+  float peekFreq;
+  float FreqRange;
+  int pickupH;
+  int marginY;
 
 };
 

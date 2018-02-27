@@ -32,5 +32,4 @@ private:
     float swingWidth;
     float prevValue;
     float peekFreq;
-    float prevFreq;
 };
