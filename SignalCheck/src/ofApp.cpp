@@ -27,6 +27,8 @@ const float SPECTROGRAM_FFT_SPAN = 500;								// FFTÇ∑ÇÈä‘äu ms
 const float lowFreq = 2000;							// FFTÇ≈êÿÇËèoÇ∑é¸îgêîâ∫å¿ Hz
 const float highFreq = 4000;						// FFTÇ≈êÿÇËèoÇ∑é¸îgêîè„å¿ Hz
 
+const float sampleRate = N * (1000 / FFT_SPAN);
+
 // PhaseDiff Ch
 const int phaseDiffCh[2] = {0, 4};
 
@@ -221,6 +223,10 @@ void ofApp::fftUpdate() {
 
   }
 
+  int startIdx = roundf((lowFreq / sampleRate * 2) * audioBins[0].size());
+  int endIdx = roundf((highFreq / sampleRate * 2) * audioBins[0].size());
+  peekFreq = (float)maxIdxForPhase / ((float)endIdx - (float)startIdx) * (highFreq - lowFreq);
+
   int _loopCnt = (signalafterfft[1].size() - 1) * 2;
   for (int i = 0; i < _loopCnt; i++) {
     int idx = i + _loopCnt * spectrogramTimeCnt;
@@ -249,7 +255,7 @@ void ofApp::draw() {
   //std::cerr << drawBins[0].size() << std::endl;
 
   // éwíËÇ≥ÇÍÇΩé¸îgêîÇ≈vectorÇêÿÇËî≤Ç¢ÇøÇ·Ç§
-  float sampleRate = N * (1000 / FFT_SPAN);
+  
   int startIdx = roundf((lowFreq / sampleRate * 2) * drawBins[0].size());
   int endIdx = roundf((highFreq / sampleRate * 2) * drawBins[0].size());
   //std::cerr << drawBins[0].size() << std::endl;
@@ -262,8 +268,8 @@ void ofApp::draw() {
     vec[i] = _vec;
     phaseViewer[i].pushData(phase[i][maxIdxForPhase] / M_PI);
   }
-  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][maxIdxForPhase] - phase[phaseDiffCh[1]][maxIdxForPhase]) * 180 / M_PI, peekFreq);
 
+  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][maxIdxForPhase] - phase[phaseDiffCh[1]][maxIdxForPhase]) * 180 / M_PI, peekFreq);
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
   ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
@@ -406,7 +412,6 @@ void ofApp::spectrogramFftUpdate() {
   fftForSpectrogram->setSignal(signalForSpectrogram);
 
   // éwíËÇ≥ÇÍÇΩé¸îgêîÇ≈vectorÇêÿÇËî≤Ç¢ÇøÇ·Ç§
-  float sampleRate = N * (1000 / FFT_SPAN);
   int startIdxForSpectrogram = roundf((3000 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   int endIdxForSpectrogram = roundf((highFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
   vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
@@ -416,7 +421,6 @@ void ofApp::spectrogramFftUpdate() {
   int maxIdx = 0;
   for (int k = 0; k < vecForSpectrogram.size(); k++)
   {
-    //fftForSpectrogram->getAmplitude()
     vecForSpectrogram[k] = fftForSpectrogram->getAmplitude()[k + startIdxForSpectrogram];
 
     if (max < vecForSpectrogram[k]) {
@@ -425,7 +429,7 @@ void ofApp::spectrogramFftUpdate() {
     }
   }
 
-  peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
+  //peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
 
   //std::cerr << peekFreq << std::endl;
   spectrums.setSpectrum(vecForSpectrogram);

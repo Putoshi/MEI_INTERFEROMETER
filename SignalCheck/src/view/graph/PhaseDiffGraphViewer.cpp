@@ -64,20 +64,25 @@ void PhaseDiffGraphViewer::allocate(int num)
 
 void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
 {
-  if (abs(_peekFreq - prevFreq) < 12 || peekFreq == 0) {
-    peekFreq = _peekFreq;
-    //std::cerr << peekFreq << std::endl;
+ if(peekFreq != _peekFreq){
+    peekFreq += (_peekFreq - peekFreq) / 2;
   }
-  //prevFreq = _peekFreq;
+  else {
+    peekFreq = _peekFreq;
+  }
 
-  peekFreq = 3736.0f;
+  if (0 > peekFreq || peekFreq > 5000) {
+    peekFreq = 3000.0f;
+  }
+  //std::cerr << peekFreq << std::endl;
+
+  //peekFreq = 3736.0f;
 
   float diffSampling = 1 / (44643.0f * 8.0f) * peekFreq * 360.0f / 2;
   //std::cerr << diffSampling << std::endl;
 
 
   /*
-  
   1-5ch 12
   */
   _d += diffSampling * 4; //20  1-5ch 12
