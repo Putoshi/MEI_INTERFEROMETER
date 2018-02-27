@@ -35,9 +35,10 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     isReading = true;
     readSigned16bitIntBinary(SRC_FILE, (binIdx + 1) % 2);
   }
+  //std::cerr << floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) << std::endl;
 
   // 14s“Ç‚Ýž‚ñ‚¾‚çƒŠƒZƒbƒg
-  if (totalCnt > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) ) {
+  if (totalCnt >= floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) ) {
     std::cerr << "LOOP" << std::endl;
     totalCnt = 1;
     binIdx = (binIdx + 1) % 2;
