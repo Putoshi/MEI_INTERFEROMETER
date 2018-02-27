@@ -180,6 +180,43 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   // 画像をグレースケールに変換
   grayImg = colorImg;
   grayImg.threshold(255 * maxValue * 0.5);
+
+  // 輪郭を描く
+  // 第1引数 輪郭検出対象
+  // 第2引数 検出する最小の大きさ(20)
+  // 第3引数 検出する最大の大きさ
+  // 第4引数 検出する数
+  // 第5引数 穴が空いたものを検出するかどうか trueで　検出する
+  try
+  {
+    contourFinder.findContours(grayImg, 1, 20, 1, false);
+    std::cerr << contourFinder.nBlobs << std::endl;
+
+    // 動的配列をクリアする
+    edgeLines.clear();
+
+    //-----------------------------------------
+    // 輪郭線の座標を結んで線にする
+    //-----------------------------------------
+
+    // １周目for文で複数の輪郭にアクセス
+    for (int i = 0; i< contourFinder.nBlobs; i++) {
+      ofPolyline line;
+      // ２周目for文でそれぞれの輪郭の点にアクセスし、点を結んで線にする。
+      for (int j = 0; j<contourFinder.blobs[i].pts.size(); j++) {
+        // 点を線にする。
+        line.addVertex(contourFinder.blobs[i].pts[j]);
+      }
+      // 作成した線を格納
+      edgeLines.push_back(line);
+    }
+  }
+  catch (cv::Exception& e)
+  {
+    const char* err_msg = e.what();
+    std::cout << "exception caught: " << err_msg << std::endl;
+  }
+ 
 }
 
 void Spectrum::drawSpectrogram() {
@@ -192,6 +229,14 @@ void Spectrum::drawSpectrogram() {
 
   // グレースケール画像
   grayImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
+
+  // 境界線のサイズと色指定
+  ofSetLineWidth(1);
+  ofSetColor(255, 255, 0);
+  // 輪郭線の描画
+  for (int cnt = 0; cnt< edgeLines.size(); cnt++) {
+    edgeLines[cnt].draw();
+  }
 
   ofRotate(90);
 }
@@ -209,6 +254,11 @@ void Spectrum::drawFrame() {
   ofNoFill();
   ofSetColor(ofColor::white);
   ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY, spectrumWidth, pickupH);
+
+  ofPushStyle();
+  ofNoFill();
+  ofSetColor(ofColor::white);
+  ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY * 2 + pickupH, spectrumWidth, pickupH);
 
 }
 

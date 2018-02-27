@@ -61,6 +61,10 @@ private:
   // opencv
   ofxCvColorImage colorImg; // openCvで扱うイメージ
   ofxCvGrayscaleImage grayImg; // openCvで扱うグレースケールイメージ
+  ofxCvContourFinder contourFinder; // 輪郭検出用
+  vector <ofPolyline> edgeLines; // 輪郭線を格納する動的配列
+  
+  
   float maxValue;
   float avgValue;
 
