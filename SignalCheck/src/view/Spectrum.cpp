@@ -74,7 +74,7 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
 
 
   // openCvで解析する領域確保
-  //colorImg.allocate(pickupH, spectrumWidth);
+  colorImg.allocate(pickupH, spectrumWidth);
 
   //// グレースケール
   //grayScaleImg.allocate(pickupH, spectrumWidth);
@@ -121,8 +121,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     }
   }
   avgValue = _avgValue / vec.size();
-  //maxValue += (_maxValue - maxValue) / 4;
-  maxValue = 0;
+  maxValue += (_maxValue - maxValue) / 4;
+  //maxValue = 0;
 
 
   unsigned char * pixels = spectrogramPix.getPixels();
@@ -215,11 +215,13 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   imgPickup->setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth, OF_IMAGE_COLOR);
   imgPickup->update();
   specPickupTex.loadData(imgPickup->getPixels());
-
-  // 画像をグレースケールに変換
-  grayImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
-  grayImg.threshold(2.5);
   imgPickup->clear();
+
+  // OpenCVで解析するカラー画像領域に取得した映像を格納
+  colorImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
+  // 画像をグレースケールに変換
+  grayImg = colorImg;
+  grayImg.threshold(255 * maxValue * 0.75);
 
   // グレースケール抽出
   //imgPickup_GrayScale->setFromPixels(_specPickupPix_GrayScale, pickupH, spectrumWidth, OF_IMAGE_COLOR);
@@ -417,7 +419,7 @@ ofColor Spectrum::covertGrayScale(ofColor _col) {
   newCol.g = 255 - 255 / 6 * X;
   newCol.b = 255 - 255 / 6 * X;
 
-  if(maxValue < 255 - 255 / 6 * X) maxValue = 255 - 255 / 6 * X;
+  //if(maxValue < 255 - 255 / 6 * X) maxValue = 255 - 255 / 6 * X;
 
   return  newCol;
 }

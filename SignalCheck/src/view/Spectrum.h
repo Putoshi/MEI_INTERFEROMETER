@@ -59,7 +59,7 @@ private:
   int marginY;
 
   // opencv
-  //ofxCvColorImage colorImg; // openCvで扱うイメージ
+  ofxCvColorImage colorImg; // openCvで扱うイメージ
   //ofxCvColorImage grayScaleImg; // openCvで扱うイメージ
   ofxCvGrayscaleImage grayImg; // openCvで扱うグレースケールイメージ
   ofxCvContourFinder contourFinder; // 輪郭検出用
