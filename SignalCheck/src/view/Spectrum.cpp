@@ -61,23 +61,8 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   specPickupTex.allocate(pickupH, spectrumWidth, GL_RGB);
   specPickupTex.loadData(specPickupPix);
 
-  // グレースケール スペクトログラム[抽出]
-  //specPickupPix_GrayScale.allocate(pickupH, spectrumWidth, OF_IMAGE_COLOR);
-  //specPickupPix_GrayScale.set(0);
-  //for (int i = 0; i < pickupH; i++) {
-  //  for (int j = 0; j < spectrumWidth; j++) {
-  //    specPickupPix_GrayScale.setColor(i, j, ofColor::black);
-  //  }
-  //}
-  //specPickupTex_GrayScale.allocate(pickupH, spectrumWidth, GL_RGB);
-  //specPickupTex_GrayScale.loadData(specPickupPix_GrayScale);
-
-
   // openCvで解析する領域確保
   colorImg.allocate(pickupH, spectrumWidth);
-
-  //// グレースケール
-  //grayScaleImg.allocate(pickupH, spectrumWidth);
 
   // グレースケール 2極化
   grayImg.allocate(pickupH, spectrumWidth);
@@ -112,7 +97,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
 
   // MaxとAvgを取得
   float _avgValue = 0;
-  float _maxValue = 0.45;
+  float _maxValue = 0.3;
   for (int i = 0; i < vec.size(); i++)
   {
     _avgValue += vec[i];
@@ -121,8 +106,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     }
   }
   avgValue = _avgValue / vec.size();
-  maxValue += (_maxValue - maxValue) / 4;
-  //maxValue = 0;
+  //maxValue += (_maxValue - maxValue) / 2;
+  maxValue = 0.45;
 
 
   unsigned char * pixels = spectrogramPix.getPixels();
@@ -136,21 +121,6 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   ofImage *imgPickup;
   imgPickup = new ofImage;
   imgPickup->clear();
-
-  //unsigned char _specPickupPix_GrayScale[600 * 50 * 3];
-  //ofImage *imgPickup_GrayScale;
-  //imgPickup_GrayScale = new ofImage;
-  //imgPickup_GrayScale->clear();
-
-  //unsigned char pixsColorPickup[600 * 50 * 3];
-  //ofImage *imgColorPickup;
-  //imgColorPickup = new ofImage;
-  //imgColorPickup->clear();
-  //
-  //unsigned char pixsPickupGrayScale[600 * 50 * 3];
-  //ofImage *imgPickup;
-  //imgPickup = new ofImage;
-  //imgPickup->clear();
 
   if((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
 
@@ -221,7 +191,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   colorImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
   // 画像をグレースケールに変換
   grayImg = colorImg;
-  grayImg.threshold(255 * maxValue * 0.75);
+  grayImg.threshold(255 * maxValue * 0.8);
 
   // 輪郭を描く
   // 第1引数 輪郭検出対象
@@ -230,38 +200,40 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   // 第4引数 検出する数
   // 第5引数 穴が空いたものを検出するかどうか trueで　検出する
 
-  contourFinder.findContours(grayImg, 1, 20, 1000, false);
-  std::cerr << contourFinder.nBlobs << std::endl;
+  //contourFinder.findContours(grayImg, 1, 20, 1000, false);
+  //std::cerr << contourFinder.nBlobs << std::endl;
 
-  //try
-  //{
-  //  contourFinder.findContours(grayImg, 1, 20, 10, false);
-  //  std::cerr << contourFinder.nBlobs << std::endl;
+  try
+  {
+    contourFinder.findContours(grayImg, 0, 600 * 50, 100, false, false);
+    //std::cerr << contourFinder.nBlobs << std::endl;
 
-  //  // 動的配列をクリアする
-  //  edgeLines.clear();
+    // 動的配列をクリアする
+    edgeLines.clear();
 
-  //  //-----------------------------------------
-  //  // 輪郭線の座標を結んで線にする
-  //  //-----------------------------------------
+    //-----------------------------------------
+    // 輪郭線の座標を結んで線にする
+    //-----------------------------------------
 
-  //  // １周目for文で複数の輪郭にアクセス
-  //  for (int i = 0; i< contourFinder.nBlobs; i++) {
-  //    ofPolyline line;
-  //    // ２周目for文でそれぞれの輪郭の点にアクセスし、点を結んで線にする。
-  //    for (int j = 0; j<contourFinder.blobs[i].pts.size(); j++) {
-  //      // 点を線にする。
-  //      line.addVertex(contourFinder.blobs[i].pts[j]);
-  //    }
-  //    // 作成した線を格納
-  //    edgeLines.push_back(line);
-  //  }
-  //}
-  //catch (cv::Exception& e)
-  //{
-  //  const char* err_msg = e.what();
-  //  std::cout << "exception caught: " << err_msg << std::endl;
-  //}
+    // １周目for文で複数の輪郭にアクセス
+    for (int i = 0; i< contourFinder.nBlobs; i++) {
+      ofPolyline line;
+      //std::cout << contourFinder.blobs[i].pts.size() << std::endl;
+      // ２周目for文でそれぞれの輪郭の点にアクセスし、点を結んで線にする。
+      for (int j = 0; j<contourFinder.blobs[i].pts.size(); j++) {
+        // 点を線にする。
+        //std::cout << "exception caught: " << contourFinder.blobs[i].pts[j].x << std::endl;
+        line.addVertex(contourFinder.blobs[i].pts[j]);
+      }
+      // 作成した線を格納
+      edgeLines.push_back(line);
+    }
+  }
+  catch (cv::Exception& e)
+  {
+    const char* err_msg = e.what();
+    std::cout << "exception caught: " << err_msg << std::endl;
+  }
 
   //std::cout << pickupIdxY << std::endl;
   
@@ -274,27 +246,29 @@ void Spectrum::drawSpectrogram() {
   // 抽出
   specPickupTex.draw(-spectrumHeight - pos.y - pickupH - marginY, pos.x);
 
-  // グレースケール 抽出
-  //specPickupTex_GrayScale.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
-
-  
-
-  // 取り込んだ画像を表示
-  //colorImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
-
-  // グレースケール画像
-  //grayScaleImg.draw(-spectrumHeight - pos.y - pickupH * 3 - marginY * 3, pos.x);
-
   // グレースケール画像 2極化
   grayImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
 
-  //// 境界線のサイズと色指定
-  //ofSetLineWidth(1);
-  //ofSetColor(255, 255, 0);
-  //// 輪郭線の描画
-  //for (int cnt = 0; cnt< edgeLines.size(); cnt++) {
-  //  edgeLines[cnt].draw();
+  // 境界線のサイズと色指定
+  ofPushMatrix();
+  ofTranslate(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
+
+  ofSetLineWidth(1);
+  ofSetColor(255, 0, 0);
+  // 輪郭線の描画
+  for (int cnt = 0; cnt< edgeLines.size(); cnt++) {
+    edgeLines[cnt].draw();
+  }
+  //if (edgeLines.size() > 0) {
+  //  //for (int i = 0; i < edgeLines[0].getVertices.size(); i++) {
+
+  //  //}
+  //  //std::cout << edgeLines[0].getVertices << std::endl;
+  //  edgeLines[0].draw();
   //}
+  
+
+  ofPopMatrix();
   
 
   ofRotate(90);
@@ -392,8 +366,6 @@ ofColor Spectrum::covertGrayScale(ofColor _col) {
   newCol.r = 255 - 255 / 6 * X;
   newCol.g = 255 - 255 / 6 * X;
   newCol.b = 255 - 255 / 6 * X;
-
-  //if(maxValue < 255 - 255 / 6 * X) maxValue = 255 - 255 / 6 * X;
 
   return  newCol;
 }
