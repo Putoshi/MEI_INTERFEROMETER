@@ -16,7 +16,8 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   marginY = 25;
   maxValue = 0;
   avgValue = 0;
-  
+  pickupIdxY = 0;
+
   color.setHsb(0, 255, 255);
 
   colorMap.allocate(5, spectrumHeight, OF_IMAGE_COLOR);
@@ -60,11 +61,25 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   specPickupTex.allocate(pickupH, spectrumWidth, GL_RGB);
   specPickupTex.loadData(specPickupPix);
 
+  // グレースケール スペクトログラム[抽出]
+  //specPickupPix_GrayScale.allocate(pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  //specPickupPix_GrayScale.set(0);
+  //for (int i = 0; i < pickupH; i++) {
+  //  for (int j = 0; j < spectrumWidth; j++) {
+  //    specPickupPix_GrayScale.setColor(i, j, ofColor::black);
+  //  }
+  //}
+  //specPickupTex_GrayScale.allocate(pickupH, spectrumWidth, GL_RGB);
+  //specPickupTex_GrayScale.loadData(specPickupPix_GrayScale);
+
 
   // openCvで解析する領域確保
-  colorImg.allocate(pickupH, spectrumWidth);
+  //colorImg.allocate(pickupH, spectrumWidth);
 
-  // グレースケール
+  //// グレースケール
+  //grayScaleImg.allocate(pickupH, spectrumWidth);
+
+  // グレースケール 2極化
   grayImg.allocate(pickupH, spectrumWidth);
 }
 
@@ -80,7 +95,7 @@ void Spectrum::draw(float _peekFreq) {
     peekFreq = _peekFreq;
   }
 
-  if (0 > peekFreq || peekFreq > 5000) {
+  if (1 > peekFreq || peekFreq > 5000) {
     peekFreq = 3000.0f;
   }
   
@@ -106,9 +121,9 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     }
   }
   avgValue = _avgValue / vec.size();
-  maxValue += (_maxValue - maxValue) / 4;
-  //std::cerr << avgValue + " : " + maxValue << std::endl;
-  //std::cerr << maxValue << std::endl;
+  //maxValue += (_maxValue - maxValue) / 4;
+  maxValue = 0;
+
 
   unsigned char * pixels = spectrogramPix.getPixels();
 
@@ -117,11 +132,27 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   img = new ofImage;
   img->clear();
 
-  unsigned char pixsPickup[600 * 50 * 3];
+  
   ofImage *imgPickup;
   imgPickup = new ofImage;
   imgPickup->clear();
-  int pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
+
+  //unsigned char _specPickupPix_GrayScale[600 * 50 * 3];
+  //ofImage *imgPickup_GrayScale;
+  //imgPickup_GrayScale = new ofImage;
+  //imgPickup_GrayScale->clear();
+
+  //unsigned char pixsColorPickup[600 * 50 * 3];
+  //ofImage *imgColorPickup;
+  //imgColorPickup = new ofImage;
+  //imgColorPickup->clear();
+  //
+  //unsigned char pixsPickupGrayScale[600 * 50 * 3];
+  //ofImage *imgPickup;
+  //imgPickup = new ofImage;
+  //imgPickup->clear();
+
+  if((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
 
   int len = 500;
   int pickupIdx = 0;
@@ -134,9 +165,14 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     // 抽出
     int headY = i % spectrumHeight;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
-      pixsPickup[pickupIdx * 3] = pixs[i * 3];
-      pixsPickup[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
-      pixsPickup[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
+      //_specPickupPix[pickupIdx * 3] = pixs[i * 3];
+      //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
+      //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
+
+      ofColor _col = covertGrayScale(ofColor(pixs[i * 3], pixs[i * 3 + 1], pixs[i * 3 + 2]));
+      specPickupPix[pickupIdx * 3] = _col.r;
+      specPickupPix[pickupIdx * 3 + 1] = _col.g;
+      specPickupPix[pickupIdx * 3 + 2] = _col.b;
       pickupIdx++;
     }
   }
@@ -154,14 +190,20 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     // 抽出
     int headY = i % spectrumHeight;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
-      pixsPickup[pickupIdx * 3] = pixs[i * 3];
-      pixsPickup[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
-      pixsPickup[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
+      
+      //_specPickupPix[pickupIdx * 3] = pixs[i * 3];
+      //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
+      //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
+
+      ofColor _col = covertGrayScale(ofColor(pixs[i * 3], pixs[i * 3 + 1], pixs[i * 3 + 2]));
+      specPickupPix[pickupIdx * 3] = _col.r;
+      specPickupPix[pickupIdx * 3 + 1] = _col.g;
+      specPickupPix[pickupIdx * 3 + 2] = _col.b;
       pickupIdx++;
     }
   }
 
-  //std::cerr << pickupIdx << std::endl;
+  //std::cerr << pickupIdxY << std::endl;
 
   img->setFromPixels(pixs, spectrumHeight, spectrumWidth, OF_IMAGE_COLOR);
   img->update();
@@ -169,18 +211,41 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   spectrogramTex.loadData(spectrogramPix);
   img->clear();
 
-  imgPickup->setFromPixels(pixsPickup, pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  // 抽出
+  imgPickup->setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth, OF_IMAGE_COLOR);
   imgPickup->update();
-  specPickupPix = imgPickup->getPixels();
-  specPickupTex.loadData(specPickupPix);
+  specPickupTex.loadData(imgPickup->getPixels());
+
+  // 画像をグレースケールに変換
+  grayImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
+  grayImg.threshold(2.5);
   imgPickup->clear();
+
+  // グレースケール抽出
+  //imgPickup_GrayScale->setFromPixels(_specPickupPix_GrayScale, pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  //imgPickup_GrayScale->update();
+  //specPickupTex_GrayScale.loadData(imgPickup_GrayScale->getPixels());
+  //imgPickup_GrayScale->clear();
+
+  //imgColorPickup->setFromPixels(pixsColorPickup, pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  //imgColorPickup->update();
+  //specColorPickupPix = imgColorPickup->getPixels();
+  //specColorPickupTex.loadData(specColorPickupPix);
+  //imgColorPickup->clear();
+
+  //imgPickup->setFromPixels(pixsPickupGrayScale, pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  //imgPickup->update();
+  //specPickupPix = imgPickup->getPixels();
+  //specPickupTex.loadData(specPickupPix);
+  //imgPickup->clear();
 
 
   // OpenCVで解析するカラー画像領域に取得した映像を格納
-  colorImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
-  // 画像をグレースケールに変換
-  grayImg = colorImg;
-  grayImg.threshold(255 * maxValue * 0.5);
+  //colorImg.setFromPixels(specColorPickupPix.getData(), pickupH, spectrumWidth);
+
+  //grayScaleImg.setFromPixels(specColorPickupPix.getData(), pickupH, spectrumWidth);
+
+
 
   // 輪郭を描く
   // 第1引数 輪郭検出対象
@@ -189,12 +254,12 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   // 第4引数 検出する数
   // 第5引数 穴が空いたものを検出するかどうか trueで　検出する
 
-  contourFinder.findContours(grayImg, 1, 20, 1000, false);
-  std::cerr << contourFinder.nBlobs << std::endl;
+  //contourFinder.findContours(grayImg, 1, 20, 1000, false);
+  //std::cerr << contourFinder.nBlobs << std::endl;
 
   //try
   //{
-  //  contourFinder.findContours(grayImg, 1, 20, 1, false);
+  //  contourFinder.findContours(grayImg, 1, 20, 10, false);
   //  std::cerr << contourFinder.nBlobs << std::endl;
 
   //  // 動的配列をクリアする
@@ -221,27 +286,39 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   //  const char* err_msg = e.what();
   //  std::cout << "exception caught: " << err_msg << std::endl;
   //}
- 
+
+  //std::cout << pickupIdxY << std::endl;
+  
 }
 
 void Spectrum::drawSpectrogram() {
   ofRotate(-90);
   spectrogramTex.draw(-spectrumHeight - pos.y, pos.x);
+
+  // 抽出
   specPickupTex.draw(-spectrumHeight - pos.y - pickupH - marginY, pos.x);
 
+  // グレースケール 抽出
+  //specPickupTex_GrayScale.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
+
+  
+
   // 取り込んだ画像を表示
-  colorImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
+  //colorImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
 
   // グレースケール画像
+  //grayScaleImg.draw(-spectrumHeight - pos.y - pickupH * 3 - marginY * 3, pos.x);
+
+  // グレースケール画像 2極化
   grayImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
 
-  // 境界線のサイズと色指定
-  ofSetLineWidth(1);
-  ofSetColor(255, 255, 0);
-  // 輪郭線の描画
-  for (int cnt = 0; cnt< edgeLines.size(); cnt++) {
-    edgeLines[cnt].draw();
-  }
+  //// 境界線のサイズと色指定
+  //ofSetLineWidth(1);
+  //ofSetColor(255, 255, 0);
+  //// 輪郭線の描画
+  //for (int cnt = 0; cnt< edgeLines.size(); cnt++) {
+  //  edgeLines[cnt].draw();
+  //}
   
 
   ofRotate(90);
@@ -298,4 +375,49 @@ ofColor Spectrum::getColorMap(float _level) {
   }
 
   return  ofColor(r, g, b);
+}
+
+ofColor Spectrum::covertGrayScale(ofColor _col) {
+
+  int X = 0;
+  int Y = 0;
+  if (_col.r == 255) {
+    X = 0;
+    Y = _col.g;
+  }
+  else if (_col.r == 0) {
+    if (_col.g == 255) {
+      X = 2;
+      Y = _col.b;
+    }
+    else if(_col.b == 255) {
+      X = 3;
+      Y = 255 - _col.g;
+    }
+    else {
+      X = 6;
+      //Y = floor(255 * (a - X));
+    }
+  }
+  else if (_col.g == 255) {
+    X = 1;
+    Y = 255 - _col.r;
+  }
+  else if (_col.b == 255) {
+    X = 4;
+    Y = _col.r;
+  }
+  else if (_col.g == 0) {
+    X = 5;
+    Y = 255 - _col.b;
+  }
+
+  ofColor newCol;
+  newCol.r = 255 - 255 / 6 * X;
+  newCol.g = 255 - 255 / 6 * X;
+  newCol.b = 255 - 255 / 6 * X;
+
+  if(maxValue < 255 - 255 / 6 * X) maxValue = 255 - 255 / 6 * X;
+
+  return  newCol;
 }

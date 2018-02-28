@@ -34,6 +34,8 @@ public:
 
 private:
   ofColor getColorMap(float _level = 0.0f);
+  ofColor covertGrayScale(ofColor _col);
+  
   ofPixels colorMap;
   ofTexture colorMapTex;
 
@@ -41,9 +43,7 @@ private:
   ofTexture spectrogramTex;
 
   ofPixels specPickupPix;
-  ofTexture specPickupTex;
-
-  
+  ofTexture specPickupTex; 
 
   int spectrumWidth;
   int spectrumHeight;
@@ -59,7 +59,8 @@ private:
   int marginY;
 
   // opencv
-  ofxCvColorImage colorImg; // openCvで扱うイメージ
+  //ofxCvColorImage colorImg; // openCvで扱うイメージ
+  //ofxCvColorImage grayScaleImg; // openCvで扱うイメージ
   ofxCvGrayscaleImage grayImg; // openCvで扱うグレースケールイメージ
   ofxCvContourFinder contourFinder; // 輪郭検出用
   vector <ofPolyline> edgeLines; // 輪郭線を格納する動的配列
@@ -67,6 +68,7 @@ private:
   
   float maxValue;
   float avgValue;
+  int pickupIdxY;
 
 };
 
