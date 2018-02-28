@@ -223,32 +223,6 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   grayImg = colorImg;
   grayImg.threshold(255 * maxValue * 0.75);
 
-  // グレースケール抽出
-  //imgPickup_GrayScale->setFromPixels(_specPickupPix_GrayScale, pickupH, spectrumWidth, OF_IMAGE_COLOR);
-  //imgPickup_GrayScale->update();
-  //specPickupTex_GrayScale.loadData(imgPickup_GrayScale->getPixels());
-  //imgPickup_GrayScale->clear();
-
-  //imgColorPickup->setFromPixels(pixsColorPickup, pickupH, spectrumWidth, OF_IMAGE_COLOR);
-  //imgColorPickup->update();
-  //specColorPickupPix = imgColorPickup->getPixels();
-  //specColorPickupTex.loadData(specColorPickupPix);
-  //imgColorPickup->clear();
-
-  //imgPickup->setFromPixels(pixsPickupGrayScale, pickupH, spectrumWidth, OF_IMAGE_COLOR);
-  //imgPickup->update();
-  //specPickupPix = imgPickup->getPixels();
-  //specPickupTex.loadData(specPickupPix);
-  //imgPickup->clear();
-
-
-  // OpenCVで解析するカラー画像領域に取得した映像を格納
-  //colorImg.setFromPixels(specColorPickupPix.getData(), pickupH, spectrumWidth);
-
-  //grayScaleImg.setFromPixels(specColorPickupPix.getData(), pickupH, spectrumWidth);
-
-
-
   // 輪郭を描く
   // 第1引数 輪郭検出対象
   // 第2引数 検出する最小の大きさ(20)
@@ -256,8 +230,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   // 第4引数 検出する数
   // 第5引数 穴が空いたものを検出するかどうか trueで　検出する
 
-  //contourFinder.findContours(grayImg, 1, 20, 1000, false);
-  //std::cerr << contourFinder.nBlobs << std::endl;
+  contourFinder.findContours(grayImg, 1, 20, 1000, false);
+  std::cerr << contourFinder.nBlobs << std::endl;
 
   //try
   //{
