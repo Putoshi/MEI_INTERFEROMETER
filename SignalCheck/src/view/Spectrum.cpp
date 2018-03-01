@@ -61,6 +61,8 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   specPickupTex.allocate(pickupH, spectrumWidth, GL_RGB);
   specPickupTex.loadData(specPickupPix);
 
+  hough = Hough();
+  hough.init();
 }
 
 void Spectrum::update() {
@@ -166,7 +168,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       pickupIdx++;
     }
   }
-
+  
   //std::cerr << pickupIdxY << std::endl;
 
   img->setFromPixels(pixs, spectrumHeight, spectrumWidth, OF_IMAGE_COLOR);
@@ -181,6 +183,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   specPickupTex.loadData(imgPickup->getPixels());
   imgPickup->clear();
 
+
+  hough.getHoughLine(specPickupPix.getData());
 
 }
 

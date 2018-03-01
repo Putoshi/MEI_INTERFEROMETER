@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "./analyze/Hough.h"
 #include <math.h>
 #include <string>
 #include <string.h>
@@ -64,6 +65,8 @@ private:
   float maxValue;
   float avgValue;
   int pickupIdxY;
+
+  Hough hough;
 
 };
 
