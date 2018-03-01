@@ -176,6 +176,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\analyze\Hough.cpp" />
+    <ClCompile Include="src\analyze\Tuple2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\SignalUtil.cpp" />
@@ -210,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\analyze\Hough.h" />
+    <ClInclude Include="src\analyze\Tuple2.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\SignalUtil.h" />
     <ClInclude Include="src\TriggerBuffer.h" />

@@ -103,6 +103,9 @@
     <ClCompile Include="src\analyze\Hough.cpp">
       <Filter>src\analyze</Filter>
     </ClCompile>
+    <ClCompile Include="src\analyze\Tuple2.cpp">
+      <Filter>src\analyze</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -276,6 +279,9 @@
       <Filter>addons\ofxWatchFile\src</Filter>
     </ClInclude>
     <ClInclude Include="src\analyze\Hough.h">
+      <Filter>src\analyze</Filter>
+    </ClInclude>
+    <ClInclude Include="src\analyze\Tuple2.h">
       <Filter>src\analyze</Filter>
     </ClInclude>
   </ItemGroup>

@@ -92,6 +92,10 @@ void Spectrum::draw(float _peekFreq) {
 void Spectrum::setSpectrum(vector<float> _vec) {
   vec = _vec;
 
+  // ’¼ü’Šo—p‚Ìvector
+  std::vector<int16_t> monoVec;
+  monoVec.resize(600 * 50);
+
   // Max‚ÆAvg‚ğæ“¾
   float _avgValue = 0;
   float _maxValue = 0.3;
@@ -132,11 +136,15 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     // ’Šo
     int headY = i % spectrumHeight;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
-      //_specPickupPix[pickupIdx * 3] = pixs[i * 3];
-      //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
-      //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
-
       specPickupPix[pickupIdx] = specPickupPix[pickupIdx + 50];
+
+      if (specPickupPix[pickupIdx] == 255) {
+        monoVec[pickupIdx] = 1;
+      }
+      else {
+        monoVec[pickupIdx] = 0;
+      }
+      
       pickupIdx++;
     }
   }
@@ -160,11 +168,16 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
       int _colgray = covertGrayScale(vec[idx]);
       specPickupPix[pickupIdx] = _colgray;
+      monoVec[pickupIdx] = _colgray;
+      //ofColor c = specPickupPix.getColor(pickupIdx);
+      //std::cerr << specPickupPix.getColor(pickupIdx).r << std::endl;
       pickupIdx++;
     }
   }
   
   //std::cerr << pickupIdxY << std::endl;
+
+  
 
   img->setFromPixels(pixs, spectrumHeight, spectrumWidth, OF_IMAGE_COLOR);
   img->update();
@@ -178,8 +191,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   specPickupTex.loadData(imgPickup->getPixels());
   imgPickup->clear();
 
-
-  hough.getHoughLine(specPickupPix.getData());
+  
+  hough.calcHoughLine(monoVec);
 
 }
 
