@@ -4,7 +4,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxOpenCv.h"
 #include <math.h>
 #include <string>
 #include <string.h>
@@ -34,7 +33,7 @@ public:
 
 private:
   ofColor getColorMap(float _level = 0.0f);
-  ofColor covertGrayScale(ofColor _col);
+  ofColor covertGrayScale(float _level);
   
   ofPixels colorMap;
   ofTexture colorMapTex;
@@ -59,9 +58,6 @@ private:
   int marginY;
 
   // opencv
-  ofxCvColorImage colorImg; // openCvで扱うイメージ
-  ofxCvGrayscaleImage grayImg; // openCvで扱うグレースケールイメージ
-  ofxCvContourFinder contourFinder; // 輪郭検出用
   vector <ofPolyline> edgeLines; // 輪郭線を格納する動的配列
   
   

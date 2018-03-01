@@ -61,11 +61,6 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   specPickupTex.allocate(pickupH, spectrumWidth, GL_RGB);
   specPickupTex.loadData(specPickupPix);
 
-  // openCvで解析する領域確保
-  colorImg.allocate(pickupH, spectrumWidth);
-
-  // グレースケール 2極化
-  grayImg.allocate(pickupH, spectrumWidth);
 }
 
 void Spectrum::update() {
@@ -139,10 +134,10 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
       //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
 
-      ofColor _col = covertGrayScale(ofColor(pixs[i * 3], pixs[i * 3 + 1], pixs[i * 3 + 2]));
-      specPickupPix[pickupIdx * 3] = _col.r;
-      specPickupPix[pickupIdx * 3 + 1] = _col.g;
-      specPickupPix[pickupIdx * 3 + 2] = _col.b;
+      //ofColor _col = covertGrayScale(vec[i]);
+      specPickupPix[pickupIdx * 3] = specPickupPix[pickupIdx * 3 + 50 * 3];
+      specPickupPix[pickupIdx * 3 + 1] = specPickupPix[pickupIdx * 3 + 1 + 50 * 3];
+      specPickupPix[pickupIdx * 3 + 2] = specPickupPix[pickupIdx * 3 + 2 + 50 * 3];
       pickupIdx++;
     }
   }
@@ -164,8 +159,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       //_specPickupPix[pickupIdx * 3] = pixs[i * 3];
       //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
       //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
-
-      ofColor _col = covertGrayScale(ofColor(pixs[i * 3], pixs[i * 3 + 1], pixs[i * 3 + 2]));
+      ofColor _col = covertGrayScale(vec[idx]);
       specPickupPix[pickupIdx * 3] = _col.r;
       specPickupPix[pickupIdx * 3 + 1] = _col.g;
       specPickupPix[pickupIdx * 3 + 2] = _col.b;
@@ -187,56 +181,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   specPickupTex.loadData(imgPickup->getPixels());
   imgPickup->clear();
 
-  // OpenCVで解析するカラー画像領域に取得した映像を格納
-  colorImg.setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth);
-  // 画像をグレースケールに変換
-  grayImg = colorImg;
-  grayImg.threshold(255 * maxValue * 0.8);
 
-  // 輪郭を描く
-  // 第1引数 輪郭検出対象
-  // 第2引数 検出する最小の大きさ(20)
-  // 第3引数 検出する最大の大きさ
-  // 第4引数 検出する数
-  // 第5引数 穴が空いたものを検出するかどうか trueで　検出する
-
-  //contourFinder.findContours(grayImg, 1, 20, 1000, false);
-  //std::cerr << contourFinder.nBlobs << std::endl;
-
-  try
-  {
-    contourFinder.findContours(grayImg, 0, 600 * 50, 100, false, false);
-    //std::cerr << contourFinder.nBlobs << std::endl;
-
-    // 動的配列をクリアする
-    edgeLines.clear();
-
-    //-----------------------------------------
-    // 輪郭線の座標を結んで線にする
-    //-----------------------------------------
-
-    // １周目for文で複数の輪郭にアクセス
-    for (int i = 0; i< contourFinder.nBlobs; i++) {
-      ofPolyline line;
-      //std::cout << contourFinder.blobs[i].pts.size() << std::endl;
-      // ２周目for文でそれぞれの輪郭の点にアクセスし、点を結んで線にする。
-      for (int j = 0; j<contourFinder.blobs[i].pts.size(); j++) {
-        // 点を線にする。
-        //std::cout << "exception caught: " << contourFinder.blobs[i].pts[j].x << std::endl;
-        line.addVertex(contourFinder.blobs[i].pts[j]);
-      }
-      // 作成した線を格納
-      edgeLines.push_back(line);
-    }
-  }
-  catch (cv::Exception& e)
-  {
-    const char* err_msg = e.what();
-    std::cout << "exception caught: " << err_msg << std::endl;
-  }
-
-  //std::cout << pickupIdxY << std::endl;
-  
 }
 
 void Spectrum::drawSpectrogram() {
@@ -245,9 +190,6 @@ void Spectrum::drawSpectrogram() {
 
   // 抽出
   specPickupTex.draw(-spectrumHeight - pos.y - pickupH - marginY, pos.x);
-
-  // グレースケール画像 2極化
-  grayImg.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
 
   // 境界線のサイズと色指定
   ofPushMatrix();
@@ -327,45 +269,20 @@ ofColor Spectrum::getColorMap(float _level) {
   return  ofColor(r, g, b);
 }
 
-ofColor Spectrum::covertGrayScale(ofColor _col) {
-
-  int X = 0;
-  int Y = 0;
-  if (_col.r == 255) {
-    X = 0;
-    Y = _col.g;
-  }
-  else if (_col.r == 0) {
-    if (_col.g == 255) {
-      X = 2;
-      Y = _col.b;
-    }
-    else if(_col.b == 255) {
-      X = 3;
-      Y = 255 - _col.g;
-    }
-    else {
-      X = 6;
-      //Y = floor(255 * (a - X));
-    }
-  }
-  else if (_col.g == 255) {
-    X = 1;
-    Y = 255 - _col.r;
-  }
-  else if (_col.b == 255) {
-    X = 4;
-    Y = _col.r;
-  }
-  else if (_col.g == 0) {
-    X = 5;
-    Y = 255 - _col.b;
+ofColor Spectrum::covertGrayScale(float _level) {
+  
+  float l = 0;
+  if (maxValue * 0.7f <= _level) {
+    l = 255;
+  }else {
+    l = 0;
   }
 
   ofColor newCol;
-  newCol.r = 255 - 255 / 6 * X;
-  newCol.g = 255 - 255 / 6 * X;
-  newCol.b = 255 - 255 / 6 * X;
+  newCol.r = l;
+  newCol.g = l;
+  newCol.b = l;
 
+  //std::cerr << l << std::endl;
   return  newCol;
 }

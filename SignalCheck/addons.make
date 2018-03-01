@@ -2,5 +2,4 @@ ofxFft
 ofxGraphViewer
 ofxGui
 ofxNetwork
-ofxOpenCv
 ofxWatchFile
