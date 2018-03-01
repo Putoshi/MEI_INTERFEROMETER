@@ -51,7 +51,7 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
 
   // スペクトログラム[抽出]
   pickupH = (int)((FreqRange / (_highFreq - _lowFreq))  * spectrumHeight);
-  specPickupPix.allocate(pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  specPickupPix.allocate(pickupH, spectrumWidth, OF_IMAGE_GRAYSCALE);
   specPickupPix.set(0);
   for (int i = 0; i < pickupH; i++) {
     for (int j = 0; j < spectrumWidth; j++) {
@@ -136,10 +136,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
       //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
 
-      //ofColor _col = covertGrayScale(vec[i]);
-      specPickupPix[pickupIdx * 3] = specPickupPix[pickupIdx * 3 + 50 * 3];
-      specPickupPix[pickupIdx * 3 + 1] = specPickupPix[pickupIdx * 3 + 1 + 50 * 3];
-      specPickupPix[pickupIdx * 3 + 2] = specPickupPix[pickupIdx * 3 + 2 + 50 * 3];
+      specPickupPix[pickupIdx] = specPickupPix[pickupIdx + 50];
       pickupIdx++;
     }
   }
@@ -161,10 +158,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       //_specPickupPix[pickupIdx * 3] = pixs[i * 3];
       //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
       //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
-      ofColor _col = covertGrayScale(vec[idx]);
-      specPickupPix[pickupIdx * 3] = _col.r;
-      specPickupPix[pickupIdx * 3 + 1] = _col.g;
-      specPickupPix[pickupIdx * 3 + 2] = _col.b;
+      int _colgray = covertGrayScale(vec[idx]);
+      specPickupPix[pickupIdx] = _colgray;
       pickupIdx++;
     }
   }
@@ -178,7 +173,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   img->clear();
 
   // 抽出
-  imgPickup->setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  imgPickup->setFromPixels(specPickupPix.getData(), pickupH, spectrumWidth, OF_IMAGE_GRAYSCALE);
   imgPickup->update();
   specPickupTex.loadData(imgPickup->getPixels());
   imgPickup->clear();
@@ -273,20 +268,13 @@ ofColor Spectrum::getColorMap(float _level) {
   return  ofColor(r, g, b);
 }
 
-ofColor Spectrum::covertGrayScale(float _level) {
+int Spectrum::covertGrayScale(float _level) {
   
-  float l = 0;
+  int l = 0;
   if (maxValue * 0.7f <= _level) {
     l = 255;
   }else {
     l = 0;
   }
-
-  ofColor newCol;
-  newCol.r = l;
-  newCol.g = l;
-  newCol.b = l;
-
-  //std::cerr << l << std::endl;
-  return  newCol;
+  return  l;
 }

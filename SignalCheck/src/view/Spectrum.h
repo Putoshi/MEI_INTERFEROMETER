@@ -34,7 +34,7 @@ public:
 
 private:
   ofColor getColorMap(float _level = 0.0f);
-  ofColor covertGrayScale(float _level);
+  int covertGrayScale(float _level);
   
   ofPixels colorMap;
   ofTexture colorMapTex;
