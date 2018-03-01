@@ -176,6 +176,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\analyze\Hough.cpp" />
+    <ClCompile Include="src\analyze\NoiseDetect.cpp" />
+    <ClCompile Include="src\analyze\PixelObject.cpp" />
     <ClCompile Include="src\analyze\Tuple2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -211,6 +213,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\analyze\Hough.h" />
+    <ClInclude Include="src\analyze\NoiseDetect.h" />
+    <ClInclude Include="src\analyze\PixelObject.h" />
     <ClInclude Include="src\analyze\Tuple2.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\SignalUtil.h" />

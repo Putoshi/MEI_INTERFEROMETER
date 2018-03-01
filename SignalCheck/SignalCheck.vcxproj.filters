@@ -106,6 +106,12 @@
     <ClCompile Include="src\analyze\Tuple2.cpp">
       <Filter>src\analyze</Filter>
     </ClCompile>
+    <ClCompile Include="src\analyze\NoiseDetect.cpp">
+      <Filter>src\analyze</Filter>
+    </ClCompile>
+    <ClCompile Include="src\analyze\PixelObject.cpp">
+      <Filter>src\analyze</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -282,6 +288,12 @@
       <Filter>src\analyze</Filter>
     </ClInclude>
     <ClInclude Include="src\analyze\Tuple2.h">
+      <Filter>src\analyze</Filter>
+    </ClInclude>
+    <ClInclude Include="src\analyze\NoiseDetect.h">
+      <Filter>src\analyze</Filter>
+    </ClInclude>
+    <ClInclude Include="src\analyze\PixelObject.h">
       <Filter>src\analyze</Filter>
     </ClInclude>
   </ItemGroup>

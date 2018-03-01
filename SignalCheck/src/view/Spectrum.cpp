@@ -49,20 +49,27 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   spectrogramTex.loadData(spectrogramPix);
 
 
-  // スペクトログラム[抽出]
+  // スペクトログラム[抽出] && ノイズ除去 初期化
   pickupH = (int)((FreqRange / (_highFreq - _lowFreq))  * spectrumHeight);
   specPickupPix.allocate(pickupH, spectrumWidth, OF_IMAGE_GRAYSCALE);
   specPickupPix.set(0);
+
+  cleanPix.allocate(pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  cleanPix.set(0);
+
   for (int i = 0; i < pickupH; i++) {
     for (int j = 0; j < spectrumWidth; j++) {
       specPickupPix.setColor(i, j, ofColor::black);
+      cleanPix.setColor(i, j, ofColor::black);
     }
   }
   specPickupTex.allocate(pickupH, spectrumWidth, GL_RGB);
   specPickupTex.loadData(specPickupPix);
 
-  hough = Hough();
-  hough.init();
+  cleanTex.allocate(pickupH, spectrumWidth, GL_RGB);
+  cleanTex.loadData(cleanPix);
+
+  noiseDetect = NoiseDetect();
 }
 
 void Spectrum::update() {
@@ -84,17 +91,10 @@ void Spectrum::draw(float _peekFreq) {
   colorMapTex.draw(pos.x + spectrumWidth + 10, pos.y);
   drawSpectrogram();
   drawFrame();
-
-  //std::cerr << peekFreq << std::endl;
-
 }
 
 void Spectrum::setSpectrum(vector<float> _vec) {
   vec = _vec;
-
-  // 直線抽出用のvector
-  std::vector<int16_t> monoVec;
-  monoVec.resize(600 * 50);
 
   // MaxとAvgを取得
   float _avgValue = 0;
@@ -123,6 +123,10 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   imgPickup = new ofImage;
   imgPickup->clear();
 
+  ofImage *imgClean;
+  imgClean = new ofImage;
+  imgClean->clear();
+
   if((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
 
   int len = 500;
@@ -137,14 +141,9 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     int headY = i % spectrumHeight;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
       specPickupPix[pickupIdx] = specPickupPix[pickupIdx + 50];
-
-      if (specPickupPix[pickupIdx] == 255) {
-        monoVec[pickupIdx] = 1;
-      }
-      else {
-        monoVec[pickupIdx] = 0;
-      }
-      
+      cleanPix[pickupIdx * 3] = cleanPix[pickupIdx * 3 + 50 * 3];
+      cleanPix[pickupIdx * 3 + 1] = cleanPix[pickupIdx * 3 + 1 + 50 * 3];
+      cleanPix[pickupIdx * 3 + 2] = cleanPix[pickupIdx * 3 + 2 + 50 * 3];
       pickupIdx++;
     }
   }
@@ -162,18 +161,18 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     // 抽出
     int headY = i % spectrumHeight;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
-      
-      //_specPickupPix[pickupIdx * 3] = pixs[i * 3];
-      //_specPickupPix[pickupIdx * 3 + 1] = pixs[i * 3 + 1];
-      //_specPickupPix[pickupIdx * 3 + 2] = pixs[i * 3 + 2];
       int _colgray = covertGrayScale(vec[idx]);
       specPickupPix[pickupIdx] = _colgray;
-      monoVec[pickupIdx] = _colgray;
-      //ofColor c = specPickupPix.getColor(pickupIdx);
-      //std::cerr << specPickupPix.getColor(pickupIdx).r << std::endl;
+      cleanPix[pickupIdx * 3] = _colgray;
+      cleanPix[pickupIdx * 3 + 1] = _colgray;
+      cleanPix[pickupIdx * 3 + 2] = _colgray;
+
+     
       pickupIdx++;
     }
   }
+
+  
   
   //std::cerr << pickupIdxY << std::endl;
 
@@ -191,39 +190,26 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   specPickupTex.loadData(imgPickup->getPixels());
   imgPickup->clear();
 
-  
-  hough.calcHoughLine(monoVec);
+  // ノイズ検出
+  cleanPix = noiseDetect.convert(cleanPix);
+  imgClean->setFromPixels(cleanPix.getData(), pickupH, spectrumWidth, OF_IMAGE_COLOR);
+  imgClean->update();
+  cleanTex.loadData(imgClean->getPixels());
+  imgClean->clear();
 
 }
 
 void Spectrum::drawSpectrogram() {
   ofRotate(-90);
+
+  // スペクトログラム
   spectrogramTex.draw(-spectrumHeight - pos.y, pos.x);
 
   // 抽出
   specPickupTex.draw(-spectrumHeight - pos.y - pickupH - marginY, pos.x);
 
-  // 境界線のサイズと色指定
-  ofPushMatrix();
-  ofTranslate(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
-
-  ofSetLineWidth(1);
-  ofSetColor(255, 0, 0);
-  // 輪郭線の描画
-  for (int cnt = 0; cnt< edgeLines.size(); cnt++) {
-    edgeLines[cnt].draw();
-  }
-  //if (edgeLines.size() > 0) {
-  //  //for (int i = 0; i < edgeLines[0].getVertices.size(); i++) {
-
-  //  //}
-  //  //std::cout << edgeLines[0].getVertices << std::endl;
-  //  edgeLines[0].draw();
-  //}
-  
-
-  ofPopMatrix();
-  
+  // ノイズ処理
+  cleanTex.draw(-spectrumHeight - pos.y - pickupH * 2 - marginY * 2, pos.x);
 
   ofRotate(90);
 }

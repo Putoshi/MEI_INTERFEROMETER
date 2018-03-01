@@ -4,7 +4,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "./analyze/Hough.h"
+#include "./analyze/NoiseDetect.h"
 #include <math.h>
 #include <string>
 #include <string.h>
@@ -36,14 +36,23 @@ private:
   ofColor getColorMap(float _level = 0.0f);
   int covertGrayScale(float _level);
   
+  // 横のカラーマップ
   ofPixels colorMap;
   ofTexture colorMapTex;
 
+  // スペクトログラム
   ofPixels spectrogramPix;
   ofTexture spectrogramTex;
 
+  // 抽出スペクトログラム
   ofPixels specPickupPix;
   ofTexture specPickupTex; 
+
+  // 直線ノイズなど除去
+  ofPixels cleanPix;
+  ofTexture cleanTex;
+  NoiseDetect noiseDetect;
+
 
   int spectrumWidth;
   int spectrumHeight;
@@ -65,8 +74,6 @@ private:
   float maxValue;
   float avgValue;
   int pickupIdxY;
-
-  Hough hough;
 
 };
 
