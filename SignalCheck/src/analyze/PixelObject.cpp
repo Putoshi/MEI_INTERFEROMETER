@@ -4,6 +4,7 @@ using namespace std;
 
 PixelObject::PixelObject(int _y)
 {
+  dots.reserve(600);
   lifetime = 0;
   y = _y;
   check.resize(0);
@@ -18,8 +19,16 @@ PixelObject::~PixelObject()
 
 void PixelObject::updateHead()
 {
+  std::cerr << "dots : " << dots.size() << std::endl;
+  dots.push_back(check);
   check.clear();
   lifetime++;
+}
+
+void PixelObject::deactivate()
+{
+  //vector<vector<int>> dots;
+  vector<vector<int>>().swap(dots);
 }
 
 
@@ -28,30 +37,37 @@ vector<int> PixelObject::checkHeadIdx(int _y)
   int v1 = _y + 1;
   int v2 = _y;
   int v3 = _y - 1;
+  vector<int> _check;
+  _check.reserve(50);
   if (_y == 0) {
-    check.push_back(v1);
-    check.push_back(v2);
+    _check.push_back(v1);
+    _check.push_back(v2);
   }
   else if(_y == (50 - 1)) {
-    check.push_back(v2);
-    check.push_back(v3);
+    _check.push_back(v2);
+    _check.push_back(v3);
   }
   else {
-    check.push_back(v1);
-    check.push_back(v2);
-    check.push_back(v3);
+    _check.push_back(v1);
+    _check.push_back(v2);
+    _check.push_back(v3);
   }
 
+  vector<int> _newcheck;
+  _newcheck.reserve(50);
 
-  //vector<vector<int>> newVec;
-  //for (int i = 0; i < check.size(); i++) {
-  //  check[i].
-  //  for (int i = 0; i < check.size(); i++) {
-  //  }
-  //}
+  std::sort(_check.begin(), _check.end());
+  std::sort(check.begin(), check.end());
+  _newcheck.resize(check.size() + _check.size());
+  set_union(check.begin(), check.end(), _check.begin(), _check.end(), _newcheck.begin());
 
-  //std::sort(check.begin(), check.end());
-  //check.erase(std::unique(check.begin(), check.end()), check.end());
+  check.clear();
+  check.reserve(_newcheck.size());
+  check = _newcheck;
+  std::sort(check.begin(), check.end());
+
+  vector<int>().swap(_check);
+  vector<int>().swap(_newcheck);
   return check;
 }
 

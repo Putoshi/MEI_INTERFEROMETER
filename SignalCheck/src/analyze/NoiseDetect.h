@@ -21,6 +21,6 @@ public:
 
 private:
   vector<PixelObject> pixelObjectVec;
-  vector<int> checkIdxVec;
+  std::vector<int> checkIdxVec;
 
 };
