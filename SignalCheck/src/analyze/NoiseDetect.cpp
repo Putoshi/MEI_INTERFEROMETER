@@ -5,6 +5,11 @@ using namespace std;
 NoiseDetect::NoiseDetect()
 {
   //pixelObjectVec.push_back(PixelObject());
+  blurPixVec.resize(3);
+  blurPixVec[0].resize(50);
+  blurPixVec[1].resize(50);
+  blurPixVec[2].resize(50);
+
 }
 
 
@@ -16,6 +21,28 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
 {
   ofPixels newPix;
   newPix = _dat;
+
+  // 3px残像残す
+  vector<int> pix;
+  pix.resize(50);
+  for (int i = 0; i < 50; i++) {
+    ofColor col = newPix.getColor(i, 600 - 1);
+    if (col.getBrightness() >= 255) {
+      pix[i] = 1;
+    }
+    else {
+      pix[i] = 0;
+    }
+    
+    if (blurPixVec[0][i] == 1 || blurPixVec[1][i] == 1 || blurPixVec[2][i] == 1) {
+      newPix.setColor(i, 600 - 1, ofColor::white);
+    }
+    else {
+      newPix.setColor(i, 600 - 1, ofColor::black);
+    }
+  }
+  blurPixVec.erase(blurPixVec.begin());
+  blurPixVec.push_back(pix);
 
   checkIdxVec.clear();
   vector<PixelObject> _pixelObjectVec;
@@ -30,7 +57,9 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
     bool isActive = false;
     for (int j = 0; j < v1.check.size(); j++) {
       ofColor col = newPix.getColor(v1.check[j], 600 - 1);
+      
       if (col.getBrightness() >= 255) {
+        //std::cerr << ofToString(col.r) << std::endl;
         isActive = true;
         std::vector<int> v2 = pixelObjectVec[i].checkHeadIdx(v1.check[j]);
         std::sort(v2.begin(), v2.end());
@@ -55,21 +84,34 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
     if (!isActive) {
       PixelObject deleteObj = v1;
 
-      // Dead判定のPixel
+      // ジャッジ
+      std::cerr << "判定:  LifeTime=" << deleteObj.lifetime << "  DopplerShift=" << deleteObj.dopplerShift << std::endl;
+
+      ofColor judgeColor;
+      if (deleteObj.dopplerShift > 10) {
+        judgeColor = ofColor(5, 5, 5);
+      }
+      else if (deleteObj.lifetime > 20) {
+        judgeColor = ofColor(5, 5, 5);
+      }
+      else {
+        judgeColor = ofColor(0, 200, 0);
+      }
+
+
+
       if (deleteObj.lifetime == 0) {
         deleteObj.dots.push_back(deleteObj.check);
       }
       for (int k = 0; k < deleteObj.dots.size(); k++) {
         vector<int> del = deleteObj.dots[k];
         for (int l = 0; l < del.size(); l++) {
-          newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k) - 1, ofColor(200, 0, 0));
-          newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k), ofColor(200, 0, 0));
+          newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k) - 1, judgeColor);
+          newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k), judgeColor);
         }
       }
 
       
-
-      std::cerr << "deleteVec:" << deleteObj.lifetime << std::endl;
 
       pixelObjectVec[i].deactivate();
       pixelObjectVec.erase(pixelObjectVec.begin() + i);

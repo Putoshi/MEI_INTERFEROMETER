@@ -22,5 +22,6 @@ public:
 private:
   vector<PixelObject> pixelObjectVec;
   std::vector<int> checkIdxVec;
+  vector<vector<int>> blurPixVec;
 
 };

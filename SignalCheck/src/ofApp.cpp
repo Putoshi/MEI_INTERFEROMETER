@@ -65,8 +65,8 @@ void ofApp::setup() {
   gui.setPosition(ofPoint(1920 - 220,0));
   gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
 
-  isLabelVisible = false;
-  font.loadFont("ufonts.com_grotesquemtt.ttf", 8);
+  isLabelVisible = true;
+  font.loadFont("ufonts.com_grotesquemt.ttf", 8);
 
   load();
 }
@@ -283,6 +283,7 @@ void ofApp::draw() {
 
     // 周波数スペクトル 表示位置の初期化
     if (isLabelVisible) {
+
       ofPushMatrix();
       //ofTranslate(16, 16 + (plotHeight + 30) * j);
 
@@ -439,11 +440,13 @@ void ofApp::spectrogramFftUpdate() {
 void ofApp::drawLabel() {
   ofPushMatrix();
   //ofSetHexColor(0xbbbbbb);
-  font.drawString("Signal 1.25V", 157, marginTop - 3);
-  font.drawString("Freq 2-4kHz", 250 - 8, marginTop - 3);
+  font.drawString("Signal 1.25V", 70, marginTop - 3);
+  font.drawString("Freq 2-4kHz", 250 - 2, marginTop - 3);
   font.drawString("Phase +-180", 325, marginTop - 3);
   font.drawString("PhaseDifference +-180", 870, marginTop - 3);
   font.drawString("Spectrogram 3-4kHz", 870, 175 - 3);
+  font.drawString("Mono Spectrogram 100Hz", 870, 175 + 500 + 25 - 3);
+  font.drawString("Echo Analyze", 870, 175 + 500 + 25 * 2 + 50 - 3);
 
   
   //ofDrawBitmapString("Signal 1.25V ", 117, marginTop - 3);

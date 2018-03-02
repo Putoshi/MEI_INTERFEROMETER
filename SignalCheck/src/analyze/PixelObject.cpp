@@ -7,6 +7,7 @@ PixelObject::PixelObject(int _y)
   dots.reserve(600);
   lifetime = 0;
   y = _y;
+  dopplerShift = 0;
   check.resize(0);
   checkHeadIdx(y);
   detect = 0; // 0: ”»’f’†,  1: OK , 2: NG
@@ -21,8 +22,13 @@ void PixelObject::updateHead()
 {
   //std::cerr << "dots : " << dots.size() << std::endl;
   dots.push_back(check);
+  if (dots.size() >= 600) {
+    dots.erase(dots.begin());
+  }
+
   check.clear();
   lifetime++;
+
 }
 
 void PixelObject::deactivate()
@@ -43,7 +49,7 @@ vector<int> PixelObject::checkHeadIdx(int _y)
     _check.push_back(v1);
     _check.push_back(v2);
   }
-  else if(_y == (50 - 1)) {
+  else if (_y == (50 - 1)) {
     _check.push_back(v2);
     _check.push_back(v3);
   }
@@ -68,6 +74,14 @@ vector<int> PixelObject::checkHeadIdx(int _y)
 
   vector<int>().swap(_check);
   vector<int>().swap(_newcheck);
+
+  if (_y > y) {
+    dopplerShift++;
+  }
+  y = _y;
+
+
+
   return check;
 }
 

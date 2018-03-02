@@ -22,6 +22,7 @@ public:
   vector<int> check;
   vector<vector<int>> dots;
   int lifetime;
+  int dopplerShift;
 
 private:
   
