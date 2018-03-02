@@ -42,11 +42,8 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
         set_union(v2.begin(), v2.end(), checkIdxVec.begin(), checkIdxVec.end(), v3.begin());
 
         checkIdxVec.clear();
-        //v3 = checkIdxVec;
         checkIdxVec.resize(v3.size());
         checkIdxVec = v3;
-
-        //std::cerr << "v2:" << v2.size() << std::endl;
         
         vector<int>().swap(v2);
         vector<int>().swap(v3);
@@ -54,13 +51,14 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
         newPix.setColor(v1.check[j], 600 - 1, ofColor::yellow);
       }
     }
-    
-
 
     if (!isActive) {
       PixelObject deleteObj = v1;
 
       // Dead”»’è‚ÌPixel
+      if (deleteObj.lifetime == 0) {
+        deleteObj.dots.push_back(deleteObj.check);
+      }
       for (int k = 0; k < deleteObj.dots.size(); k++) {
         vector<int> del = deleteObj.dots[k];
         for (int l = 0; l < del.size(); l++) {
@@ -68,44 +66,21 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
           newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k), ofColor(200, 0, 0));
         }
       }
+
       
 
-
       std::cerr << "deleteVec:" << deleteObj.lifetime << std::endl;
-      /*std::cerr << "deleteVec:" << deleteVec.size() << std::endl;*/
-      /*for (int j = 0; j < deleteObj.check.size(); j++) {
-        std::cerr << "deleteVec:" << deleteObj.size() << std::endl;
-      }*/
 
       pixelObjectVec[i].deactivate();
       pixelObjectVec.erase(pixelObjectVec.begin() + i);
-      
-      //pixelObjectVec[i].detectend();
-     
     }
-    //else {
-    //  _pixelObjectVec.push_back(pixelObjectVec[i]);
-    //}
-
-    //std::copy(v2.begin(), v2.end(), std::back_inserter(checkIdxVec));
   }
-  //pixelObjectVec.clear();
-  //pixelObjectVec = _pixelObjectVec;
-  //_pixelObjectVec.clear();
 
-
-  //std::sort(checkIdxVec.begin(), checkIdxVec.end());
-  //checkIdxVec.erase(std::unique(checkIdxVec.begin(), checkIdxVec.end()), checkIdxVec.end());
-  ////std::cerr << checkIdxVec << std::endl;
-
-  //for (int i = 0; i < checkIdxVec.size(); i++) {
-  //  std::cerr << checkIdxVec[i] << std::endl;
-  //}
-
-  std::cerr << "checkIdxVec:" << checkIdxVec.size() << std::endl;
+  //std::cerr << "checkIdxVec:" << checkIdxVec.size() << std::endl;
 
   for (int i = 0; i < 50; i++) {
     ofColor col = newPix.getColor(i, 600 - 1);
+    //std::cerr << col.getBrightness() << std::endl;
     if (col.getBrightness() >= 255) {
 
       bool renzoku = false;
@@ -114,11 +89,9 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
           renzoku = true;
         }
       }
-      
 
       if (!renzoku) {
         PixelObject pixelObject(i);
-        //pixelObjectVec.add(i);
         pixelObjectVec.push_back(pixelObject);
         newPix.setColor(i, 600 - 1, ofColor::yellow);
       }

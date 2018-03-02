@@ -19,7 +19,7 @@ PixelObject::~PixelObject()
 
 void PixelObject::updateHead()
 {
-  std::cerr << "dots : " << dots.size() << std::endl;
+  //std::cerr << "dots : " << dots.size() << std::endl;
   dots.push_back(check);
   check.clear();
   lifetime++;
