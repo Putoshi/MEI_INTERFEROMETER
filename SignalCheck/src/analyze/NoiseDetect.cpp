@@ -77,7 +77,7 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
         vector<int>().swap(v2);
         vector<int>().swap(v3);
 
-        newPix.setColor(v1.check[j], 600 - 1, ofColor::yellow);
+        newPix.setColor(v1.check[j], 600 - 1, ofColor(251,211,80));
       }
     }
 
@@ -89,13 +89,13 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
 
       ofColor judgeColor;
       if (deleteObj.dopplerShift > 10) {
-        judgeColor = ofColor(5, 5, 5);
+        judgeColor = ofColor(195, 30, 30);
       }
       else if (deleteObj.lifetime > 20) {
-        judgeColor = ofColor(5, 5, 5);
+        judgeColor = ofColor(195, 30, 30);
       }
       else {
-        judgeColor = ofColor(0, 200, 0);
+        judgeColor = ofColor(57, 195, 59);
       }
 
 

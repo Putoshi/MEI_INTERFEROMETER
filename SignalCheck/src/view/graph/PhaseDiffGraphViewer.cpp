@@ -142,7 +142,8 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
 
   ofPushStyle();
   ofNoFill();
-  ofSetColor(ofColor::white);
+  ofSetLineWidth(0.5);
+  ofSetHexColor(0x555555);
   ofRect(posx, posy, w, h);
   ofSetColor(120, 120, 120);
   ofLine(posx, posy + h / 2.0, posx + w, posy + h / 2.0);

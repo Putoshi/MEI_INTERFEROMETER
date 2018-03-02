@@ -219,19 +219,22 @@ void Spectrum::drawFrame() {
   // òg
   ofPushStyle();
   ofNoFill();
-  ofSetColor(ofColor::white);
+  ofSetLineWidth(0.5);
+  ofSetHexColor(0x555555);
+  //ofSetColor(ofColor::white);
   ofDrawRectangle(pos.x, pos.y, spectrumWidth, spectrumHeight);
 
   // òg[íäèo]
   ofPushStyle();
   ofNoFill();
-  ofSetColor(ofColor::white);
+  //ofSetColor(ofColor::white);
   ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY, spectrumWidth, pickupH);
 
   ofPushStyle();
   ofNoFill();
-  ofSetColor(ofColor::white);
+  
   ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY * 2 + pickupH, spectrumWidth, pickupH);
+  ofSetColor(ofColor::white);
 
 }
 

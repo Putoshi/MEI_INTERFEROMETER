@@ -14,9 +14,9 @@ const int FPS = 120;								// FPS
 const int CHANNELS = 7;
 
 // COLOR
-const int COLOR_SIGNAL = 0x00dd44;
-const int COLOR_PHASE = 0x00ddc7;
-const int COLOR_PHASEDIFF = 0xdd00b6;
+const int COLOR_SIGNAL = 0x68e4a3;
+const int COLOR_PHASE = 0x737cbd;
+const int COLOR_PHASEDIFF = 0xe568a2;//0x9168e4
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
@@ -59,14 +59,15 @@ void ofApp::setup() {
   ofEnableSmoothing();
   ofSetVerticalSync(false);
   ofSetFrameRate(FPS);
-  ofBackground(3, 3, 6);
+  ofBackground(1, 3, 5);
+  //ofBackground(0, 0, 0);
 
   gui.setup();
   gui.setPosition(ofPoint(1920 - 220,0));
   gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
 
   isLabelVisible = true;
-  font.loadFont("ufonts.com_grotesquemt.ttf", 8);
+  font.loadFont("ufonts.com_grotesquemt.ttf", 9);
 
   load();
 }
