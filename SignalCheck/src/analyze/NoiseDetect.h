@@ -16,7 +16,7 @@ class NoiseDetect
 public:
   NoiseDetect();
   ~NoiseDetect();
-  
+
   ofPixels convert(ofPixels _dat);
 
 private:

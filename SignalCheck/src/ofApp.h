@@ -20,6 +20,7 @@
 #include <string.h>
 #include <iterator>
 
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -53,7 +54,7 @@ public:
 private:
   ofxWatchFile file_;
   SignalUtil signalUtil;
-  AmpSpectrogram ampSpectrogram; 
+  AmpSpectrogram ampSpectrogram;
 
   void init();
   void load();

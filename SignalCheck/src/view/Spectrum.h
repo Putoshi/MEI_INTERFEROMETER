@@ -35,7 +35,7 @@ public:
 private:
   ofColor getColorMap(float _level = 0.0f);
   int covertGrayScale(float _level);
-  
+
   // 横のカラーマップ
   ofPixels colorMap;
   ofTexture colorMapTex;
@@ -46,7 +46,7 @@ private:
 
   // 抽出スペクトログラム
   ofPixels specPickupPix;
-  ofTexture specPickupTex; 
+  ofTexture specPickupTex;
 
   // 直線ノイズなど除去
   ofPixels cleanPix;
@@ -69,8 +69,8 @@ private:
 
   // opencv
   vector <ofPolyline> edgeLines; // 輪郭線を格納する動的配列
-  
-  
+
+
   float maxValue;
   float avgValue;
   int pickupIdxY;

@@ -30,7 +30,7 @@ const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
 const float sampleRate = N * (1000 / FFT_SPAN);
 
 // PhaseDiff Ch
-const int phaseDiffCh[2] = {0, 4};
+const int phaseDiffCh[2] = { 0, 4 };
 
 int deltaTime, connectTime;
 
@@ -63,7 +63,7 @@ void ofApp::setup() {
   //ofBackground(0, 0, 0);
 
   gui.setup();
-  gui.setPosition(ofPoint(1920 - 220,0));
+  gui.setPosition(ofPoint(1920 - 220, 0));
   gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
 
   isLabelVisible = true;
@@ -172,7 +172,7 @@ void ofApp::update() {
       //std::cerr << "スペクトログラム" << std::endl;
       spectrogramFftUpdate();
     }
-    
+
   }
 
   for (int i = 0; i < CHANNELS; i++) {
@@ -180,12 +180,12 @@ void ofApp::update() {
 
     if (signalafterfft[i].size() >= 2049 / 2 / 2) {
       int size = signalafterfft[i].size();
-      
+
       for (int j = 0; j < 2049 / 2 / 2 - 1; j++) {
         signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
       }
-      
-    } 
+
+    }
   }
 }
 
@@ -246,7 +246,7 @@ void ofApp::fftUpdate() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
- 
+
   ofSetColor(255);
 
   soundMutex.lock();
@@ -256,7 +256,7 @@ void ofApp::draw() {
   //std::cerr << drawBins[0].size() << std::endl;
 
   // 指定された周波数でvectorを切り抜いちゃう
-  
+
   int startIdx = roundf((lowFreq / sampleRate * 2) * drawBins[0].size());
   int endIdx = roundf((highFreq / sampleRate * 2) * drawBins[0].size());
   //std::cerr << drawBins[0].size() << std::endl;
@@ -302,7 +302,7 @@ void ofApp::draw() {
       }
       ofPopMatrix();
     }
-    
+
     // Signal
     ofPushMatrix();
     signalViewer[j].draw(26, marginTop + (plotHeight + 30) * j);
@@ -321,13 +321,13 @@ void ofApp::draw() {
       ofPopMatrix();
     }
   }
-  
+
   phaseDiffViewer[0].draw(870, marginTop + (plotHeight + 30) * 0);
 
   //std::cerr << (endIdx - startIdx) << std::endl;
   ofSetColor(255, 255, 255);
 
-  if(isLabelVisible) drawLabel();
+  if (isLabelVisible) drawLabel();
 
   spectrums.draw(peekFreq);
 
@@ -449,7 +449,7 @@ void ofApp::drawLabel() {
   font.drawString("Mono Spectrogram 100Hz", 870, 175 + 500 + 25 - 3);
   font.drawString("Echo Analyze", 870, 175 + 500 + 25 * 2 + 50 - 3);
 
-  
+
   //ofDrawBitmapString("Signal 1.25V ", 117, marginTop - 3);
   //ofDrawBitmapString("Freq 2-4kHz", 250, marginTop - 3);
   //ofDrawBitmapString("Phase +-180", 330, marginTop - 3);

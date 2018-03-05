@@ -31,7 +31,7 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
       colorMap.setColor(j, i, col);
     }
   }
-  
+
   colorMapTex.allocate(5, spectrumHeight, GL_RGB);
   colorMapTex.loadData(colorMap);
 
@@ -87,7 +87,7 @@ void Spectrum::draw(float _peekFreq) {
   if (1 > peekFreq || peekFreq > 5000) {
     peekFreq = 3000.0f;
   }
-  
+
   colorMapTex.draw(pos.x + spectrumWidth + 10, pos.y);
   drawSpectrogram();
   drawFrame();
@@ -118,7 +118,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   img = new ofImage;
   img->clear();
 
-  
+
   ofImage *imgPickup;
   imgPickup = new ofImage;
   imgPickup->clear();
@@ -127,7 +127,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   imgClean = new ofImage;
   imgClean->clear();
 
-  if((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
+  if ((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
 
   int len = 500;
   int pickupIdx = 0;
@@ -167,16 +167,16 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       cleanPix[pickupIdx * 3 + 1] = _colgray;
       cleanPix[pickupIdx * 3 + 2] = _colgray;
 
-     
+
       pickupIdx++;
     }
   }
 
-  
-  
+
+
   //std::cerr << pickupIdxY << std::endl;
 
-  
+
 
   img->setFromPixels(pixs, spectrumHeight, spectrumWidth, OF_IMAGE_COLOR);
   img->update();
@@ -215,7 +215,7 @@ void Spectrum::drawSpectrogram() {
 }
 
 void Spectrum::drawFrame() {
-  
+
   // ˜g
   ofPushStyle();
   ofNoFill();
@@ -232,7 +232,7 @@ void Spectrum::drawFrame() {
 
   ofPushStyle();
   ofNoFill();
-  
+
   ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY * 2 + pickupH, spectrumWidth, pickupH);
   ofSetColor(ofColor::white);
 
@@ -271,11 +271,12 @@ ofColor Spectrum::getColorMap(float _level) {
 }
 
 int Spectrum::covertGrayScale(float _level) {
-  
+
   int l = 0;
   if (maxValue * 0.7f <= _level) {
     l = 255;
-  }else {
+  }
+  else {
     l = 0;
   }
   return  l;

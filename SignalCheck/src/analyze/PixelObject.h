@@ -25,8 +25,8 @@ public:
   int dopplerShift;
 
 private:
-  
+
   int y;
   int detect;
-  
+
 };
