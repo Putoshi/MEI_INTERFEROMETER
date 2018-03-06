@@ -11,6 +11,8 @@
 #include "./view/AmpSpectrogram.h"
 #include "./view/Spectrum.h"
 #include "./view/graph/PhaseDiffGraphViewer.h"
+#include "./event/EventManager.h"
+#include "./event/Event.h"
 
 #include <stdio.h>
 #include <vector>
@@ -49,7 +51,7 @@ public:
   bool isLabelVisible;
   ofTrueTypeFont font;
 
-  ofMutex soundMutex;
+  ofMutex soundMutex; 
 
 private:
   ofxWatchFile file_;
@@ -60,6 +62,7 @@ private:
   void load();
   void fileEvent(ofFile &file);
   void fileEvent2(const void *sender, ofFile &file);
+  static void detectFunc(Event &event);
 
   void fftUpdate();
   void spectrogramFftUpdate();

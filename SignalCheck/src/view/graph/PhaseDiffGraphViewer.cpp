@@ -62,7 +62,7 @@ void PhaseDiffGraphViewer::allocate(int num)
 
 void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
 {
- if(peekFreq != _peekFreq){
+  if (peekFreq != _peekFreq) {
     peekFreq += (_peekFreq - peekFreq) / 2;
   }
   else {
@@ -103,11 +103,11 @@ void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
       }
     }
   }
-  
+
   last4Plots.push_back(prevValue - _d);
   if (last4Plots.size() > 4) last4Plots.erase(last4Plots.begin());
 
-  
+
   //std::cerr << last4Plots.size() << std::endl;
 
 
@@ -138,7 +138,7 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
 {
   if (data == NULL) return;
 
-  if(idx < offset) return;
+  if (idx < offset) return;
 
   ofPushStyle();
   ofNoFill();

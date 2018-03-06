@@ -9,7 +9,7 @@ NoiseDetect::NoiseDetect()
   blurPixVec[0].resize(50);
   blurPixVec[1].resize(50);
   blurPixVec[2].resize(50);
-
+  //event = Event();
 }
 
 
@@ -86,6 +86,10 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
 
       // ジャッジ
       std::cerr << "判定:  LifeTime=" << deleteObj.lifetime << "  DopplerShift=" << deleteObj.dopplerShift << std::endl;
+
+      // イベントディスパッチ
+      EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
+      eventDispatcher->dispatchEvent(new Event(Event::ECHO_DETECT));
 
       ofColor judgeColor;
       if (deleteObj.dopplerShift > 10) {

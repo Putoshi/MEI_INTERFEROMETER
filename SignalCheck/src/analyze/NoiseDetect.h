@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "./analyze/PixelObject.h"
+#include "./event/EventManager.h"
+#include "./event/Event.h"
 #include <stdio.h>
 #include <vector>
 #include <math.h>
@@ -18,6 +20,7 @@ public:
   ~NoiseDetect();
 
   ofPixels convert(ofPixels _dat);
+  //Event event;
 
 private:
   vector<PixelObject> pixelObjectVec;

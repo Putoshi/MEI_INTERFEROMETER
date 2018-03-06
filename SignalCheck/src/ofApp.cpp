@@ -79,6 +79,9 @@ void ofApp::load() {
   //file_.addListener(this, &ofApp::fileEvent2);
   //file_.setTargetPath(SRC_FILE);
 
+  EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
+  eventDispatcher->addEventListener(Event::ECHO_DETECT, this, detectFunc);
+
   signalUtil.CHANNELS = CHANNELS;
   signalUtil.AD_1S_N = AD_1S_N;
   signalUtil.N = N;
@@ -190,6 +193,8 @@ void ofApp::update() {
 }
 
 void ofApp::fftUpdate() {
+  //float val = 10;
+  //ofNotifyEvent(event.detectEvent, val);
 
   //std::cerr << "fftUpdate" << std::endl;
 
@@ -407,6 +412,11 @@ void ofApp::fileEvent(ofFile &file)
 void ofApp::fileEvent2(const void *sender, ofFile &file)
 {
   //std::cout << "loaded event function (with sender) called" << std::endl;
+}
+
+void ofApp::detectFunc(Event &event)
+{
+  cout << "[event.target] : " << ofToString(event.type()).c_str() << endl;
 }
 
 void ofApp::spectrogramFftUpdate() {

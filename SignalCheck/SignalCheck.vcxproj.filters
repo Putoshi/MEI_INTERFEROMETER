@@ -112,6 +112,15 @@
     <ClCompile Include="src\analyze\PixelObject.cpp">
       <Filter>src\analyze</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\Object.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\Event.cpp">
+      <Filter>src\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\EventDispatcher.cpp">
+      <Filter>src\event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -170,6 +179,12 @@
     </Filter>
     <Filter Include="src\analyze">
       <UniqueIdentifier>{b48810cb-a737-4e1c-91fe-4289cc662b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\event">
+      <UniqueIdentifier>{05a1308f-9f1b-4040-a73e-989cc75249be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{e70b39e4-c8b7-450e-a719-0da3ddda82c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +310,21 @@
     </ClInclude>
     <ClInclude Include="src\analyze\PixelObject.h">
       <Filter>src\analyze</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Singleton.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Object.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\EventManager.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\Event.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\EventDispatcher.h">
+      <Filter>src\event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

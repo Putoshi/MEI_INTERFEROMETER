@@ -179,6 +179,9 @@
     <ClCompile Include="src\analyze\NoiseDetect.cpp" />
     <ClCompile Include="src\analyze\PixelObject.cpp" />
     <ClCompile Include="src\analyze\Tuple2.cpp" />
+    <ClCompile Include="src\core\Object.cpp" />
+    <ClCompile Include="src\event\Event.cpp" />
+    <ClCompile Include="src\event\EventDispatcher.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\SignalUtil.cpp" />
@@ -216,6 +219,11 @@
     <ClInclude Include="src\analyze\NoiseDetect.h" />
     <ClInclude Include="src\analyze\PixelObject.h" />
     <ClInclude Include="src\analyze\Tuple2.h" />
+    <ClInclude Include="src\core\Object.h" />
+    <ClInclude Include="src\core\Singleton.h" />
+    <ClInclude Include="src\event\Event.h" />
+    <ClInclude Include="src\event\EventDispatcher.h" />
+    <ClInclude Include="src\event\EventManager.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\SignalUtil.h" />
     <ClInclude Include="src\TriggerBuffer.h" />
