@@ -98,16 +98,16 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
         judgeColor = ofColor(57, 195, 59);
       }
 
-
-
+      int _idx;
       if (deleteObj.lifetime == 0) {
         deleteObj.dots.push_back(deleteObj.check);
       }
       for (int k = 0; k < deleteObj.dots.size(); k++) {
         vector<int> del = deleteObj.dots[k];
         for (int l = 0; l < del.size(); l++) {
-          if (600 - 1 - (deleteObj.dots.size() - k) - 1) newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k) - 1, judgeColor);
-          if (600 - 1 - (deleteObj.dots.size() - k)) newPix.setColor(del[l], 600 - 1 - (deleteObj.dots.size() - k), judgeColor);
+          _idx = 600 - 1 - (deleteObj.dots.size() - k);
+          if (0 <= (_idx - 1) && (_idx - 1) < 600 && 0 <= del[l] && del[l] < 50) newPix.setColor(del[l], _idx - 1, judgeColor);
+          if (0 <= _idx && _idx < 600 && 0 <= del[l] && del[l] < 50) newPix.setColor(del[l], _idx, judgeColor);
         }
       }
       pixelObjectVec[i].deactivate();
