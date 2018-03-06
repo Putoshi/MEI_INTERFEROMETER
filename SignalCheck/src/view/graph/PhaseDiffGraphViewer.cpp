@@ -15,7 +15,7 @@ PhaseDiffGraphViewer::PhaseDiffGraphViewer()
   min = -1.0;
   max = 1.0;
   width = 200.0;
-  height = 50.0;
+  height = 100.0;
   lineColor = 0xffffff;
   idx = 0;
   offset = 0;
@@ -144,6 +144,13 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
   ofNoFill();
   ofSetLineWidth(0.5);
   ofSetHexColor(0x555555);
+
+  ofSetColor(30, 30, 30);
+  for (int i = 0; i < 6; i++) {
+    ofLine(posx, posy + h * (i + 1) / 6, posx + w, posy + h * (i + 1) / 6);
+  }
+
+  ofSetColor(120, 120, 120);
   ofRect(posx, posy, w, h);
   ofSetColor(120, 120, 120);
   ofLine(posx, posy + h / 2.0, posx + w, posy + h / 2.0);

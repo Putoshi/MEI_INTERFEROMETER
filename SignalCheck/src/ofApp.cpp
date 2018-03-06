@@ -137,12 +137,12 @@ void ofApp::init() {
 
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
-  spectrums.setup(870, 175, highFreq, 3000);
+  spectrums.setup(870, 255, highFreq, 3000);
 
   // à ëäç∑ 0-1
   phaseDiffViewer[0].setup(400);
   phaseDiffViewer[0].setRange(-180.0, 180.0);
-  phaseDiffViewer[0].setSize(800, plotHeight);
+  phaseDiffViewer[0].setSize(800, 180);
   phaseDiffViewer[0].setColor(COLOR_PHASEDIFF);
 
   signalMemRelease();  // ÉÅÉÇÉääJï˙
@@ -445,9 +445,9 @@ void ofApp::drawLabel() {
   font.drawString("Freq 2-4kHz", 250 - 2, marginTop - 3);
   font.drawString("Phase +-180", 325, marginTop - 3);
   font.drawString("PhaseDifference +-180", 870, marginTop - 3);
-  font.drawString("Spectrogram 3-4kHz", 870, 175 - 3);
-  font.drawString("Mono Spectrogram 100Hz", 870, 175 + 500 + 25 - 3);
-  font.drawString("Echo Analyze", 870, 175 + 500 + 25 * 2 + 50 - 3);
+  font.drawString("Spectrogram 3-4kHz", 870, 255 - 3);
+  font.drawString("Mono Spectrogram 100Hz", 870, 255 + 500 + 25 - 3);
+  font.drawString("Echo Analyze", 870, 255 + 500 + 25 * 2 + 50 - 3);
 
 
   //ofDrawBitmapString("Signal 1.25V ", 117, marginTop - 3);
