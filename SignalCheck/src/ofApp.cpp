@@ -80,6 +80,8 @@ void ofApp::load() {
   //file_.setTargetPath(SRC_FILE);
 
   EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
+
+  // 流星エコー検知イベント
   eventDispatcher->addEventListener(Event::ECHO_DETECT, this, detectFunc);
 
   signalUtil.CHANNELS = CHANNELS;
@@ -416,7 +418,10 @@ void ofApp::fileEvent2(const void *sender, ofFile &file)
 
 void ofApp::detectFunc(Event &event)
 {
-  cout << "[event.target] : " << ofToString(event.type()).c_str() << endl;
+  //cout << "[event.target] : " << ofToString(event.type()).c_str() << endl;
+
+  phaseDiffViewer[0].culcDiff(EventManager::getInstance().lifetime);
+  EventManager::getInstance().lifetime = 0;
 }
 
 void ofApp::spectrogramFftUpdate() {

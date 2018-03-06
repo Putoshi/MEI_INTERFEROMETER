@@ -85,11 +85,15 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
       PixelObject deleteObj = v1;
 
       // ジャッジ
-      std::cerr << "判定:  LifeTime=" << deleteObj.lifetime << "  DopplerShift=" << deleteObj.dopplerShift << std::endl;
-
-      // イベントディスパッチ
-      EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
-      eventDispatcher->dispatchEvent(new Event(Event::ECHO_DETECT));
+      //秒の取得
+      int s = ofGetSeconds();
+      //分の取得
+      int m = ofGetMinutes();
+      //時の取得
+      int h = ofGetHours();
+      string time = ofToString(h, 0) + ":" + ofToString(m, 0) + ":" + ofToString(s, 0);
+      std::cerr << time << "  ";
+      std::cerr << "判定:  LifeTime=" << deleteObj.lifetime + 1 << "  DopplerShift=" << deleteObj.dopplerShift << std::endl;
 
       ofColor judgeColor;
       if (deleteObj.dopplerShift > 10) {
@@ -100,6 +104,11 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
       }
       else {
         judgeColor = ofColor(57, 195, 59);
+
+        // イベントディスパッチ
+        EventManager::getInstance().lifetime = deleteObj.lifetime + 1;
+        EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
+        eventDispatcher->dispatchEvent(new Event(Event::ECHO_DETECT));
       }
 
       int _idx;

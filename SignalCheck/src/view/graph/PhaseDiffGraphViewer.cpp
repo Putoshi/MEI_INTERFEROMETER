@@ -187,3 +187,41 @@ void PhaseDiffGraphViewer::setColor(int _lineColor)
 {
   lineColor = _lineColor;
 }
+
+void PhaseDiffGraphViewer::culcDiff(int _lifetime)
+{
+  float dispersion = 5.0f;
+  float minV = data[0];
+  float maxV = data[0];
+
+  int len = std::min(_lifetime * 20, bufferLength);
+  float avg = 0;
+  for (int i = len; i > 0; i--) {
+    avg += data[i - 1];
+
+    minV = std::min(minV, data[i - 1]);
+    maxV = std::max(maxV, data[i - 1]);
+
+  }
+  avg /= len;
+  //std::cerr << std::endl;
+  //•b‚ÌŽæ“¾
+  int s = ofGetSeconds();
+  //•ª‚ÌŽæ“¾
+  int m = ofGetMinutes();
+  //Žž‚ÌŽæ“¾
+  int h = ofGetHours();
+  string time = ofToString(h, 0) + ":" + ofToString(m, 0) + ":" + ofToString(s, 0);
+
+  std::cerr << time << "  ";
+
+  if (minV > avg - dispersion && maxV < avg + dispersion) {
+    std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avg:" << avg << std::endl;
+  }
+  else {
+    std::cerr << "‚Î‚ç‚Â‚«‘½‚¢" << "  avg:" << avg << "  min:" << minV << "  max:" << maxV << std::endl;
+  }
+  //std::cerr << std::endl;
+
+  
+}

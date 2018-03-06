@@ -39,7 +39,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
 
   // 14s“Ç‚Ýž‚ñ‚¾‚çƒŠƒZƒbƒg
   if (totalCnt >= floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) ) {
-    std::cerr << "LOOP" << std::endl;
+    //std::cerr << "LOOP" << std::endl;
     totalCnt = 1;
     binIdx = (binIdx + 1) % 2;
     isReading = false;

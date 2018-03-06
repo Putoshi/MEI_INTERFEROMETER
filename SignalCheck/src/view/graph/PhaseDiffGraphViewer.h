@@ -1,5 +1,6 @@
 
 #include "ofMain.h"
+#include <algorithm>    // std::max
 #include <cmath>
 #include <math.h>
 #include <string>
@@ -24,6 +25,8 @@ public:
   void setSize(float _width, float _height);
   void setRange(float _min, float _max);
   void setColor(int _lineColor);
+
+  void culcDiff(int _lifetime);
 
   float min, max, width, height;
 

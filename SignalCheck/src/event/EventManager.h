@@ -18,6 +18,8 @@ private:
   };
   EventDispatcher* dispatcher;
 
+  
+
 public:
   static EventManager& EventManager::getInstance() {
     static EventManager eventManager;
@@ -30,5 +32,7 @@ public:
     }
     return dispatcher;
   }
+
+  int lifetime;
 };
 
