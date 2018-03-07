@@ -237,19 +237,27 @@ void PhaseDiffGraphViewer::setColor(int _lineColor1, int _lineColor2)
 void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 {
   float dispersion = 5.0f;
-  float minV = dataAlpha[0];
-  float maxV = dataAlpha[0];
+  float minVAlpha = dataAlpha[0];
+  float maxVAlpha = dataAlpha[0];
+  float minVBeta = dataBeta[0];
+  float maxVBeta = dataBeta[0];
 
   int len = std::min(_lifetime * 20, bufferLength);
-  float avg = 0;
+  float avgAlpha = 0;
+  float avgBeta = 0;
   for (int i = len; i > 0; i--) {
-    avg += dataAlpha[i - 1];
+    avgAlpha += dataAlpha[i - 1];
+    minVAlpha = std::min(minVAlpha, dataAlpha[i - 1]);
+    maxVAlpha = std::max(maxVAlpha, dataAlpha[i - 1]);
 
-    minV = std::min(minV, dataAlpha[i - 1]);
-    maxV = std::max(maxV, dataAlpha[i - 1]);
+    avgBeta += dataBeta[i - 1];
+    minVBeta = std::min(minVBeta, dataBeta[i - 1]);
+    maxVBeta = std::max(maxVBeta, dataBeta[i - 1]);
 
   }
-  avg /= len;
+  avgAlpha /= len;
+  avgBeta /= len;
+
   //std::cerr << std::endl;
   //•b‚ÌŽæ“¾
   int s = ofGetSeconds();
@@ -262,12 +270,17 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
   std::cerr << time << "  ";
 
-  if (minV > avg - dispersion && maxV < avg + dispersion) {
-    std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avg:" << avg << std::endl;
+  /*if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion  && minVBeta > avgBeta - dispersion && maxVBeta < avgBeta + dispersion) {
+    std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << std::endl;
     ScreenCapture::getInstance().saveScreenCapture("./tmp/", time2);
+  }*/
+  if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion ) {
+    std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << std::endl;
+
+    if(Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time2);
   }
   else {
-    std::cerr << "‚Î‚ç‚Â‚«‘½‚¢" << "  avg:" << avg << "  min:" << minV << "  max:" << maxV << std::endl;
+    std::cerr << "‚Î‚ç‚Â‚«‘½‚¢" << "  avgAlpha:" << avgAlpha << "  min:" << minVAlpha << "  max:" << maxVAlpha << std::endl;
   }
   //std::cerr << std::endl;
 

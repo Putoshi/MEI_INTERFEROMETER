@@ -31,6 +31,9 @@ private:
     EAST_ANT = XML.getValue("settings:channel:eastAnt", 4);
     SOUTH_ANT = XML.getValue("settings:channel:southAnt", 2);
 
+    // キャプ画像
+    enableCapture = XML.getValue("settings:save:captureImage", false);
+
     //delete[] cstr; // メモリ解放
 
     /*std::cerr << SRC_PATH << std::endl;*/
@@ -57,6 +60,9 @@ public:
 
   // 南アンテナのチャンネル
   int SOUTH_ANT;
+
+  // キャプ画像
+  bool enableCapture;
 
 
 };

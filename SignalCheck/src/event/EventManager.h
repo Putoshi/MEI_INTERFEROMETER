@@ -14,7 +14,7 @@
 class EventManager {
 private:
   EventManager() {
-    std::cerr << "EventManager" << std::endl;
+    //std::cerr << "EventManager" << std::endl;
   };
   EventDispatcher* dispatcher;
 
