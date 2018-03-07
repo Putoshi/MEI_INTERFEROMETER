@@ -7,33 +7,44 @@
 #include <iostream>
 
 #include "PhaseDiffGraphViewer.h"
-vector<float> last4Plots;
+vector<float> last4PlotsAlpha;
+vector<float> last4PlotsBeta;
 PhaseDiffGraphViewer::PhaseDiffGraphViewer()
 {
-  data = NULL;
+  dataAlpha = NULL;
+  dataBeta = NULL;
   bufferLength = 0;
   min = -1.0;
   max = 1.0;
   width = 200.0;
   height = 100.0;
-  lineColor = 0xffffff;
+  lineColor1 = 0xffffff;
+  lineColor2 = 0xffffff;
   idx = 0;
   offset = 0;
 
-  last4Plots.resize(4);
-  swingWidth = 0;
+  last4PlotsAlpha.resize(4);
+  last4PlotsBeta.resize(4);
+  swingWidthAlpha = 0;
+  swingWidthBeta = 0;
 
-  prevValue = 0;
+  prevValueAlpha = 0;
+  prevValueBeta = 0;
 
   for (int i = 0; i < 4; i++) {
-    last4Plots.push_back(0.1);
+    last4PlotsAlpha.push_back(0.1);
+    last4PlotsBeta.push_back(0.1);
   }
 }
 
 PhaseDiffGraphViewer::~PhaseDiffGraphViewer()
 {
-  if (data != NULL) {
-    delete data;
+  if (dataAlpha != NULL) {
+    delete dataAlpha;
+  }
+
+  if (dataBeta != NULL) {
+    delete dataBeta;
   }
 
 }
@@ -49,18 +60,25 @@ void PhaseDiffGraphViewer::setup(int _bufferLength, int _offset)
 
 void PhaseDiffGraphViewer::allocate(int num)
 {
-  if (data != NULL) {
-    delete data;
+  if (dataAlpha != NULL) {
+    delete dataAlpha;
+  }
+
+  if (dataBeta != NULL) {
+    delete dataBeta;
   }
 
   bufferLength = num;
 
-  data = new float[bufferLength];
-  memset(data, 0, sizeof(float)*bufferLength);
+  dataAlpha = new float[bufferLength];
+  memset(dataAlpha, 0, sizeof(float)*bufferLength);
+
+  dataBeta = new float[bufferLength];
+  memset(dataBeta, 0, sizeof(float)*bufferLength);
 
 }
 
-void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
+void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
 {
   if (peekFreq != _peekFreq) {
     peekFreq += (_peekFreq - peekFreq) / 2;
@@ -72,55 +90,69 @@ void PhaseDiffGraphViewer::pushData(float _d, float _peekFreq)
   if (0 > peekFreq || peekFreq > 5000) {
     peekFreq = 3000.0f;
   }
-  //std::cerr << peekFreq << std::endl;
-
-  //peekFreq = 3736.0f;
 
   float diffSampling = 1 / (44643.0f * 8.0f) * peekFreq * 360.0f / 2;
-  //std::cerr << diffSampling << std::endl;
 
 
   /*
   1-5ch 12
   */
-  _d += diffSampling * 4; //20  1-5ch 12
+  _alpha += diffSampling * 4; //20  1-5ch 12
+  _beta += diffSampling * 4;
 
   // ˆÊ‘Š”½“]‚ÌŽž‚É
-  float wid = 0;
-  for (int i = 0; i < last4Plots.size(); i++) {
-    wid += last4Plots[i];
+  float widAlpha = 0;
+  for (int i = 0; i < last4PlotsAlpha.size(); i++) {
+    widAlpha += last4PlotsAlpha[i];
   }
-  swingWidth = wid / 4;
+  swingWidthAlpha = widAlpha / 4;
+
+  float widBeta = 0;
+  for (int i = 0; i < last4PlotsBeta.size(); i++) {
+    widBeta += last4PlotsBeta[i];
+  }
+  swingWidthBeta = widBeta / 4;
+
   //std::cerr << swingWidth << std::endl;
 
-  if (abs(swingWidth) < 10) {
-    if (abs(abs(prevValue) - abs(_d)) > 90) {
-      if (_d > 300) {
-        _d -= 360;
+  if (abs(swingWidthAlpha) < 10) {
+    if (abs(abs(prevValueAlpha) - abs(_alpha)) > 90) {
+      if (_alpha > 300) {
+        _alpha -= 360;
       }
-      else if (_d < 300) {
-        _d += 360;
+      else if (_alpha < 300) {
+        _alpha += 360;
       }
     }
   }
 
-  last4Plots.push_back(prevValue - _d);
-  if (last4Plots.size() > 4) last4Plots.erase(last4Plots.begin());
+  if (abs(swingWidthBeta) < 10) {
+    if (abs(abs(prevValueBeta) - abs(_beta)) > 90) {
+      if (_beta > 300) {
+        _beta -= 360;
+      }
+      else if (_beta < 300) {
+        _beta += 360;
+      }
+    }
+  }
 
+  last4PlotsAlpha.push_back(prevValueAlpha - _alpha);
+  if (last4PlotsAlpha.size() > 4) last4PlotsAlpha.erase(last4PlotsAlpha.begin());
 
-  //std::cerr << last4Plots.size() << std::endl;
-
+  last4PlotsBeta.push_back(prevValueBeta - _beta);
+  if (last4PlotsBeta.size() > 4) last4PlotsBeta.erase(last4PlotsBeta.begin());
 
   for (int i = bufferLength - 1; i > 0; i--) {
-    data[i] = data[i - 1];
+    dataAlpha[i] = dataAlpha[i - 1];
+    dataBeta[i] = dataBeta[i - 1];
   }
   idx++;
+  prevValueAlpha = _alpha;
+  prevValueBeta = _beta;
 
-  prevValue = _d;
-
-  data[0] = _d;
-
-  //std::cerr << _d << std::endl;
+  dataAlpha[0] = _alpha;
+  dataBeta[0] = _beta;
 }
 
 void PhaseDiffGraphViewer::draw()
@@ -136,7 +168,7 @@ void PhaseDiffGraphViewer::draw(float posx, float posy)
 
 void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float min, float max)
 {
-  if (data == NULL) return;
+  if (dataAlpha == NULL) return;
 
   if (idx < offset) return;
 
@@ -155,15 +187,28 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
   ofSetColor(120, 120, 120);
   ofLine(posx, posy + h / 2.0, posx + w, posy + h / 2.0);
 
-  ofSetHexColor(lineColor);
+  ofSetHexColor(lineColor1);
   glBegin(GL_LINE_STRIP);
   for (int i = 0; i < bufferLength; i++) {
-    //glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(data[i + offset], min, max, 0.0, h), 0.0);
+    //glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(dataAlpha[i + offset], min, max, 0.0, h), 0.0);
     if (bufferLength < i + offset) {
       glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(0.0, min, max, 0.0, h), 0.0);
     }
     else {
-      glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(data[i + offset], min, max, 0.0, h), 0.0);
+      glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(dataAlpha[i + offset], min, max, 0.0, h), 0.0);
+    }
+  }
+  glEnd();
+
+  ofSetHexColor(lineColor2);
+  glBegin(GL_LINE_STRIP);
+  for (int i = 0; i < bufferLength; i++) {
+    //glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(dataAlpha[i + offset], min, max, 0.0, h), 0.0);
+    if (bufferLength < i + offset) {
+      glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(0.0, min, max, 0.0, h), 0.0);
+    }
+    else {
+      glVertex3d(posx + (w / (float)bufferLength)*i, posy + h - ofMap(dataBeta[i + offset], min, max, 0.0, h), 0.0);
     }
   }
   glEnd();
@@ -183,24 +228,25 @@ void PhaseDiffGraphViewer::setRange(float _min, float _max)
   max = _max;
 }
 
-void PhaseDiffGraphViewer::setColor(int _lineColor)
+void PhaseDiffGraphViewer::setColor(int _lineColor1, int _lineColor2)
 {
-  lineColor = _lineColor;
+  lineColor1 = _lineColor1;
+  lineColor2 = _lineColor2;
 }
 
 void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 {
   float dispersion = 5.0f;
-  float minV = data[0];
-  float maxV = data[0];
+  float minV = dataAlpha[0];
+  float maxV = dataAlpha[0];
 
   int len = std::min(_lifetime * 20, bufferLength);
   float avg = 0;
   for (int i = len; i > 0; i--) {
-    avg += data[i - 1];
+    avg += dataAlpha[i - 1];
 
-    minV = std::min(minV, data[i - 1]);
-    maxV = std::max(maxV, data[i - 1]);
+    minV = std::min(minV, dataAlpha[i - 1]);
+    maxV = std::max(maxV, dataAlpha[i - 1]);
 
   }
   avg /= len;

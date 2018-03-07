@@ -18,7 +18,7 @@ public:
   void setup(int _bufferLength = 256, int _offset = 0);
 
   void allocate(int num);
-  void pushData(float _d, float _peekFreq);
+  void pushData(float _alpha, float _beta, float _peekFreq);
 
   void draw();
   void draw(float posx, float posy);
@@ -26,7 +26,7 @@ public:
 
   void setSize(float _width, float _height);
   void setRange(float _min, float _max);
-  void setColor(int _lineColor);
+  void setColor(int _lineColor1, int _lineColor2);
 
   void culcDiff(int _lifetime);
 
@@ -35,10 +35,14 @@ public:
 
 private:
   int bufferLength, offset, idx;
-  float* data;
-  int lineColor;
-  float swingWidth;
-  float prevValue;
+  float* dataAlpha;
+  float* dataBeta;
+  int lineColor1;
+  int lineColor2;
+  float swingWidthAlpha;
+  float swingWidthBeta;
+  float prevValueAlpha;
+  float prevValueBeta;
   float peekFreq;
 
 };

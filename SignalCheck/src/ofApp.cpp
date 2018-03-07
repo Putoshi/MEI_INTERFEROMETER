@@ -11,7 +11,8 @@ const int CHANNELS = 7;
 // COLOR
 const int COLOR_SIGNAL = 0x68e4a3;
 const int COLOR_PHASE = 0x737cbd;
-const int COLOR_PHASEDIFF = 0xe568a2;//0x9168e4
+const int COLOR_PHASEDIFF1 = 0xe568a2;
+const int COLOR_PHASEDIFF2 = 0xe5a068;//0x68e5d9
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
@@ -26,6 +27,7 @@ const float sampleRate = N * (1000 / FFT_SPAN);
 
 // PhaseDiff Ch
 int phaseDiffChAlpha[2];
+int phaseDiffChBeta[2];
 
 int deltaTime, connectTime;
 
@@ -37,7 +39,7 @@ vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 vector<SimpleGraphViewer> phaseViewer(CHANNELS);
 vector<SimpleGraphViewer> signalViewer(CHANNELS);
 
-vector<PhaseDiffGraphViewer> phaseDiffViewer(CHANNELS);
+PhaseDiffGraphViewer phaseDiffViewer;
 
 
 vector<ofxFft*> fft(CHANNELS);						// FFT Class vector
@@ -56,6 +58,8 @@ void ofApp::setup() {
 
   phaseDiffChAlpha[0] = Const::getInstance().CENTER_ANT;
   phaseDiffChAlpha[1] = Const::getInstance().EAST_ANT;
+  phaseDiffChBeta[0] = Const::getInstance().CENTER_ANT;
+  phaseDiffChBeta[1] = Const::getInstance().SOUTH_ANT;
 
   gui.setup();
   gui.setPosition(ofPoint(1920 - 220, 0));
@@ -137,10 +141,10 @@ void ofApp::init() {
   spectrums.setup(870, 255, highFreq, 3000);
 
   // 位相差 0-1
-  phaseDiffViewer[0].setup(400);
-  phaseDiffViewer[0].setRange(-180.0, 180.0);
-  phaseDiffViewer[0].setSize(800, 180);
-  phaseDiffViewer[0].setColor(COLOR_PHASEDIFF);
+  phaseDiffViewer.setup(400);
+  phaseDiffViewer.setRange(-180.0, 180.0);
+  phaseDiffViewer.setSize(800, 180);
+  phaseDiffViewer.setColor(COLOR_PHASEDIFF1, COLOR_PHASEDIFF2);
 
   signalMemRelease();  // メモリ開放
 
@@ -269,7 +273,9 @@ void ofApp::draw() {
     phaseViewer[i].pushData(phase[i][maxIdxForPhase] / M_PI);
   }
 
-  phaseDiffViewer[0].pushData((phase[phaseDiffChAlpha[0]][maxIdxForPhase] - phase[phaseDiffChAlpha[1]][maxIdxForPhase]) * 180 / M_PI, peekFreq);
+  float _alpha = (phase[phaseDiffChAlpha[0]][maxIdxForPhase] - phase[phaseDiffChAlpha[1]][maxIdxForPhase]) * 180 / M_PI;
+  float _beta = (phase[phaseDiffChBeta[0]][maxIdxForPhase] - phase[phaseDiffChBeta[1]][maxIdxForPhase]) * 180 / M_PI;
+  phaseDiffViewer.pushData(_alpha, _beta, peekFreq);
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
   ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
@@ -321,7 +327,7 @@ void ofApp::draw() {
     }
   }
 
-  phaseDiffViewer[0].draw(870, marginTop + (plotHeight + 30) * 0);
+  phaseDiffViewer.draw(870, marginTop + (plotHeight + 30) * 0);
 
   //std::cerr << (endIdx - startIdx) << std::endl;
   ofSetColor(255, 255, 255);
@@ -412,7 +418,7 @@ void ofApp::detectFunc(Event &event)
 {
   //cout << "[event.target] : " << ofToString(event.type()).c_str() << endl;
 
-  phaseDiffViewer[0].culcDiff(EventManager::getInstance().lifetime);
+  phaseDiffViewer.culcDiff(EventManager::getInstance().lifetime);
   EventManager::getInstance().lifetime = 0;
 }
 
