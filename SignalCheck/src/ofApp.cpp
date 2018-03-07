@@ -2,11 +2,6 @@
 
 using namespace std;
 
-// PATH
-char * SRC_FILE = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";		// adiファイルのパス
-char * DST_FILE = "C:/Users/Putoshi/Documents/MEI/DaqLog/_DaqLog.bak";	// 一時保存パス
-
-
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
 
 // CONFIG
@@ -20,8 +15,8 @@ const int COLOR_PHASEDIFF = 0xe568a2;//0x9168e4
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数
-const int N = 4096 / 2 / 2;									// FFT 標本数 1024
-const float FFT_SPAN = 100 / 2 / 2;								// FFTする間隔 ms
+const int N = 1024;									// FFT 標本数
+const float FFT_SPAN = 25;								// FFTする間隔 ms
 const float SPECTROGRAM_FFT_SPAN = 500;								// FFTする間隔 ms
 
 const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
@@ -35,12 +30,10 @@ const int phaseDiffCh[2] = { 0, 4 };
 int deltaTime, connectTime;
 
 int spectrogramTimeCnt = 0;  // スペクトログラムだけ別ループなのでその時間計測の変数
-//float * signalForSpectrogram[10260];
 float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
 
-std::vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
-//vector<vector<float>> phase(CHANNELS);				// 都度読み込んで更新される位相vector
+vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
 vector<ofxGraphViewer> phaseViewer(CHANNELS);
 vector<ofxGraphViewer> signalViewer(CHANNELS);
 
@@ -77,7 +70,7 @@ void ofApp::load() {
 
   //file_.addListener(this, &ofApp::fileEvent);
   //file_.addListener(this, &ofApp::fileEvent2);
-  //file_.setTargetPath(SRC_FILE);
+  //file_.setTargetPath(Const::getInstance().SRC_PATH);
 
   EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
 
@@ -88,9 +81,6 @@ void ofApp::load() {
   signalUtil.AD_1S_N = AD_1S_N;
   signalUtil.N = N;
   signalUtil.FFT_SPAN = FFT_SPAN;
-  signalUtil.SRC_FILE = SRC_FILE;
-  signalUtil.DST_FILE = DST_FILE;
-
   signalUtil.init();
 
   init();
@@ -446,16 +436,11 @@ void ofApp::spectrogramFftUpdate() {
     }
   }
 
-  //peekFreq = (float)maxIdx / ((float)endIdxForSpectrogram - (float)startIdxForSpectrogram) * (highFreq - 3000) + 3000;
-
-  //std::cerr << peekFreq << std::endl;
   spectrums.setSpectrum(vecForSpectrogram);
-
 }
 
 void ofApp::drawLabel() {
   ofPushMatrix();
-  //ofSetHexColor(0xbbbbbb);
   font.drawString("Signal 1.25V", 70, marginTop - 3);
   font.drawString("Freq 2-4kHz", 250 - 2, marginTop - 3);
   font.drawString("Phase +-180", 325, marginTop - 3);
@@ -463,13 +448,6 @@ void ofApp::drawLabel() {
   font.drawString("Spectrogram 3-4kHz", 870, 255 - 3);
   font.drawString("Mono Spectrogram 100Hz", 870, 255 + 500 + 25 - 3);
   font.drawString("Echo Analyze", 870, 255 + 500 + 25 * 2 + 50 - 3);
-
-
-  //ofDrawBitmapString("Signal 1.25V ", 117, marginTop - 3);
-  //ofDrawBitmapString("Freq 2-4kHz", 250, marginTop - 3);
-  //ofDrawBitmapString("Phase +-180", 330, marginTop - 3);
-  //ofDrawBitmapString("PhaseDifference  +-180", 870, marginTop - 3);
-  //ofSetHexColor(0xffffff);
 
   ofPopMatrix();
 }

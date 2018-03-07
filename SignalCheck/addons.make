@@ -3,3 +3,4 @@ ofxGraphViewer
 ofxGui
 ofxNetwork
 ofxWatchFile
+ofxXmlSettings

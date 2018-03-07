@@ -18,12 +18,12 @@ void SignalUtil::init() {
   isReading = false;
 
   // .adiファイルを開く
-  bool isReaded = readSigned16bitIntBinary(SRC_FILE, 0);
+  bool isReaded = readSigned16bitIntBinary(Const::getInstance().SRC_PATH, 0);
   // _DaqLog.bakファイルに保存
-  bool isWrote = writeSigned16bitIntBinary(DST_FILE);
+  bool isWrote = writeSigned16bitIntBinary(Const::getInstance().DST_PATH);
 
   if (isReaded && isWrote) {
-    remove(DST_FILE); // ファイル削除
+    remove(Const::getInstance().DST_PATH); // ファイル削除
   }
 }
 
@@ -33,7 +33,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
   // 事前読み込み
   if (totalCnt > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) * 0.8 && !isReading) {
     isReading = true;
-    readSigned16bitIntBinary(SRC_FILE, (binIdx + 1) % 2);
+    readSigned16bitIntBinary(Const::getInstance().SRC_PATH, (binIdx + 1) % 2);
   }
   //std::cerr << floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) << std::endl;
 

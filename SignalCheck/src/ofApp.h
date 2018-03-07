@@ -6,6 +6,7 @@
 #include "ofxGraphViewer.h"
 #include "ofxGui.h"
 
+#include "./config/Const.h"
 #include "./TriggerBuffer.h"
 #include "./SignalUtil.h"
 #include "./view/AmpSpectrogram.h"

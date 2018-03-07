@@ -1,5 +1,5 @@
 #pragma once
-
+#include "./config/Const.h"
 #include <stdio.h>
 #include <vector>
 #include <iostream>
@@ -15,9 +15,6 @@ public:
   ~SignalUtil();
 
   void init();
-
-  char * SRC_FILE;		// adiファイルのパス
-  char * DST_FILE;	// 一時保存パス
 
   const int IDX_BODY = 8 * 4 + 4;
   int CHANNELS;
