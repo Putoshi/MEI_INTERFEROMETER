@@ -3,6 +3,8 @@
 #include "./core/util/ScreenCapture.h"
 #include "./config/Const.h"
 
+#define M_PI 3.14159265358979323846
+
 #include <algorithm>    // std::max
 #include <cmath>
 #include <math.h>

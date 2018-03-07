@@ -274,8 +274,35 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << std::endl;
     ScreenCapture::getInstance().saveScreenCapture("./tmp/", time2);
   }*/
+
+  //minVAlpha = maxVAlpha = avgAlpha = 138.7; // theta1=50.1, theta2=21.5, •ûˆÊŠp=50.1, ‹ÂŠp=30.8
+  //minVBeta = maxVBeta = avgBeta = 66.1;
+
+  //minVAlpha = maxVAlpha = avgAlpha = -96.3; // theta1=-32.3, theta2=4.78, •ûˆÊŠp=171.3, ‹ÂŠp=57.3
+  //minVBeta = maxVBeta = avgBeta = 14.9;
+
+ 
+
   if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion ) {
-    std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << std::endl;
+    std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
+
+    float theta1 = asin(avgAlpha / 180) * 180 / M_PI;
+    float theta2 = asin(avgBeta / 180) * 180 / M_PI;
+
+    std::cerr << "@@@@    theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
+    //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
+    float azimuthAngle = atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI + 180;
+    if (azimuthAngle > 180) {
+      azimuthAngle = 360 - azimuthAngle;
+    }
+
+    if (azimuthAngle < -180) {
+      azimuthAngle = -360 - azimuthAngle;
+    }
+
+    float elevationAngle = acos(sqrt(pow(cos((90 - theta1)/180 * M_PI),2) + pow(cos((90 - theta2)/180 * M_PI), 2))) * 180 / M_PI;
+
+    std::cerr << "@@@@    •ûˆÊŠp: " << azimuthAngle << "  ‹ÂŠp: " << elevationAngle << std::endl;
 
     if(Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time2);
   }
@@ -285,4 +312,6 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   //std::cerr << std::endl;
 
   
+
+  //elevation angle
 }
