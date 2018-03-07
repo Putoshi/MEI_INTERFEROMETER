@@ -25,7 +25,7 @@ const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
 const float sampleRate = N * (1000 / FFT_SPAN);
 
 // PhaseDiff Ch
-const int phaseDiffCh[2] = { 0, 4 };
+int phaseDiffChAlpha[2];
 
 int deltaTime, connectTime;
 
@@ -34,8 +34,8 @@ float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
 
 vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
-vector<ofxGraphViewer> phaseViewer(CHANNELS);
-vector<ofxGraphViewer> signalViewer(CHANNELS);
+vector<SimpleGraphViewer> phaseViewer(CHANNELS);
+vector<SimpleGraphViewer> signalViewer(CHANNELS);
 
 vector<PhaseDiffGraphViewer> phaseDiffViewer(CHANNELS);
 
@@ -53,7 +53,9 @@ void ofApp::setup() {
   ofSetVerticalSync(false);
   ofSetFrameRate(FPS);
   ofBackground(1, 3, 5);
-  //ofBackground(0, 0, 0);
+
+  phaseDiffChAlpha[0] = Const::getInstance().CENTER_ANT;
+  phaseDiffChAlpha[1] = Const::getInstance().EAST_ANT;
 
   gui.setup();
   gui.setPosition(ofPoint(1920 - 220, 0));
@@ -267,7 +269,7 @@ void ofApp::draw() {
     phaseViewer[i].pushData(phase[i][maxIdxForPhase] / M_PI);
   }
 
-  phaseDiffViewer[0].pushData((phase[phaseDiffCh[0]][maxIdxForPhase] - phase[phaseDiffCh[1]][maxIdxForPhase]) * 180 / M_PI, peekFreq);
+  phaseDiffViewer[0].pushData((phase[phaseDiffChAlpha[0]][maxIdxForPhase] - phase[phaseDiffChAlpha[1]][maxIdxForPhase]) * 180 / M_PI, peekFreq);
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
   ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);

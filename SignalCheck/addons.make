@@ -1,5 +1,4 @@
 ofxFft
-ofxGraphViewer
 ofxGui
 ofxNetwork
 ofxWatchFile

@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "ofxWatchFile.h"
 #include "ofxFft.h"
-#include "ofxGraphViewer.h"
 #include "ofxGui.h"
 
 #include "./config/Const.h"
@@ -12,6 +11,7 @@
 #include "./view/AmpSpectrogram.h"
 #include "./view/Spectrum.h"
 #include "./view/graph/PhaseDiffGraphViewer.h"
+#include "./view/graph/SimpleGraphViewer.h"
 #include "./event/EventManager.h"
 #include "./event/Event.h"
 

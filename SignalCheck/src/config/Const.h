@@ -26,6 +26,11 @@ private:
     DST_PATH = new char[dst_s.size() + 1]; // メモリ確保
     std::char_traits<char>::copy(DST_PATH, dst_s.data(), dst_s.size() + 1);
 
+    // チャンネルの設定
+    CENTER_ANT = XML.getValue("settings:channel:centerAnt", 0);
+    EAST_ANT = XML.getValue("settings:channel:eastAnt", 4);
+    SOUTH_ANT = XML.getValue("settings:channel:southAnt", 2);
+
     //delete[] cstr; // メモリ解放
 
     /*std::cerr << SRC_PATH << std::endl;*/
@@ -44,8 +49,14 @@ public:
   // 一時保存パス
   char * DST_PATH;
 
+  // 中央アンテナのチャンネル
+  int CENTER_ANT;
 
-  //char * SRC_PATH = "C:/Users/Putoshi/Documents/MEI/DaqLog/DaqLog.bak";		// adiファイルのパス
+  // 東アンテナのチャンネル
+  int EAST_ANT;
+
+  // 南アンテナのチャンネル
+  int SOUTH_ANT;
 
 
 };
