@@ -1,5 +1,7 @@
 
 #include "ofMain.h"
+#include "./core/util/ScreenCapture.h"
+
 #include <algorithm>    // std::max
 #include <cmath>
 #include <math.h>

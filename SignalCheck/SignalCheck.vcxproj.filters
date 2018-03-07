@@ -186,6 +186,9 @@
     <Filter Include="src\core">
       <UniqueIdentifier>{e70b39e4-c8b7-450e-a719-0da3ddda82c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\core\util">
+      <UniqueIdentifier>{1f348d3a-242e-4498-93e7-ba736ad67fca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="src\event\EventDispatcher.h">
       <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\util\ScreenCapture.h">
+      <Filter>src\core\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

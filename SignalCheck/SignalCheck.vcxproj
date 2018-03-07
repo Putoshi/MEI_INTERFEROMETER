@@ -221,6 +221,7 @@
     <ClInclude Include="src\analyze\Tuple2.h" />
     <ClInclude Include="src\core\Object.h" />
     <ClInclude Include="src\core\Singleton.h" />
+    <ClInclude Include="src\core\util\ScreenCapture.h" />
     <ClInclude Include="src\event\Event.h" />
     <ClInclude Include="src\event\EventDispatcher.h" />
     <ClInclude Include="src\event\EventManager.h" />

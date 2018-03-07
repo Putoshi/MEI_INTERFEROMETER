@@ -212,11 +212,13 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   //Žž‚ÌŽæ“¾
   int h = ofGetHours();
   string time = ofToString(h, 0) + ":" + ofToString(m, 0) + ":" + ofToString(s, 0);
+  string time2 = ofToString(h, 0) + "_" + ofToString(m, 0) + "_" + ofToString(s, 0);
 
   std::cerr << time << "  ";
 
   if (minV > avg - dispersion && maxV < avg + dispersion) {
     std::cerr << "Ÿ—¬¯ŒŸ’m    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avg:" << avg << std::endl;
+    ScreenCapture::getInstance().saveScreenCapture("./tmp/", time2);
   }
   else {
     std::cerr << "‚Î‚ç‚Â‚«‘½‚¢" << "  avg:" << avg << "  min:" << minV << "  max:" << maxV << std::endl;
