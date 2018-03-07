@@ -12,7 +12,7 @@ const int CHANNELS = 7;
 const int COLOR_SIGNAL = 0x68e4a3;
 const int COLOR_PHASE = 0x737cbd;
 const int COLOR_PHASEDIFF1 = 0xe568a2;
-const int COLOR_PHASEDIFF2 = 0xe5a068;//0x68e5d9
+const int COLOR_PHASEDIFF2 = 0xe58a68;//0x68e5d9
 
 // FFT SETTING
 const float AD_1S_N = 44643;						// ADボードの1秒ごとの標本数

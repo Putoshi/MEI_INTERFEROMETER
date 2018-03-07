@@ -97,8 +97,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
   /*
   1-5ch 12
   */
-  _alpha += diffSampling * 4; //20  1-5ch 12
-  _beta += diffSampling * 4;
+  _alpha += diffSampling * (Const::getInstance().EAST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
+  _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
 
   // ˆÊ‘Š”½“]‚ÌŽž‚É
   float widAlpha = 0;
