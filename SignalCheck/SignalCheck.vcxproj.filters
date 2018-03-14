@@ -359,6 +359,12 @@
     <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.h">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\util\DateUtil.h">
+      <Filter>src\core\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\util\LogUtil.h">
+      <Filter>src\core\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

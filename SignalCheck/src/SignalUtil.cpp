@@ -28,13 +28,27 @@ void SignalUtil::init() {
 }
 
 std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
-  totalCnt++;
+  std::cerr << "parseBinary start " << std::endl;
+
 
   // 事前読み込み
-  if (totalCnt > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) * 0.8 && !isReading) {
+  if (totalCnt + 1 > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) * 0.8 && !isReading) {
     isReading = true;
     readSigned16bitIntBinary(Const::getInstance().SRC_PATH, (binIdx + 1) % 2);
+
+    //std::cerr << "事前読み " << std::endl;
+    if (binValues[binIdx].size() == 0) {
+      std::cerr << "少ない " << std::endl;
+      std::cerr << binValues[binIdx].size() << std::endl;
+      Sleep(100);
+      std::cerr << "parseBinary cancel" << std::endl;
+      isReading = false;
+      return parseBinary(frameCnt);
+    }
   }
+
+  totalCnt++;
+  
   //std::cerr << floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) << std::endl;
 
   // 14s読み込んだらリセット
@@ -61,13 +75,18 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     int idx = totalCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
     //std::cerr << idx << " ";
 
+    //if (binValues[binIdx].size() < idx * 16 + 8 * 2 + IDX_BODY - 1 ) {
+    //  std::cerr << "少ない " << std::endl;
+    //  std::cerr << binValues[binIdx].size() << std::endl;
+    //  std::cerr << idx * 16 + 8 * 2 + IDX_BODY - 1 << std::endl;
+    //}
+
     std::vector<unsigned short> data(8);
 
+
     for (int k = 0, size = 8; k < size; ++k) {
-
-
       char buf[20];
-     
+
       snprintf(buf, 20, "%#x", binValues[binIdx][idx * 16 + k * 2 + IDX_BODY]);
 
       char t[5];
@@ -99,6 +118,8 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     //printf("%02x ", targetVector[idx * 16 + IDX_BODY + 12]);
     //printf("%02x ", targetVector[idx * 16 + IDX_BODY + 14]);
 
+    
+
     for (int i = 0; i < CHANNELS; ++i) {
       long lon = (long)data[i];
       float flo = (float)lon;
@@ -110,6 +131,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
   
 
   //cout << endl;
+  std::cerr << "parseBinary end " << std::endl;
   return signal;
 }
 

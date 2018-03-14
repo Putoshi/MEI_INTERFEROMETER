@@ -154,7 +154,6 @@ void ofApp::init() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-
   deltaTime = ofGetElapsedTimeMillis() - connectTime;
   if (deltaTime >= FFT_SPAN) {
     connectTime = ofGetElapsedTimeMillis();
@@ -171,7 +170,12 @@ void ofApp::update() {
     if (spectrogramTimeCnt >= (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) {
       spectrogramTimeCnt = 0;
       //std::cerr << "スペクトログラム" << std::endl;
+      std::cerr << "spectrogramFftUpdate start " << std::endl;
       spectrogramFftUpdate();
+      std::cerr << "spectrogramFftUpdate end " << std::endl;
+
+      /*string d = DateUtil::getInstance().getTimeString("-");
+      std::cerr << d << std::endl;*/
     }
 
   }
@@ -197,6 +201,7 @@ void ofApp::fftUpdate() {
   //std::cerr << "fftUpdate" << std::endl;
 
   // Binary Analyze
+  std::cerr << "fftUpdate start " << std::endl;
   signal = signalUtil.parseBinary(frameCnt);
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
@@ -245,6 +250,7 @@ void ofApp::fftUpdate() {
   std::vector<vector<float>>().swap(middleBins); // メモリ開放
   middleBins = audioBins;
   soundMutex.unlock();
+  std::cerr << "fftUpdate end " << std::endl;
 }
 
 //--------------------------------------------------------------
@@ -275,6 +281,19 @@ void ofApp::draw() {
 
   float _alpha = (phase[phaseDiffChAlpha[0]][maxIdxForPhase] - phase[phaseDiffChAlpha[1]][maxIdxForPhase]) * 180 / M_PI;
   float _beta = (phase[phaseDiffChBeta[0]][maxIdxForPhase] - phase[phaseDiffChBeta[1]][maxIdxForPhase]) * 180 / M_PI;
+  if (_alpha > 180) {
+    _alpha = -360 + _alpha;
+  }
+  else if (_alpha < -180) {
+    _alpha = 360 + _alpha;
+  }
+  if (_beta > 180) {
+    _beta = -360 + _beta;
+  }
+  else if (_beta < -180) {
+    _beta = 360 + _beta;
+  }
+
   phaseDiffViewer.pushData(_alpha, _beta, peekFreq);
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";

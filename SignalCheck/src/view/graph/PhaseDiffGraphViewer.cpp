@@ -258,17 +258,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   avgAlpha /= len;
   avgBeta /= len;
 
-  //std::cerr << std::endl;
-  //秒の取得
-  int s = ofGetSeconds();
-  //分の取得
-  int m = ofGetMinutes();
-  //時の取得
-  int h = ofGetHours();
-  string time = ofToString(h, 0) + ":" + ofToString(m, 0) + ":" + ofToString(s, 0);
-  string time2 = ofToString(h, 0) + "_" + ofToString(m, 0) + "_" + ofToString(s, 0);
 
-  std::cerr << time << "  ";
+  string time = DateUtil::getInstance().getDateString("_");
 
   /*if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion  && minVBeta > avgBeta - dispersion && maxVBeta < avgBeta + dispersion) {
     std::cerr << "◆流星検知    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << std::endl;
@@ -284,12 +275,12 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
  
 
   if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion ) {
-    std::cerr << "◆流星検知    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "◆流星検知　duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
 
     float theta1 = asin(avgAlpha / 180) * 180 / M_PI;
     float theta2 = asin(avgBeta / 180) * 180 / M_PI;
 
-    std::cerr << "　　　　    theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
+    std::cerr << "　　　　　　　　　theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
     //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
     float azimuthAngle = atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI + 180;
     if (azimuthAngle > 180) {
@@ -302,12 +293,12 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
     float elevationAngle = acos(sqrt(pow(cos((90 - theta1)/180 * M_PI),2) + pow(cos((90 - theta2)/180 * M_PI), 2))) * 180 / M_PI;
 
-    std::cerr << "　　　　    方位角: " << azimuthAngle << "  仰角: " << elevationAngle << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "方位角: " << azimuthAngle << "  仰角: " << elevationAngle << std::endl;
 
-    if(Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time2);
+    if(Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time);
   }
   else {
-    std::cerr << "ばらつき多い" << "  avgAlpha:" << avgAlpha << "  min:" << minVAlpha << "  max:" << maxVAlpha << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "ばらつき多い" << "  avgAlpha:" << avgAlpha << "  min:" << minVAlpha << "  max:" << maxVAlpha << std::endl;
   }
   //std::cerr << std::endl;
 

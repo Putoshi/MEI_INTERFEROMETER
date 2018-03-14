@@ -4,6 +4,7 @@
 #include "./analyze/PixelObject.h"
 #include "./event/EventManager.h"
 #include "./event/Event.h"
+#include "./util/DateUtil.h"
 #include <stdio.h>
 #include <vector>
 #include <math.h>

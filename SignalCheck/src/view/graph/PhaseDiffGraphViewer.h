@@ -2,6 +2,8 @@
 #include "ofMain.h"
 #include "./core/util/ScreenCapture.h"
 #include "./config/Const.h"
+#include "./util/DateUtil.h"
+#include "./util/LogUtil.h"
 
 #define M_PI 3.14159265358979323846
 

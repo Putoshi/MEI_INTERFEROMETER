@@ -219,6 +219,8 @@
     <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\util\DateUtil.h" />
+    <ClInclude Include="src\core\util\LogUtil.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\analyze\Hough.h" />
     <ClInclude Include="src\analyze\NoiseDetect.h" />
