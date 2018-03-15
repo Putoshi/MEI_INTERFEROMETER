@@ -5,7 +5,7 @@ using namespace std;
 //const int AD_SAMPLING_SPEED = 44100; // 35398230 44100
 
 // CONFIG
-const int FPS = 120;								// FPS
+int FPS = 120;								// FPS
 const int CHANNELS = 7;
 
 // COLOR
@@ -61,10 +61,8 @@ void ofApp::setup() {
   phaseDiffChBeta[0] = Const::getInstance().CENTER_ANT;
   phaseDiffChBeta[1] = Const::getInstance().SOUTH_ANT;
 
-  gui.setup();
-  gui.setPosition(ofPoint(1920 - 220, 0));
-  gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
-
+  setupGui();
+  
   isLabelVisible = true;
   font.loadFont("ufonts.com_grotesquemt.ttf", 9);
 
@@ -366,6 +364,74 @@ void ofApp::signalMemRelease() {
     free(signal[i]);
   }
   std::vector<float *>().swap(signal); // ÉÅÉÇÉääJï˙
+}
+
+//--------------------------------------------------------------
+void ofApp::setupGui() {
+  gui.setup();
+  gui.setPosition(ofPoint(1920 - 220, 0));
+  //gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
+  gui.add(frameRate.setup("FPS", Const::getInstance().frameRate, 60, 120));
+  frameRate.addListener(this, &ofApp::onGuiChangeFrameRate);
+
+  gui.add(enableLogTxt.setup(" Save LogTxt", Const::getInstance().enableLogTxt));
+  enableLogTxt.addListener(this, &ofApp::onGuiChangeLogTxt);
+
+  gui.add(enableCapImg.setup(" Save CaptureImg", Const::getInstance().enableCapture));
+  enableCapImg.addListener(this, &ofApp::onGuiChangeCapImg);
+
+  gui.add(enableSaveAdi.setup(" Save ADI", Const::getInstance().enableSaveAdi));
+  enableSaveAdi.addListener(this, &ofApp::onGuiChangeSaveAdi);
+
+  gui.add(thresholdDispersion.setup(" Dispersion (degree)", Const::getInstance().thresholdDispersion, 3, 30));
+  thresholdDispersion.addListener(this, &ofApp::onGuiChangeDispersion);
+
+  gui.add(thresholdBipolar.setup(" Bipolar (%)", Const::getInstance().thresholdBipolar, 0, 100));
+  thresholdBipolar.addListener(this, &ofApp::onGuiChangBipolar);
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeFrameRate(int & n) {
+  //std::cerr << "onGuiChangeFrameRate: " <<  n << std::endl;
+  Const::getInstance().frameRate = n;
+  Const::getInstance().saveXml();
+  FPS = frameRate;
+  ofSetFrameRate(FPS);
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeLogTxt(bool & pressed) {
+  //std::cerr << "onGuiChangeLogTxt: " << std::boolalpha << pressed << std::endl;
+  Const::getInstance().enableLogTxt = pressed;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeCapImg(bool & pressed) {
+  //std::cerr << "onGuiChangeCapImg: " << std::boolalpha << pressed << std::endl;
+  Const::getInstance().enableCapture = pressed;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeSaveAdi(bool & pressed) {
+  //std::cerr << "onGuiChangeSaveAdi: " << std::boolalpha << pressed << std::endl;
+  Const::getInstance().enableSaveAdi = pressed;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeDispersion(int & n) {
+  //std::cerr << "onGuiChangeDispersion: " << n << std::endl;
+  Const::getInstance().thresholdDispersion = n;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangBipolar(int & n) {
+  //std::cerr << "onGuiChangBipolar: " << n << std::endl;
+  Const::getInstance().thresholdBipolar = n;
+  Const::getInstance().saveXml();
 }
 
 //--------------------------------------------------------------

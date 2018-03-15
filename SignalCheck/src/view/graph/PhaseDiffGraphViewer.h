@@ -49,5 +49,7 @@ private:
   float prevValueAlpha;
   float prevValueBeta;
   float peekFreq;
+  
+  float dispersion;
 
 };

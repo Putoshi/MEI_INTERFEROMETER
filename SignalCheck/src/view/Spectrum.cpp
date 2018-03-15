@@ -108,8 +108,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   }
   avgValue = _avgValue / vec.size();
   //maxValue += (_maxValue - maxValue) / 2;
-  maxValue = 0.45;
-
+  maxValue = 0.01 * (float) Const::getInstance().thresholdBipolar;
+  //std::cerr << maxValue << std::endl;
 
   unsigned char * pixels = spectrogramPix.getPixels();
 

@@ -236,7 +236,7 @@ void PhaseDiffGraphViewer::setColor(int _lineColor1, int _lineColor2)
 
 void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 {
-  float dispersion = 5.0f;
+  dispersion = (float) Const::getInstance().thresholdDispersion;
   float minVAlpha = dataAlpha[0];
   float maxVAlpha = dataAlpha[0];
   float minVBeta = dataBeta[0];

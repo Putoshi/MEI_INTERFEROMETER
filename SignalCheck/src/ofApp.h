@@ -72,8 +72,7 @@ private:
 
   Spectrum spectrums;
 
-  ofxPanel gui;
-  ofxIntSlider binaryOffset;
+  
 
   int maxIdxForPhase;
 
@@ -81,5 +80,22 @@ private:
 
   void drawLabel();
 
+  ofxPanel gui;
+  ofxIntSlider frameRate;
+  ofxIntSlider binaryOffset;
+  ofxToggle enableLogTxt;
+  ofxToggle enableCapImg;
+  ofxToggle enableSaveAdi;
+
+  ofxIntSlider thresholdDispersion;
+  ofxIntSlider thresholdBipolar;
+
+  void setupGui();
+  void onGuiChangeFrameRate(int & n);
+  void onGuiChangeLogTxt(bool & pressed);
+  void onGuiChangeCapImg(bool & pressed);
+  void onGuiChangeSaveAdi(bool & pressed);
+  void onGuiChangeDispersion(int & n);
+  void onGuiChangBipolar(int & n);
 
 };

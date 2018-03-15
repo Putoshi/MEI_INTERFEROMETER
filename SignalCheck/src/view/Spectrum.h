@@ -5,6 +5,7 @@
 
 #include "ofMain.h"
 #include "./analyze/NoiseDetect.h"
+#include "./config/Const.h"
 #include <math.h>
 #include <string>
 #include <string.h>
