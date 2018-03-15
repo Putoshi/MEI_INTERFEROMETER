@@ -28,7 +28,7 @@ void SignalUtil::init() {
 }
 
 std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
-  std::cerr << "parseBinary start " << std::endl;
+  //std::cerr << "parseBinary start " << std::endl;
 
 
   // 事前読み込み
@@ -73,16 +73,8 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     // FFTに掛ける時間単位の標本数(2のべき乗)が合わないので、
     // ADボードの標本数に合わせたインデックスを与える
     int idx = totalCnt *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + j;
-    //std::cerr << idx << " ";
-
-    //if (binValues[binIdx].size() < idx * 16 + 8 * 2 + IDX_BODY - 1 ) {
-    //  std::cerr << "少ない " << std::endl;
-    //  std::cerr << binValues[binIdx].size() << std::endl;
-    //  std::cerr << idx * 16 + 8 * 2 + IDX_BODY - 1 << std::endl;
-    //}
 
     std::vector<unsigned short> data(8);
-
 
     for (int k = 0, size = 8; k < size; ++k) {
       char buf[20];
@@ -131,7 +123,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
   
 
   //cout << endl;
-  std::cerr << "parseBinary end " << std::endl;
+  //std::cerr << "parseBinary end " << std::endl;
   return signal;
 }
 

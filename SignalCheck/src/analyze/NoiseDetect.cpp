@@ -19,7 +19,7 @@ NoiseDetect::~NoiseDetect()
 
 ofPixels NoiseDetect::convert(ofPixels _dat)
 {
-  std::cerr << "convert start " << std::endl;
+  //std::cerr << "convert start " << std::endl;
   ofPixels newPix;
   newPix = _dat;
 
@@ -146,6 +146,6 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
   }
 
   //std::cerr << newPix[newPix.size() - i * 3 - 2 - 1] << std::endl;
-  std::cerr << "convert end " << std::endl;
+  //std::cerr << "convert end " << std::endl;
   return newPix;
 }

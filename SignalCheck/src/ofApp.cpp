@@ -170,9 +170,9 @@ void ofApp::update() {
     if (spectrogramTimeCnt >= (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) {
       spectrogramTimeCnt = 0;
       //std::cerr << "スペクトログラム" << std::endl;
-      std::cerr << "spectrogramFftUpdate start " << std::endl;
+      //std::cerr << "spectrogramFftUpdate start " << std::endl;
       spectrogramFftUpdate();
-      std::cerr << "spectrogramFftUpdate end " << std::endl;
+      //std::cerr << "spectrogramFftUpdate end " << std::endl;
 
       /*string d = DateUtil::getInstance().getTimeString("-");
       std::cerr << d << std::endl;*/
@@ -201,7 +201,7 @@ void ofApp::fftUpdate() {
   //std::cerr << "fftUpdate" << std::endl;
 
   // Binary Analyze
-  std::cerr << "fftUpdate start " << std::endl;
+  //std::cerr << "fftUpdate start " << std::endl;
   signal = signalUtil.parseBinary(frameCnt);
   vector<float> maxValue(CHANNELS);
   for (int i = 0; i < CHANNELS; i++) {
@@ -250,7 +250,7 @@ void ofApp::fftUpdate() {
   std::vector<vector<float>>().swap(middleBins); // メモリ開放
   middleBins = audioBins;
   soundMutex.unlock();
-  std::cerr << "fftUpdate end " << std::endl;
+  //std::cerr << "fftUpdate end " << std::endl;
 }
 
 //--------------------------------------------------------------
