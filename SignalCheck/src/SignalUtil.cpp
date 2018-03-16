@@ -30,16 +30,29 @@ void SignalUtil::init() {
 std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
   //std::cerr << "parseBinary start " << std::endl;
 
+  
 
   // 事前読み込み
   if (totalCnt + 1 > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) * 0.8 && !isReading) {
     isReading = true;
     readSigned16bitIntBinary(Const::getInstance().SRC_PATH, (binIdx + 1) % 2);
 
-    //std::cerr << "事前読み " << std::endl;
-    if (binValues[binIdx].size() == 0) {
+    //std::cerr << "事前読み " << std::endl; size = 3154980   2516258  2534114
+    //if (binValues[binIdx].size() == 0) {
+
+    
+    //std::cerr << _idx * 16 + 7 * 2 + IDX_BODY << std::endl;
+    //Sleep(10000);
+
+    int _idx = (totalCnt + 1) *  roundf(AD_1S_N * (FFT_SPAN / 1000)) + (N - 1);
+    //std::cerr << binValues[(binIdx + 1) % 2].size() << std::endl;
+    //std::cerr << _idx * 16 + 7 * 2 + IDX_BODY + 40 << std::endl;
+
+    if (binValues[binIdx].size() < _idx * 16 + 7 * 2 + IDX_BODY + 40) {
+    //if (binValues[(binIdx + 1) % 2].size() == 0) {
       std::cerr << "少ない " << std::endl;
-      std::cerr << binValues[binIdx].size() << std::endl;
+      std::cerr << binValues[(binIdx + 1) % 2].size() << std::endl;
+      std::cerr << _idx * 16 + 7 * 2 + IDX_BODY << std::endl;
       Sleep(100);
       std::cerr << "parseBinary cancel" << std::endl;
       isReading = false;
@@ -58,7 +71,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     binIdx = (binIdx + 1) % 2;
     isReading = false;
   }
-
+  //std::cerr << "parseBinary start2 " << std::endl;
   //const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
   //std::cerr << frameCnt << std::endl;
   std::vector<float *> signal(CHANNELS);
@@ -67,6 +80,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     signal[i] = sig;
   }
 
+  //std::cerr << "parseBinary start3" << std::endl;
   for (int j = 0, size = N; j < size; ++j) {
 
     // インデックスADボードの時間単位の標本数と
@@ -157,7 +171,7 @@ bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, int
   const size_t fileSize = getFileByteSize(file);
   binValues[_binIdx].clear();
   binValues[_binIdx].resize(fileSize / 2); // 16 bit is 2 bytes.
-
+  //std::cerr << "readSigned16bitIntBinary START2" << std::endl;
   file.read((char*)binValues[_binIdx].data(), fileSize);
   /*if (checkIsLlittleEndian()) {
   std::cout << "is Little endian" << std::endl;

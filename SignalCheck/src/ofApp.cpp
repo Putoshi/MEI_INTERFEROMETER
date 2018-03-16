@@ -253,7 +253,7 @@ void ofApp::fftUpdate() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-
+  //std::cerr << "draw start " << std::endl;
   ofSetColor(255);
 
   soundMutex.lock();
@@ -357,6 +357,11 @@ void ofApp::draw() {
 
   // GUI‚ğ•\¦
   gui.draw();
+  saveGroupGui.draw();
+  thresholdGroupGui.draw();
+ 
+
+  //std::cerr << "draw end " << std::endl;
 }
 
 void ofApp::signalMemRelease() {
@@ -368,25 +373,32 @@ void ofApp::signalMemRelease() {
 
 //--------------------------------------------------------------
 void ofApp::setupGui() {
-  gui.setup();
+  gui.setup("App Config");
   gui.setPosition(ofPoint(1920 - 220, 0));
   //gui.add(binaryOffset.setup("Signal Offset", 0, 0, 100));
+
   gui.add(frameRate.setup("FPS", Const::getInstance().frameRate, 60, 120));
   frameRate.addListener(this, &ofApp::onGuiChangeFrameRate);
 
-  gui.add(enableLogTxt.setup(" Save LogTxt", Const::getInstance().enableLogTxt));
+  saveGroupGui.setup("Save Config");
+  saveGroupGui.setPosition(ofPoint(1920 - 220, 40));
+
+  saveGroupGui.add(enableLogTxt.setup(" Save LogTxt", Const::getInstance().enableLogTxt));
   enableLogTxt.addListener(this, &ofApp::onGuiChangeLogTxt);
 
-  gui.add(enableCapImg.setup(" Save CaptureImg", Const::getInstance().enableCapture));
+  saveGroupGui.add(enableCapImg.setup(" Save CaptureImg", Const::getInstance().enableCapture));
   enableCapImg.addListener(this, &ofApp::onGuiChangeCapImg);
 
-  gui.add(enableSaveAdi.setup(" Save ADI", Const::getInstance().enableSaveAdi));
+  saveGroupGui.add(enableSaveAdi.setup(" Save ADI", Const::getInstance().enableSaveAdi));
   enableSaveAdi.addListener(this, &ofApp::onGuiChangeSaveAdi);
 
-  gui.add(thresholdDispersion.setup(" Dispersion (degree)", Const::getInstance().thresholdDispersion, 3, 30));
+
+  thresholdGroupGui.setup("Threshold");
+  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120));
+  thresholdGroupGui.add(thresholdDispersion.setup(" Dispersion (degree)", Const::getInstance().thresholdDispersion, 3, 30));
   thresholdDispersion.addListener(this, &ofApp::onGuiChangeDispersion);
 
-  gui.add(thresholdBipolar.setup(" Bipolar (%)", Const::getInstance().thresholdBipolar, 0, 100));
+  thresholdGroupGui.add(thresholdBipolar.setup(" Bipolar (%)", Const::getInstance().thresholdBipolar, 0, 100));
   thresholdBipolar.addListener(this, &ofApp::onGuiChangBipolar);
 }
 
@@ -508,7 +520,7 @@ void ofApp::detectFunc(Event &event)
 }
 
 void ofApp::spectrogramFftUpdate() {
-
+  //std::cerr << "spectrogramFftUpdate start " << std::endl;
   fftForSpectrogram->setSignal(signalForSpectrogram);
 
   // w’è‚³‚ê‚½ü”g”‚Åvector‚ğØ‚è”²‚¢‚¿‚á‚¤
@@ -528,8 +540,9 @@ void ofApp::spectrogramFftUpdate() {
       maxIdx = k;
     }
   }
-
+  //std::cerr << "spectrogramFftUpdate start2 " << std::endl;
   spectrums.setSpectrum(vecForSpectrogram);
+  //std::cerr << "spectrogramFftUpdate end " << std::endl;
 }
 
 void ofApp::drawLabel() {

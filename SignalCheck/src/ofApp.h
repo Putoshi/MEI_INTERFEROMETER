@@ -80,7 +80,7 @@ private:
 
   void drawLabel();
 
-  ofxPanel gui;
+  
   ofxIntSlider frameRate;
   ofxIntSlider binaryOffset;
   ofxToggle enableLogTxt;
@@ -89,6 +89,9 @@ private:
 
   ofxIntSlider thresholdDispersion;
   ofxIntSlider thresholdBipolar;
+  ofxGuiGroup gui;
+  ofxGuiGroup saveGroupGui;
+  ofxGuiGroup thresholdGroupGui;
 
   void setupGui();
   void onGuiChangeFrameRate(int & n);

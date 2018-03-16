@@ -49,7 +49,7 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
   vector<PixelObject> _pixelObjectVec;
 
   int loop = pixelObjectVec.size();
-
+  //std::cerr << "convert start2 " << std::endl;
   for (int i = loop - 1; i >= 0; i--) {
     //std::cerr << i  << std::endl;
     PixelObject v1 = pixelObjectVec[i];
@@ -105,7 +105,7 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
         EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
         eventDispatcher->dispatchEvent(new Event(Event::ECHO_DETECT));
       }
-
+      //std::cerr << "convert start3 " << std::endl;
       int _idx;
       if (deleteObj.lifetime == 0) {
         deleteObj.dots.push_back(deleteObj.check);

@@ -95,7 +95,7 @@ void Spectrum::draw(float _peekFreq) {
 
 void Spectrum::setSpectrum(vector<float> _vec) {
   vec = _vec;
-
+  //std::cerr << "setSpectrum start " << std::endl;
   // Max‚ÆAvg‚ðŽæ“¾
   float _avgValue = 0;
   float _maxValue = 0.3;
@@ -112,7 +112,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   //std::cerr << maxValue << std::endl;
 
   unsigned char * pixels = spectrogramPix.getPixels();
-
+  //std::cerr << "setSpectrum start2 " << std::endl;
   unsigned char pixs[600 * 500 * 3];
   ofImage *img;
   img = new ofImage;
@@ -147,7 +147,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       pickupIdx++;
     }
   }
-
+  //std::cerr << "setSpectrum start3 " << std::endl;
   for (int i = spectrumWidth * spectrumHeight - len; i < spectrumWidth * spectrumHeight; i++)
   {
     int idx = i - (spectrumWidth * spectrumHeight - len);
@@ -196,7 +196,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   imgClean->update();
   cleanTex.loadData(imgClean->getPixels());
   imgClean->clear();
-
+  //std::cerr << "setSpectrum end " << std::endl;
 }
 
 void Spectrum::drawSpectrogram() {
