@@ -53,6 +53,14 @@ private:
     // 2‹É‰»‚Ìè‡’l
     thresholdBipolar = XML.getValue("settings:threshold:bipolar", 45);
 
+    // “à•”ˆÊ‘Š·
+    antPhaseDiff.resize(5);
+    antPhaseDiff[0] = XML.getValue("settings:antenna:phasediff0", 0);
+    antPhaseDiff[1] = XML.getValue("settings:antenna:phasediff1", 0);
+    antPhaseDiff[2] = XML.getValue("settings:antenna:phasediff2", 0);
+    antPhaseDiff[3] = XML.getValue("settings:antenna:phasediff3", 0);
+    antPhaseDiff[4] = XML.getValue("settings:antenna:phasediff4", 0);
+
     //delete[] cstr; // ƒƒ‚ƒŠ‰ğ•ú
 
     /*std::cerr << SRC_PATH << std::endl;*/
@@ -88,6 +96,11 @@ public:
     XML.setValue("settings:save:adi", bool2int(enableSaveAdi));
     XML.setValue("settings:threshold:dispersion", thresholdDispersion);
     XML.setValue("settings:threshold:bipolar", thresholdBipolar);
+    XML.setValue("settings:antenna:phasediff0", antPhaseDiff[0]);
+    XML.setValue("settings:antenna:phasediff1", antPhaseDiff[1]);
+    XML.setValue("settings:antenna:phasediff2", antPhaseDiff[2]);
+    XML.setValue("settings:antenna:phasediff3", antPhaseDiff[3]);
+    XML.setValue("settings:antenna:phasediff4", antPhaseDiff[4]);
 
     XML.save("settings.xml");
   };
@@ -124,6 +137,9 @@ public:
 
   // 2‹É‰»‚Ìè‡’l
   int thresholdBipolar;
+
+  // “à•”ˆÊ‘Š·
+  vector<int> antPhaseDiff;
 
 };
 

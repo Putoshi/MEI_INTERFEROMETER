@@ -28,19 +28,26 @@ void SignalUtil::init() {
 }
 
 std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
-  //std::cerr << "parseBinary start " << std::endl;
-
-  
+  std::cerr << "parseBinary start " << std::endl;
 
   // 事前読み込み
   if (totalCnt + 1 > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) * 0.8 && !isReading) {
     isReading = true;
-    readSigned16bitIntBinary(Const::getInstance().SRC_PATH, (binIdx + 1) % 2);
+    bool isReaded = readSigned16bitIntBinary(Const::getInstance().SRC_PATH, (binIdx + 1) % 2);
+
+    // 読み込み失敗したらリトライ
+    if (!isReaded) {
+      std::cerr << "読み込み失敗" << std::endl;
+      Sleep(100);
+      std::cerr << "parseBinary cancel" << std::endl;
+      isReading = false;
+      return parseBinary(frameCnt);
+    }
 
     //std::cerr << "事前読み " << std::endl; size = 3154980   2516258  2534114
     //if (binValues[binIdx].size() == 0) {
 
-    
+
     //std::cerr << _idx * 16 + 7 * 2 + IDX_BODY << std::endl;
     //Sleep(10000);
 
@@ -49,7 +56,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     //std::cerr << _idx * 16 + 7 * 2 + IDX_BODY + 40 << std::endl;
 
     if (binValues[binIdx].size() < _idx * 16 + 7 * 2 + IDX_BODY + 40) {
-    //if (binValues[(binIdx + 1) % 2].size() == 0) {
+      //if (binValues[(binIdx + 1) % 2].size() == 0) {
       std::cerr << "少ない " << std::endl;
       std::cerr << binValues[(binIdx + 1) % 2].size() << std::endl;
       std::cerr << _idx * 16 + 7 * 2 + IDX_BODY << std::endl;
@@ -61,17 +68,17 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
   }
 
   totalCnt++;
-  
+
   //std::cerr << floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) << std::endl;
 
   // 14s読み込んだらリセット
-  if (totalCnt >= floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) ) {
+  if (totalCnt >= floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000))) {
     //std::cerr << "LOOP" << std::endl;
     totalCnt = 1;
     binIdx = (binIdx + 1) % 2;
     isReading = false;
   }
-  //std::cerr << "parseBinary start2 " << std::endl;
+  std::cerr << "parseBinary start2 " << std::endl;
   //const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
   //std::cerr << frameCnt << std::endl;
   std::vector<float *> signal(CHANNELS);
@@ -124,7 +131,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     //printf("%02x ", targetVector[idx * 16 + IDX_BODY + 12]);
     //printf("%02x ", targetVector[idx * 16 + IDX_BODY + 14]);
 
-    
+
 
     for (int i = 0; i < CHANNELS; ++i) {
       long lon = (long)data[i];
@@ -133,11 +140,8 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     }
     //std::cerr << sig[j] << std::endl;
   }
-
-  
-
   //cout << endl;
-  //std::cerr << "parseBinary end " << std::endl;
+  std::cerr << "parseBinary end " << std::endl;
   return signal;
 }
 
@@ -162,13 +166,23 @@ void SignalUtil::convertSigned16bitIntEndian(std::vector<int16_t>* targetVector)
 }
 
 bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, int _binIdx) {
-  //std::cerr << "readSigned16bitIntBinary START" << std::endl;
+  std::cerr << "readSigned16bitIntBinary START" << std::endl;
   std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
   if (!file) {
     std::cout << "Error: The file path is incorrect. There is no file." << std::endl;
     return false;
   }
   const size_t fileSize = getFileByteSize(file);
+
+  //std::cerr << "fileSize: " << fileSize <<std::endl;
+  //std::cerr << "_binIdx: " << _binIdx << std::endl;
+
+  if (fileSize == 0) {//6309960
+    std::cout << "Error: fileSize 0." << std::endl;
+    return false;
+  }
+
+
   binValues[_binIdx].clear();
   binValues[_binIdx].resize(fileSize / 2); // 16 bit is 2 bytes.
   //std::cerr << "readSigned16bitIntBinary START2" << std::endl;
@@ -186,7 +200,7 @@ bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, int
 
   onceReadRow = (binValues[_binIdx].size() - IDX_BODY) / 16;
 
-  //std::cerr << "readSigned16bitIntBinary END" << std::endl;
+  std::cerr << "readSigned16bitIntBinary END" << std::endl;
   return true;
 }
 

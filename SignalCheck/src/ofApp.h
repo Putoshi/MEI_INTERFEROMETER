@@ -89,6 +89,11 @@ private:
 
   ofxIntSlider thresholdDispersion;
   ofxIntSlider thresholdBipolar;
+  ofxIntSlider antPhaseDiff0;
+  ofxIntSlider antPhaseDiff1;
+  ofxIntSlider antPhaseDiff2;
+  ofxIntSlider antPhaseDiff3;
+  ofxIntSlider antPhaseDiff4;
   ofxGuiGroup gui;
   ofxGuiGroup saveGroupGui;
   ofxGuiGroup thresholdGroupGui;
@@ -99,6 +104,11 @@ private:
   void onGuiChangeCapImg(bool & pressed);
   void onGuiChangeSaveAdi(bool & pressed);
   void onGuiChangeDispersion(int & n);
-  void onGuiChangBipolar(int & n);
+  void onGuiChangeBipolar(int & n);
+  void onGuiChangeAntPhaseDiff0(int & n);
+  void onGuiChangeAntPhaseDiff1(int & n);
+  void onGuiChangeAntPhaseDiff2(int & n);
+  void onGuiChangeAntPhaseDiff3(int & n);
+  void onGuiChangeAntPhaseDiff4(int & n);
 
 };

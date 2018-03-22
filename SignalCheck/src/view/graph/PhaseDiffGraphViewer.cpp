@@ -100,6 +100,9 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
   _alpha += diffSampling * (Const::getInstance().EAST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
   _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
 
+  _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().CENTER_ANT];
+  _beta += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().CENTER_ANT];
+
   // ˆÊ‘Š”½“]‚ÌŽž‚É
   float widAlpha = 0;
   for (int i = 0; i < last4PlotsAlpha.size(); i++) {
