@@ -128,9 +128,13 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   imgClean->clear();
 
   if ((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
+  if (pickupIdxY < pickupH / 2) pickupIdxY = pickupH / 2;
+  if (pickupIdxY + pickupH / 2 > spectrumHeight) pickupIdxY = spectrumHeight - pickupH / 2;
 
   int len = 500;
   int pickupIdx = 0;
+
+  // Ç∏ÇÁÇµ
   for (int i = 0; i < spectrumWidth * spectrumHeight - len; i++)
   {
     pixs[i * 3] = pixels[i * 3 + len * 3];
@@ -147,7 +151,10 @@ void Spectrum::setSpectrum(vector<float> _vec) {
       pickupIdx++;
     }
   }
+
   //std::cerr << "setSpectrum start3 " << std::endl;
+
+  // UPDATE
   for (int i = spectrumWidth * spectrumHeight - len; i < spectrumWidth * spectrumHeight; i++)
   {
     int idx = i - (spectrumWidth * spectrumHeight - len);
@@ -160,14 +167,13 @@ void Spectrum::setSpectrum(vector<float> _vec) {
 
     // íäèo
     int headY = i % spectrumHeight;
+    //std::cerr << cleanPix.size() << std::endl;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
       int _colgray = covertGrayScale(vec[idx]);
       specPickupPix[pickupIdx] = _colgray;
       cleanPix[pickupIdx * 3] = _colgray;
       cleanPix[pickupIdx * 3 + 1] = _colgray;
       cleanPix[pickupIdx * 3 + 2] = _colgray;
-
-
       pickupIdx++;
     }
   }
