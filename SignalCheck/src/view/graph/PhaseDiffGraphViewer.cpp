@@ -239,7 +239,7 @@ void PhaseDiffGraphViewer::setColor(int _lineColor1, int _lineColor2)
 
 void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 {
-  dispersion = (float) Const::getInstance().thresholdDispersion;
+  dispersion = (float)Const::getInstance().thresholdDispersion;
   float minVAlpha = dataAlpha[0];
   float maxVAlpha = dataAlpha[0];
   float minVBeta = dataBeta[0];
@@ -261,7 +261,18 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   avgAlpha /= len;
   avgBeta /= len;
 
-
+  // •W€•Î·
+  //float standardDeviation
+  float totalAlpha = 0;
+  float totalBeta = 0;
+  for (int i = len; i > 0; i--) {
+    totalAlpha += (dataAlpha[i - 1] - avgAlpha) * (dataAlpha[i - 1] - avgAlpha);
+    totalBeta += (dataBeta[i - 1] - avgBeta) * (dataBeta[i - 1] - avgBeta);
+  }
+  float standardDeviationAlpha = sqrt(totalAlpha / len);
+  float standardDeviationBeta = sqrt(totalBeta / len);
+  std::cerr << "•W€•Î·Alpha: " << standardDeviationAlpha << std::endl;
+  std::cerr << "•W€•Î·Beta: " << standardDeviationBeta << std::endl;
   string time = DateUtil::getInstance().getDateString("_");
 
   /*if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion  && minVBeta > avgBeta - dispersion && maxVBeta < avgBeta + dispersion) {
@@ -275,9 +286,10 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   //minVAlpha = maxVAlpha = avgAlpha = -96.3; // theta1=-32.3, theta2=4.78, •ûˆÊŠp=171.3, ‹ÂŠp=57.3
   //minVBeta = maxVBeta = avgBeta = 14.9;
 
- 
 
-  if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion ) {
+
+  //if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion) {
+  if (standardDeviationAlpha <= dispersion && standardDeviationBeta <= dispersion) {
     std::cerr << LogUtil::getInstance().getIndentStr() + "Ÿ—¬¯ŒŸ’m@duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
 
     float theta1 = asin(avgAlpha / 180) * 180 / M_PI;
@@ -294,18 +306,18 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
       azimuthAngle = -360 - azimuthAngle;
     }
 
-    float elevationAngle = acos(sqrt(pow(cos((90 - theta1)/180 * M_PI),2) + pow(cos((90 - theta2)/180 * M_PI), 2))) * 180 / M_PI;
+    float elevationAngle = acos(sqrt(pow(cos((90 - theta1) / 180 * M_PI), 2) + pow(cos((90 - theta2) / 180 * M_PI), 2))) * 180 / M_PI;
 
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "•ûˆÊŠp: " << azimuthAngle << "  ‹ÂŠp: " << elevationAngle << std::endl;
 
-    if(Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time);
+    if (Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time);
   }
   else {
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "‚Î‚ç‚Â‚«‘½‚¢" << "  avgAlpha:" << avgAlpha << "  min:" << minVAlpha << "  max:" << maxVAlpha << std::endl;
   }
   //std::cerr << std::endl;
 
-  
+
 
   //elevation angle
 }
