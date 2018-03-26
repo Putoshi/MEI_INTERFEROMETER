@@ -91,7 +91,7 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
     peekFreq = 3000.0f;
   }
 
-  float diffSampling = 1 / (44643.0f * 8.0f) * peekFreq * 360.0f / 2;
+  float diffSampling = 1 / (44643.0f * 8.0f) * peekFreq * 360.0f;
 
 
   /*
@@ -271,8 +271,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   }
   float standardDeviationAlpha = sqrt(totalAlpha / len);
   float standardDeviationBeta = sqrt(totalBeta / len);
-  std::cerr << "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
-  std::cerr << "標準偏差Beta: " << standardDeviationBeta << std::endl;
+  std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
+  std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Beta: " << standardDeviationBeta << std::endl;
   string time = DateUtil::getInstance().getDateString("_");
 
   /*if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion  && minVBeta > avgBeta - dispersion && maxVBeta < avgBeta + dispersion) {

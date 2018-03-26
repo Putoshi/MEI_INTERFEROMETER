@@ -113,3 +113,16 @@ void SimpleGraphViewer::setColor(int _lineColor)
 {
   lineColor = _lineColor;
 }
+
+float SimpleGraphViewer::getAvg()
+{
+  float total = 0;
+  int cnt = 10;
+  for (int i = bufferLength - 1; i > bufferLength - cnt - 1; i--) {
+    total += data[i];
+    //std::cerr << i << std::endl;
+  }
+  total /= cnt;
+  return total;
+}
+

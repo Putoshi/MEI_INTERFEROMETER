@@ -185,7 +185,8 @@ void ofApp::update() {
       int size = signalafterfft[i].size();
 
       for (int j = 0; j < 2049 / 2 / 2 - 1; j++) {
-        signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
+        //signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()) / M_PI);
+        signalViewer[i].pushData(*signalafterfft[i].erase(signalafterfft[i].begin()));
       }
 
     }
@@ -350,6 +351,7 @@ void ofApp::draw() {
   ofSetColor(255, 255, 255);
 
   if (isLabelVisible) drawLabel();
+  drawVGA();
 
   spectrums.draw(peekFreq);
 
@@ -606,6 +608,27 @@ void ofApp::drawLabel() {
   font.drawString("Spectrogram 3-4kHz", 870, 255 - 3);
   font.drawString("Mono Spectrogram 100Hz", 870, 255 + 500 + 25 - 3);
   font.drawString("Echo Analyze", 870, 255 + 500 + 25 * 2 + 50 - 3);
+
+  ofPopMatrix();
+}
+
+void ofApp::drawVGA() {
+  float Vpos = (signalViewer[CHANNELS - 1].getAvg() * 1.25);
+  float Vgain = Vpos - 0.75;
+  float compositeGain = 26 + (Vgain * 50) + 4.4;
+  if (Vgain <= -0.65) {
+    compositeGain = 0;
+  }
+  else if (Vgain >= 0.65) {
+    compositeGain = 60;
+  }
+
+  //std::cerr << signalViewer[CHANNELS - 1].getAvg() << std::endl;
+
+  ofPushMatrix();
+  font.drawString("Vpos(V) : " + ofToString(round(Vpos * 100) / 100), 240, 835);
+  font.drawString("VGain(V) : " + ofToString(round(Vgain * 100) / 100), 240, 855);
+  font.drawString("CompositeGain(dB) : " + ofToString(round(compositeGain*100) / 100), 240, 875);
 
   ofPopMatrix();
 }

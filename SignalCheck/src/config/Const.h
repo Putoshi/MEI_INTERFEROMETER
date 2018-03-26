@@ -44,8 +44,8 @@ private:
     // adiファイル保存
     enableSaveAdi = int2bool(XML.getValue("settings:save:adi", 0));
 
-    // 位相差の閾値 ブレ
-    thresholdDispersion = XML.getValue("settings:threshold:dispersion", 5.0f);
+    // ノイズ判定
+    thresholdMaxDuration = XML.getValue("settings:threshold:maxDuration", 30.0f);
 
     // 位相差の閾値 ブレ
     thresholdDispersion = XML.getValue("settings:threshold:dispersion", 5.0f);
@@ -94,6 +94,7 @@ public:
     XML.setValue("settings:save:txt", bool2int(enableLogTxt));
     XML.setValue("settings:save:captureImage", bool2int(enableCapture));
     XML.setValue("settings:save:adi", bool2int(enableSaveAdi));
+    XML.setValue("settings:threshold:maxDuration", thresholdMaxDuration);
     XML.setValue("settings:threshold:dispersion", thresholdDispersion);
     XML.setValue("settings:threshold:bipolar", thresholdBipolar);
     XML.setValue("settings:antenna:phasediff0", antPhaseDiff[0]);
@@ -131,6 +132,9 @@ public:
 
   // adiファイルを保存する
   bool enableSaveAdi;
+
+  // ノイズ判定時間
+  int thresholdMaxDuration;
 
   // 位相差の閾値
   int thresholdDispersion;

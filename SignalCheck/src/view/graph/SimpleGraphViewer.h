@@ -21,7 +21,7 @@ public:
 
   float min, max, width, height;
 
-
+  float getAvg();
 
 private:
   int bufferLength, offset, idx;

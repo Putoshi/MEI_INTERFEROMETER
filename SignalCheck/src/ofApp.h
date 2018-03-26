@@ -79,6 +79,7 @@ private:
   int marginTop;
 
   void drawLabel();
+  void drawVGA();
 
   
   ofxIntSlider frameRate;
