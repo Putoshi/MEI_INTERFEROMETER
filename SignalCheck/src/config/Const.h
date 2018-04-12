@@ -23,7 +23,7 @@ private:
     std::char_traits<char>::copy(SRC_PATH, src_s.data(), src_s.size() + 1);
 
     // adiファイルの出力パス
-    string dst_s = XML.getValue("settings:path:dest", "C:/Users/Putoshi/Documents/MEI/DaqLog/__DaqLog_.bak");
+    string dst_s = XML.getValue("settings:path:dest", "./tmp/");
     DST_PATH = new char[dst_s.size() + 1]; // メモリ確保
     std::char_traits<char>::copy(DST_PATH, dst_s.data(), dst_s.size() + 1);
 

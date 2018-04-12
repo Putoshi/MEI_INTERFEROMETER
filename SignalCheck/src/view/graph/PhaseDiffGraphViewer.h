@@ -4,6 +4,7 @@
 #include "./config/Const.h"
 #include "./util/DateUtil.h"
 #include "./util/LogUtil.h"
+#include "./util/FileUtil.h"
 
 #define M_PI 3.14159265358979323846
 

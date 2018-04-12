@@ -249,7 +249,7 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
 void PhaseDiffGraphViewer::saveDelayCapture()
 {
   if (saveCapFlg) {
-    ScreenCapture::getInstance().saveScreenCapture("./tmp/", ofSplitString(timer[0], "__")[1] + "/delay.png");
+    ScreenCapture::getInstance().saveScreenCapture(Const::getInstance().DST_PATH, ofSplitString(timer[0], "__")[1] + "/delay.png");
     timer.erase(timer.begin());
     saveCapFlg = false;
   }
@@ -377,11 +377,15 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   if (Const::getInstance().enableDebug || !isError) {
     // キャプチャ画像残す
     if (Const::getInstance().enableCapture) {
-      ScreenCapture::getInstance().saveScreenCapture("./tmp/", time + "/end.png");
+      ScreenCapture::getInstance().saveScreenCapture(Const::getInstance().DST_PATH, time + "/end.png");
       timer.push_back("0__" + time);
     }
 
     // CSV残す
-    if (Const::getInstance().enableLogCsv) LogUtil::getInstance().saveCsv("./tmp/", time, label, content, logAlpha, logBeta);
+    if (Const::getInstance().enableLogCsv) LogUtil::getInstance().saveCsv(Const::getInstance().DST_PATH, time, label, content, logAlpha, logBeta);
+
+    // ADI残す
+    if (Const::getInstance().enableSaveAdi) FileUtil::getInstance().copyFile(Const::getInstance().SRC_PATH, Const::getInstance().DST_PATH + time + "/DaqLog.bak");
+
   }
 }

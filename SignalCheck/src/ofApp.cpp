@@ -409,7 +409,7 @@ void ofApp::setupGui() {
   thresholdGroupGui.setup("Threshold");
   thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 17 * 3));
 
-  thresholdGroupGui.add(thresholdLockTime.setup(" Lock Time", Const::getInstance().thresholdLockTime, 0, 60));
+  thresholdGroupGui.add(thresholdLockTime.setup(" Lock Time", Const::getInstance().thresholdLockTime, 0, 180));
   thresholdLockTime.addListener(this, &ofApp::onGuiChangeLockTime);
 
   thresholdGroupGui.add(thresholdLongEcho.setup(" Long Echo", Const::getInstance().thresholdLongEcho, 10, 30));
