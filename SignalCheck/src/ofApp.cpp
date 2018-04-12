@@ -388,7 +388,7 @@ void ofApp::setupGui() {
   enableDebug.addListener(this, &ofApp::onGuiChangeDebug);
 
   saveGroupGui.setup("Save Config");
-  saveGroupGui.setPosition(ofPoint(1920 - 220, 40 + 18));
+  saveGroupGui.setPosition(ofPoint(1920 - 220, 40 + 17));
 
   saveGroupGui.add(enableLogCsv.setup(" Save LogCsv", Const::getInstance().enableLogCsv));
   enableLogCsv.addListener(this, &ofApp::onGuiChangeLogCsv);
@@ -407,7 +407,17 @@ void ofApp::setupGui() {
 
 
   thresholdGroupGui.setup("Threshold");
-  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 18 * 3));
+  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 17 * 3));
+
+  thresholdGroupGui.add(thresholdLockTime.setup(" Lock Time", Const::getInstance().thresholdLockTime, 0, 60));
+  thresholdLockTime.addListener(this, &ofApp::onGuiChangeLockTime);
+
+  thresholdGroupGui.add(thresholdLongEcho.setup(" Long Echo", Const::getInstance().thresholdLongEcho, 10, 30));
+  thresholdLongEcho.addListener(this, &ofApp::onGuiChangeLongEcho);
+
+  thresholdGroupGui.add(thresholdDopplerShift.setup(" DopplerShift", Const::getInstance().thresholdDopplerShift, 5, 20));
+  thresholdDopplerShift.addListener(this, &ofApp::onGuiChangeDopplerShift);
+
   thresholdGroupGui.add(thresholdDispersion.setup(" Dispersion", Const::getInstance().thresholdDispersion, 3, 30));
   thresholdDispersion.addListener(this, &ofApp::onGuiChangeDispersion);
 
@@ -475,10 +485,32 @@ void ofApp::onGuiChangeCapDelay(int & n) {
   Const::getInstance().delayCapTime = n;
   Const::getInstance().saveXml();
 }
+
 //--------------------------------------------------------------
 void ofApp::onGuiChangeSaveAdi(bool & pressed) {
   //std::cerr << "onGuiChangeSaveAdi: " << std::boolalpha << pressed << std::endl;
   Const::getInstance().enableSaveAdi = pressed;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeLockTime(int & n) {
+  //std::cerr << "onGuiChangeLockTime: " << n << std::endl;
+  Const::getInstance().thresholdLockTime = n;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeLongEcho(int & n) {
+  //std::cerr << "onGuiChangeLongEcho: " << n << std::endl;
+  Const::getInstance().thresholdLongEcho = n;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeDopplerShift(int & n) {
+  //std::cerr << "onGuiChangeDopplerShift: " << n << std::endl;
+  Const::getInstance().thresholdDopplerShift = n;
   Const::getInstance().saveXml();
 }
 

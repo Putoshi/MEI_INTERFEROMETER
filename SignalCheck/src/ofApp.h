@@ -91,6 +91,9 @@ private:
   ofxToggle enableSaveAdi;
   ofxToggle enableDailyLogCsv;
 
+  ofxIntSlider thresholdLockTime;
+  ofxIntSlider thresholdLongEcho;
+  ofxIntSlider thresholdDopplerShift;
   ofxIntSlider thresholdDispersion;
   ofxIntSlider thresholdBipolar;
   ofxIntSlider antPhaseDiff0;
@@ -110,6 +113,9 @@ private:
   void onGuiChangeCapDelay(int & n);
   void onGuiChangeSaveAdi(bool & pressed);
   void onGuiChangeDailyLogCsv(bool & pressed);
+  void onGuiChangeLockTime(int & n);
+  void onGuiChangeLongEcho(int & n);
+  void onGuiChangeDopplerShift(int & n);
   void onGuiChangeDispersion(int & n);
   void onGuiChangeBipolar(int & n);
   void onGuiChangeAntPhaseDiff0(int & n);

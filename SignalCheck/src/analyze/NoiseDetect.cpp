@@ -9,6 +9,7 @@ NoiseDetect::NoiseDetect()
   blurPixVec[0].resize(50);
   blurPixVec[1].resize(50);
   blurPixVec[2].resize(50);
+  pastTime = 0;
   //event = Event();
 }
 
@@ -47,6 +48,10 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
 
   checkIdxVec.clear();
   vector<PixelObject> _pixelObjectVec;
+
+  if (pastTime > 0) {
+    pastTime--;
+  }
 
   int loop = pixelObjectVec.size();
   //std::cerr << "convert start2 " << std::endl;
@@ -88,23 +93,51 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
       // ジャッジ
       string time = DateUtil::getInstance().getTimeString();
       std::cerr << time << "  ";
-      std::cerr << "判定:  LifeTime=" << deleteObj.lifetime + 1 << "  DopplerShift=" << deleteObj.dopplerShift << std::endl;
+      std::cerr << "判定:  LifeTime=" << (deleteObj.lifetime + 1)/2 << "s  DopplerShift=" << deleteObj.dopplerShift * 2 << "Hz" << std::endl;
 
       ofColor judgeColor;
-      if (deleteObj.dopplerShift > 10) {
-        judgeColor = ofColor(195, 30, 30);
+      bool isError = false;
+      if (pastTime != 0 && !Const::getInstance().enableDebug) {
+        judgeColor = ofColor(10, 10, 10);
+        isError = true;
       }
-      else if (deleteObj.lifetime > 20) {
-        judgeColor = ofColor(195, 30, 30);
+      else if (deleteObj.dopplerShift > Const::getInstance().thresholdDopplerShift) {
+        
+        if (Const::getInstance().enableDebug) {
+          judgeColor = ofColor(3, 7, 3);
+        }
+        else {
+          judgeColor = ofColor(195, 30, 30);
+          isError = true;
+        }
+      }
+      else if (deleteObj.lifetime > Const::getInstance().thresholdLongEcho * 2) {
+        
+        if (Const::getInstance().enableDebug) {
+          judgeColor = ofColor(3, 7, 3);
+        }
+        else {
+          judgeColor = ofColor(195, 30, 30);
+          isError = true;
+        }
       }
       else {
         judgeColor = ofColor(57, 195, 59);
+      }
 
+      if (!isError) {
+        if (deleteObj.lifetime + 1 > 20) {
+          deleteObj.lifetime = 19;
+        }
         // イベントディスパッチ
         EventManager::getInstance().lifetime = deleteObj.lifetime + 1;
         EventDispatcher* eventDispatcher = EventManager::getInstance().getEventDispatcher();
         eventDispatcher->dispatchEvent(new Event(Event::ECHO_DETECT));
+
+        pastTime = Const::getInstance().thresholdLockTime * 2;
       }
+
+
       //std::cerr << "convert start3 " << std::endl;
       int _idx;
       if (deleteObj.lifetime == 0) {

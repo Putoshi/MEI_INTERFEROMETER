@@ -5,6 +5,7 @@
 #include "./event/EventManager.h"
 #include "./event/Event.h"
 #include "./util/DateUtil.h"
+#include "./config/Const.h"
 #include <stdio.h>
 #include <vector>
 #include <math.h>
@@ -27,5 +28,6 @@ private:
   vector<PixelObject> pixelObjectVec;
   std::vector<int> checkIdxVec;
   vector<vector<int>> blurPixVec;
+  int pastTime;
 
 };

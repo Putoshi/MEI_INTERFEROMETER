@@ -44,6 +44,7 @@ private:
     // キャプ画像
     enableCapture = int2bool(XML.getValue("settings:save:captureImage", 0));
 
+    // 遅延キャプ時間
     delayCapTime = XML.getValue("settings:save:delayCaptureTime", 5);
 
     // adiファイル保存
@@ -54,6 +55,15 @@ private:
 
     // ノイズ判定
     thresholdMaxDuration = XML.getValue("settings:threshold:maxDuration", 30.0f);
+
+    // 流星判定後の連続回避
+    thresholdLockTime = XML.getValue("settings:threshold:lockTime", 0);
+
+    // ロングエコーの閾値
+    thresholdLongEcho = XML.getValue("settings:threshold:longEcho", 10);
+
+    // ドップラーシフトの閾値
+    thresholdDopplerShift = XML.getValue("settings:threshold:dopplerShift", 10);
 
     // 位相差の閾値 ブレ
     thresholdDispersion = XML.getValue("settings:threshold:dispersion", 5.0f);
@@ -106,6 +116,9 @@ public:
     XML.setValue("settings:save:adi", bool2int(enableSaveAdi));
     XML.setValue("settings:save:dailyCsv", bool2int(enableDailyLogCsv));
     XML.setValue("settings:threshold:maxDuration", thresholdMaxDuration);
+    XML.setValue("settings:threshold:lockTime", thresholdLockTime);
+    XML.setValue("settings:threshold:longEcho", thresholdLongEcho);
+    XML.setValue("settings:threshold:dopplerShift", thresholdDopplerShift);
     XML.setValue("settings:threshold:dispersion", thresholdDispersion);
     XML.setValue("settings:threshold:bipolar", thresholdBipolar);
     XML.setValue("settings:antenna:phasediff0", antPhaseDiff[0]);
@@ -155,6 +168,15 @@ public:
 
   // ノイズ判定時間
   int thresholdMaxDuration;
+
+  // 流星判定後の連続回避
+  int thresholdLockTime;
+
+  // ロングエコーの閾値
+  int thresholdLongEcho;
+
+  // ドップラーシフトの閾値
+  int thresholdDopplerShift;
 
   // 位相差の閾値
   int thresholdDispersion;
