@@ -382,8 +382,11 @@ void ofApp::setupGui() {
   gui.add(frameRate.setup("FPS", Const::getInstance().frameRate, 60, 120));
   frameRate.addListener(this, &ofApp::onGuiChangeFrameRate);
 
+  gui.add(enableDebug.setup(" Debug Mode", Const::getInstance().enableDebug));
+  enableDebug.addListener(this, &ofApp::onGuiChangeDebug);
+
   saveGroupGui.setup("Save Config");
-  saveGroupGui.setPosition(ofPoint(1920 - 220, 40));
+  saveGroupGui.setPosition(ofPoint(1920 - 220, 40 + 18));
 
   saveGroupGui.add(enableLogTxt.setup(" Save LogTxt", Const::getInstance().enableLogTxt));
   enableLogTxt.addListener(this, &ofApp::onGuiChangeLogTxt);
@@ -396,7 +399,7 @@ void ofApp::setupGui() {
 
 
   thresholdGroupGui.setup("Threshold");
-  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120));
+  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 18));
   thresholdGroupGui.add(thresholdDispersion.setup(" Dispersion", Const::getInstance().thresholdDispersion, 3, 30));
   thresholdDispersion.addListener(this, &ofApp::onGuiChangeDispersion);
 
@@ -428,6 +431,13 @@ void ofApp::onGuiChangeFrameRate(int & n) {
   Const::getInstance().saveXml();
   FPS = frameRate;
   ofSetFrameRate(FPS);
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeDebug(bool & pressed) {
+  //std::cerr << "onGuiChangeDebug: " << std::boolalpha << pressed << std::endl;
+  Const::getInstance().enableDebug = pressed;
+  Const::getInstance().saveXml();
 }
 
 //--------------------------------------------------------------
@@ -616,12 +626,12 @@ void ofApp::drawVGA() {
   float Vpos = (signalViewer[CHANNELS - 1].getAvg() * 1.25);
   float Vgain = Vpos - 0.75;
   float compositeGain = 26 + (Vgain * 50) + 4.4;
-  if (Vgain <= -0.65) {
-    compositeGain = 0;
-  }
-  else if (Vgain >= 0.65) {
-    compositeGain = 60;
-  }
+  //if (Vgain <= -0.65) {
+  //  compositeGain = 0;
+  //}
+  //else if (Vgain >= 0.65) {
+  //  compositeGain = 60;
+  //}
 
   //std::cerr << signalViewer[CHANNELS - 1].getAvg() << std::endl;
 

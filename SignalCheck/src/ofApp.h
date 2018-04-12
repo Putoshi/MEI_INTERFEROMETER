@@ -83,6 +83,7 @@ private:
 
   
   ofxIntSlider frameRate;
+  ofxToggle enableDebug;
   ofxIntSlider binaryOffset;
   ofxToggle enableLogTxt;
   ofxToggle enableCapImg;
@@ -101,6 +102,7 @@ private:
 
   void setupGui();
   void onGuiChangeFrameRate(int & n);
+  void onGuiChangeDebug(bool & pressed);
   void onGuiChangeLogTxt(bool & pressed);
   void onGuiChangeCapImg(bool & pressed);
   void onGuiChangeSaveAdi(bool & pressed);

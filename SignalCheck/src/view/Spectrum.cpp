@@ -245,7 +245,7 @@ void Spectrum::drawFrame() {
 }
 
 ofColor Spectrum::getColorMap(float _level) {
-  float a = (1.0f - min(1.0f, _level)) / 0.166666f;
+  float a = (1.0f - min(1.0f, _level)) / 0.2f;//0.166666f
   int X = floor(a);
   int Y = floor(255 * (a - X));
 
@@ -254,7 +254,23 @@ ofColor Spectrum::getColorMap(float _level) {
   int r = 0;
   int g = 0;
   int b = 0;
+  
   switch (X) {
+  case 0:
+    r = 255; g = Y; b = 0; break;
+  case 1:
+    r = 255 - Y; g = 255; b = 0; break;
+  case 2:
+    r = 0; g = 255; b = Y; break;
+  case 3:
+    r = 0; g = 255 - Y; b = 255; break;
+  case 4:
+    r = 0; g = 0; b = 255 - Y; break;
+  case 5:
+    r = 0; g = 0; b = 0; break;
+  }
+
+  /*switch (X) {
   case 0:
     r = 255; g = Y; b = 0; break;
   case 1:
@@ -266,12 +282,10 @@ ofColor Spectrum::getColorMap(float _level) {
   case 4:
     r = Y; g = 0; b = 255; break;
   case 5:
-    //r = 255; g = 0; b = 255; break;
     r = 255 - Y; g = 0; b = 255 - Y; break;
   case 6:
     r = 0; g = 0; b = 0; break;
-    /*r = 255 - Y; g = 0; b = 255 - Y; break;*/
-  }
+  }*/
 
   return  ofColor(r, g, b);
 }

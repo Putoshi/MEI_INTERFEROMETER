@@ -35,6 +35,9 @@ private:
     // FPS
     frameRate = XML.getValue("settings:fps", 60);
 
+    // Debug
+    enableDebug = int2bool(XML.getValue("settings:debug", 0));
+
     // ログ保存
     enableLogTxt = int2bool(XML.getValue("settings:save:txt", 0));
 
@@ -91,6 +94,7 @@ public:
 
   void saveXml() {
     XML.setValue("settings:fps", frameRate);
+    XML.setValue("settings:debug", bool2int(enableDebug));
     XML.setValue("settings:save:txt", bool2int(enableLogTxt));
     XML.setValue("settings:save:captureImage", bool2int(enableCapture));
     XML.setValue("settings:save:adi", bool2int(enableSaveAdi));
@@ -124,9 +128,12 @@ public:
   // FPS
   int frameRate;
 
+  // Debug
+  bool enableDebug;
+
   // ログ保存
   bool enableLogTxt;
-  
+
   // キャプ画像
   bool enableCapture;
 

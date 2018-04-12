@@ -28,7 +28,7 @@ void SignalUtil::init() {
 }
 
 std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
-  std::cerr << "parseBinary start " << std::endl;
+  //std::cerr << "parseBinary start " << std::endl;
 
   // Ž–‘O“Ç‚Ýž‚Ý
   if (totalCnt + 1 > floor((onceReadRow / AD_1S_N) / (FFT_SPAN / 1000)) * 0.8 && !isReading) {
@@ -78,7 +78,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     binIdx = (binIdx + 1) % 2;
     isReading = false;
   }
-  std::cerr << "parseBinary start2 " << std::endl;
+  //std::cerr << "parseBinary start2 " << std::endl;
   //const size_t fileSize = targetVector.size() * 2; // int16_t (16 bit) is 2 byte.
   //std::cerr << frameCnt << std::endl;
   std::vector<float *> signal(CHANNELS);
@@ -141,7 +141,7 @@ std::vector<float *> SignalUtil::parseBinary(const int frameCnt) {
     //std::cerr << sig[j] << std::endl;
   }
   //cout << endl;
-  std::cerr << "parseBinary end " << std::endl;
+  //std::cerr << "parseBinary end " << std::endl;
   return signal;
 }
 
@@ -166,7 +166,7 @@ void SignalUtil::convertSigned16bitIntEndian(std::vector<int16_t>* targetVector)
 }
 
 bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, int _binIdx) {
-  std::cerr << "readSigned16bitIntBinary START" << std::endl;
+  //std::cerr << "readSigned16bitIntBinary START" << std::endl;
   std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
   if (!file) {
     std::cout << "Error: The file path is incorrect. There is no file." << std::endl;
@@ -200,7 +200,7 @@ bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, int
 
   onceReadRow = (binValues[_binIdx].size() - IDX_BODY) / 16;
 
-  std::cerr << "readSigned16bitIntBinary END" << std::endl;
+  //std::cerr << "readSigned16bitIntBinary END" << std::endl;
   return true;
 }
 
