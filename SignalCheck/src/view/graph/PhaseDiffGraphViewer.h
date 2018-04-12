@@ -34,6 +34,7 @@ public:
   void setColor(int _lineColor1, int _lineColor2);
 
   void culcDiff(int _lifetime);
+  void saveDelayCapture();
 
   float min, max, width, height;
 

@@ -24,9 +24,9 @@ public:
 
 
   void saveScreenCapture(string _path, string _name) {
+    string file = _path + _name;
     img.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
-    img.save(_path + _name + ".png");
-    //std::cerr << "ScreenCapture: " + _path + _name + ".png" << std::endl;
+    img.save(file, OF_IMAGE_QUALITY_MEDIUM);
   }
 
 

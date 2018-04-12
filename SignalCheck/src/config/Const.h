@@ -44,6 +44,8 @@ private:
     // キャプ画像
     enableCapture = int2bool(XML.getValue("settings:save:captureImage", 0));
 
+    delayCapTime = XML.getValue("settings:save:delayCaptureTime", 5);
+
     // adiファイル保存
     enableSaveAdi = int2bool(XML.getValue("settings:save:adi", 0));
 
@@ -100,6 +102,7 @@ public:
     XML.setValue("settings:debug", bool2int(enableDebug));
     XML.setValue("settings:save:csv", bool2int(enableLogCsv));
     XML.setValue("settings:save:captureImage", bool2int(enableCapture));
+    XML.setValue("settings:save:delayCaptureTime", delayCapTime);
     XML.setValue("settings:save:adi", bool2int(enableSaveAdi));
     XML.setValue("settings:save:dailyCsv", bool2int(enableDailyLogCsv));
     XML.setValue("settings:threshold:maxDuration", thresholdMaxDuration);
@@ -140,6 +143,9 @@ public:
 
   // キャプ画像
   bool enableCapture;
+
+  // 遅延キャプチャ時間
+  int delayCapTime;
 
   // adiファイルを保存する
   bool enableSaveAdi;

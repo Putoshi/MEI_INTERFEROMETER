@@ -87,6 +87,7 @@ private:
   ofxIntSlider binaryOffset;
   ofxToggle enableLogCsv;
   ofxToggle enableCapImg;
+  ofxIntSlider delayCapTime;
   ofxToggle enableSaveAdi;
   ofxToggle enableDailyLogCsv;
 
@@ -106,6 +107,7 @@ private:
   void onGuiChangeDebug(bool & pressed);
   void onGuiChangeLogCsv(bool & pressed);
   void onGuiChangeCapImg(bool & pressed);
+  void onGuiChangeCapDelay(int & n);
   void onGuiChangeSaveAdi(bool & pressed);
   void onGuiChangeDailyLogCsv(bool & pressed);
   void onGuiChangeDispersion(int & n);

@@ -1,372 +1,372 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <ClCompile Include="src\ofApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\analyze\Hough.cpp">
-      <Filter>src\analyze</Filter>
-    </ClCompile>
-    <ClCompile Include="src\analyze\NoiseDetect.cpp">
-      <Filter>src\analyze</Filter>
-    </ClCompile>
-    <ClCompile Include="src\analyze\PixelObject.cpp">
-      <Filter>src\analyze</Filter>
-    </ClCompile>
-    <ClCompile Include="src\analyze\Tuple2.cpp">
-      <Filter>src\analyze</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\Object.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\event\Event.cpp">
-      <Filter>src\event</Filter>
-    </ClCompile>
-    <ClCompile Include="src\event\EventDispatcher.cpp">
-      <Filter>src\event</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SignalUtil.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TriggerBuffer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\view\AmpSpectrogram.cpp">
-      <Filter>src\view</Filter>
-    </ClCompile>
-    <ClCompile Include="src\view\graph\PhaseDiffGraphViewer.cpp">
-      <Filter>src\view\graph</Filter>
-    </ClCompile>
-    <ClCompile Include="src\view\graph\SimpleGraphViewer.cpp">
-      <Filter>src\view\graph</Filter>
-    </ClCompile>
-    <ClCompile Include="src\view\Spectrum.cpp">
-      <Filter>src\view</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxEasyFft.cpp">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFft.cpp">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftBasic.cpp">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftw.cpp">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxProcessFFT.cpp">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fft.c">
-      <Filter>addons\ofxFft\libs\kiss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fftr.c">
-      <Filter>addons\ofxFft\libs\kiss</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxBaseGui.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxButton.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxColorPicker.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGuiGroup.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxInputField.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxLabel.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxPanel.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSlider.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSliderGroup.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxToggle.cpp">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetworkUtils.cpp">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPClient.cpp">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPManager.cpp">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPServer.cpp">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPManager.cpp">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src\ofxWatchFile.cpp">
-      <Filter>addons\ofxWatchFile\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
-      <Filter>addons\ofxXmlSettings\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\analyze">
-      <UniqueIdentifier>{5E75E499-8A38-5826-B183-6050}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\config">
-      <UniqueIdentifier>{6605C095-DCC6-E901-6144-F29A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\core">
-      <UniqueIdentifier>{72E7CB0E-268E-7C0B-3B2D-2E9D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\core\util">
-      <UniqueIdentifier>{871157F6-3CA1-7B0D-A445-A151}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\event">
-      <UniqueIdentifier>{A0F56394-FE5E-F73B-EBA2-E79A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\view">
-      <UniqueIdentifier>{8E6A0C1B-4E64-AED4-48EB-4B5C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\view\graph">
-      <UniqueIdentifier>{F819DB2A-E967-AD7C-56E9-5583}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons">
-      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFft">
-      <UniqueIdentifier>{0D1BE4F5-A8D2-A343-7801-0B1D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFft\src">
-      <UniqueIdentifier>{0BA62021-9DA8-B189-6926-0588}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFft\libs">
-      <UniqueIdentifier>{EF447299-49BE-7B01-BCA6-72C7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFft\libs\fftw">
-      <UniqueIdentifier>{3DEE1DDE-F123-B410-23AA-B80E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFft\libs\fftw\include">
-      <UniqueIdentifier>{C97E21AA-DEFC-C216-6F14-EB6F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFft\libs\kiss">
-      <UniqueIdentifier>{A0BA27B4-C5E4-04C4-6B66-DBD1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxGui">
-      <UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxGui\src">
-      <UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxNetwork">
-      <UniqueIdentifier>{01A15744-29A6-108D-08E9-83A7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxNetwork\src">
-      <UniqueIdentifier>{3D1C10C7-8F35-E796-9C70-F5F3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxWatchFile">
-      <UniqueIdentifier>{28984CA9-0D80-79BC-68CC-AC60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxWatchFile\src">
-      <UniqueIdentifier>{2FDD0F2F-00EB-B25F-A431-8A09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxXmlSettings">
-      <UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxXmlSettings\src">
-      <UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxXmlSettings\libs">
-      <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\analyze\Hough.h">
-      <Filter>src\analyze</Filter>
-    </ClInclude>
-    <ClInclude Include="src\analyze\NoiseDetect.h">
-      <Filter>src\analyze</Filter>
-    </ClInclude>
-    <ClInclude Include="src\analyze\PixelObject.h">
-      <Filter>src\analyze</Filter>
-    </ClInclude>
-    <ClInclude Include="src\analyze\Tuple2.h">
-      <Filter>src\analyze</Filter>
-    </ClInclude>
-    <ClInclude Include="src\config\Const.h">
-      <Filter>src\config</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Object.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\Singleton.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\util\ScreenCapture.h">
-      <Filter>src\core\util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event\Event.h">
-      <Filter>src\event</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event\EventDispatcher.h">
-      <Filter>src\event</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event\EventManager.h">
-      <Filter>src\event</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SignalUtil.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TriggerBuffer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\view\AmpSpectrogram.h">
-      <Filter>src\view</Filter>
-    </ClInclude>
-    <ClInclude Include="src\view\graph\PhaseDiffGraphViewer.h">
-      <Filter>src\view\graph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\view\graph\SimpleGraphViewer.h">
-      <Filter>src\view\graph</Filter>
-    </ClInclude>
-    <ClInclude Include="src\view\Spectrum.h">
-      <Filter>src\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxEasyFft.h">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFft.h">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftBasic.h">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftw.h">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxProcessFFT.h">
-      <Filter>addons\ofxFft\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include\fftw3.h">
-      <Filter>addons\ofxFft\libs\fftw\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fft.h">
-      <Filter>addons\ofxFft\libs\kiss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fftr.h">
-      <Filter>addons\ofxFft\libs\kiss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\_kiss_fft_guts.h">
-      <Filter>addons\ofxFft\libs\kiss</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxBaseGui.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxButton.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxColorPicker.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGui.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGuiGroup.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxInputField.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxLabel.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxPanel.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSlider.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSliderGroup.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxToggle.h">
-      <Filter>addons\ofxGui\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetwork.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetworkUtils.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPClient.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPManager.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPServer.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPSettings.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPManager.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPSettings.h">
-      <Filter>addons\ofxNetwork\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src\ofxWatchFile.h">
-      <Filter>addons\ofxWatchFile\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src\ofxXmlSettings.h">
-      <Filter>addons\ofxXmlSettings\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.h">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\util\DateUtil.h">
-      <Filter>src\core\util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\util\LogUtil.h">
-      <Filter>src\core\util</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="icon.rc" />
-  </ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\analyze\Hough.cpp">
+			<Filter>src\analyze</Filter>
+		</ClCompile>
+		<ClCompile Include="src\analyze\NoiseDetect.cpp">
+			<Filter>src\analyze</Filter>
+		</ClCompile>
+		<ClCompile Include="src\analyze\PixelObject.cpp">
+			<Filter>src\analyze</Filter>
+		</ClCompile>
+		<ClCompile Include="src\analyze\Tuple2.cpp">
+			<Filter>src\analyze</Filter>
+		</ClCompile>
+		<ClCompile Include="src\core\Object.cpp">
+			<Filter>src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="src\event\Event.cpp">
+			<Filter>src\event</Filter>
+		</ClCompile>
+		<ClCompile Include="src\event\EventDispatcher.cpp">
+			<Filter>src\event</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\SignalUtil.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\TriggerBuffer.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\view\AmpSpectrogram.cpp">
+			<Filter>src\view</Filter>
+		</ClCompile>
+		<ClCompile Include="src\view\graph\PhaseDiffGraphViewer.cpp">
+			<Filter>src\view\graph</Filter>
+		</ClCompile>
+		<ClCompile Include="src\view\graph\SimpleGraphViewer.cpp">
+			<Filter>src\view\graph</Filter>
+		</ClCompile>
+		<ClCompile Include="src\view\Spectrum.cpp">
+			<Filter>src\view</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxEasyFft.cpp">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFft.cpp">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftBasic.cpp">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftw.cpp">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxProcessFFT.cpp">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fft.c">
+			<Filter>addons\ofxFft\libs\kiss</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fftr.c">
+			<Filter>addons\ofxFft\libs\kiss</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxBaseGui.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxButton.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxColorPicker.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGuiGroup.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxInputField.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxLabel.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxPanel.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSlider.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSliderGroup.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxToggle.cpp">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetworkUtils.cpp">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPClient.cpp">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPManager.cpp">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPServer.cpp">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPManager.cpp">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src\ofxWatchFile.cpp">
+			<Filter>addons\ofxWatchFile\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+			<Filter>addons\ofxXmlSettings\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.cpp">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\analyze">
+			<UniqueIdentifier>{5E75E499-8A38-5826-B183-6050}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\config">
+			<UniqueIdentifier>{6605C095-DCC6-E901-6144-F29A}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\core">
+			<UniqueIdentifier>{72E7CB0E-268E-7C0B-3B2D-2E9D}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\core\util">
+			<UniqueIdentifier>{871157F6-3CA1-7B0D-A445-A151}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\event">
+			<UniqueIdentifier>{A0F56394-FE5E-F73B-EBA2-E79A}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\view">
+			<UniqueIdentifier>{8E6A0C1B-4E64-AED4-48EB-4B5C}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="src\view\graph">
+			<UniqueIdentifier>{F819DB2A-E967-AD7C-56E9-5583}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxFft">
+			<UniqueIdentifier>{0D1BE4F5-A8D2-A343-7801-0B1D}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxFft\src">
+			<UniqueIdentifier>{0BA62021-9DA8-B189-6926-0588}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxFft\libs">
+			<UniqueIdentifier>{EF447299-49BE-7B01-BCA6-72C7}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxFft\libs\fftw">
+			<UniqueIdentifier>{3DEE1DDE-F123-B410-23AA-B80E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxFft\libs\fftw\include">
+			<UniqueIdentifier>{C97E21AA-DEFC-C216-6F14-EB6F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxFft\libs\kiss">
+			<UniqueIdentifier>{A0BA27B4-C5E4-04C4-6B66-DBD1}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGui">
+			<UniqueIdentifier>{4F2A59AF-5F4E-704B-D067-EC13}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGui\src">
+			<UniqueIdentifier>{645E9533-4DCD-6179-1CDF-CB65}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxNetwork">
+			<UniqueIdentifier>{01A15744-29A6-108D-08E9-83A7}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxNetwork\src">
+			<UniqueIdentifier>{3D1C10C7-8F35-E796-9C70-F5F3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxWatchFile">
+			<UniqueIdentifier>{28984CA9-0D80-79BC-68CC-AC60}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxWatchFile\src">
+			<UniqueIdentifier>{2FDD0F2F-00EB-B25F-A431-8A09}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxXmlSettings">
+			<UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxXmlSettings\src">
+			<UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxXmlSettings\libs">
+			<UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\analyze\Hough.h">
+			<Filter>src\analyze</Filter>
+		</ClInclude>
+		<ClInclude Include="src\analyze\NoiseDetect.h">
+			<Filter>src\analyze</Filter>
+		</ClInclude>
+		<ClInclude Include="src\analyze\PixelObject.h">
+			<Filter>src\analyze</Filter>
+		</ClInclude>
+		<ClInclude Include="src\analyze\Tuple2.h">
+			<Filter>src\analyze</Filter>
+		</ClInclude>
+		<ClInclude Include="src\config\Const.h">
+			<Filter>src\config</Filter>
+		</ClInclude>
+		<ClInclude Include="src\core\Object.h">
+			<Filter>src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="src\core\Singleton.h">
+			<Filter>src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="src\core\util\DateUtil.h">
+			<Filter>src\core\util</Filter>
+		</ClInclude>
+		<ClInclude Include="src\core\util\LogUtil.h">
+			<Filter>src\core\util</Filter>
+		</ClInclude>
+		<ClInclude Include="src\core\util\ScreenCapture.h">
+			<Filter>src\core\util</Filter>
+		</ClInclude>
+		<ClInclude Include="src\event\Event.h">
+			<Filter>src\event</Filter>
+		</ClInclude>
+		<ClInclude Include="src\event\EventDispatcher.h">
+			<Filter>src\event</Filter>
+		</ClInclude>
+		<ClInclude Include="src\event\EventManager.h">
+			<Filter>src\event</Filter>
+		</ClInclude>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\SignalUtil.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\TriggerBuffer.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="src\view\AmpSpectrogram.h">
+			<Filter>src\view</Filter>
+		</ClInclude>
+		<ClInclude Include="src\view\graph\PhaseDiffGraphViewer.h">
+			<Filter>src\view\graph</Filter>
+		</ClInclude>
+		<ClInclude Include="src\view\graph\SimpleGraphViewer.h">
+			<Filter>src\view\graph</Filter>
+		</ClInclude>
+		<ClInclude Include="src\view\Spectrum.h">
+			<Filter>src\view</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxEasyFft.h">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFft.h">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftBasic.h">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftw.h">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxProcessFFT.h">
+			<Filter>addons\ofxFft\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include\fftw3.h">
+			<Filter>addons\ofxFft\libs\fftw\include</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fft.h">
+			<Filter>addons\ofxFft\libs\kiss</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fftr.h">
+			<Filter>addons\ofxFft\libs\kiss</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\_kiss_fft_guts.h">
+			<Filter>addons\ofxFft\libs\kiss</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxBaseGui.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxButton.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxColorPicker.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGui.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGuiGroup.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxInputField.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxLabel.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxPanel.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSlider.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSliderGroup.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxToggle.h">
+			<Filter>addons\ofxGui\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetwork.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetworkUtils.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPClient.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPManager.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPServer.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPSettings.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPManager.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPSettings.h">
+			<Filter>addons\ofxNetwork\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src\ofxWatchFile.h">
+			<Filter>addons\ofxWatchFile\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+			<Filter>addons\ofxXmlSettings\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.h">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
+	</ItemGroup>
 </Project>

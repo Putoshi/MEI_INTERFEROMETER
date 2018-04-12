@@ -53,7 +53,47 @@ public:
     string M = d[1];
     //”N‚ÌŽæ“¾
     string Y = d[0];
-    string time = Y + splitstr + M + splitstr+ D + splitstr + h + splitstr + m + splitstr + s;
+    string time = Y + splitstr + M + splitstr+ D;
+    return time;
+  }
+
+  string getClockString(string splitstr = ":") {
+    vector<string> d = split(ofGetTimestampString(), '-');
+    //ƒ~ƒŠ•b‚ÌŽæ“¾
+    string ms = d[6];
+    //•b‚ÌŽæ“¾
+    string s = d[5];
+    //•ª‚ÌŽæ“¾
+    string m = d[4];
+    //Žž‚ÌŽæ“¾
+    string h = d[3];
+    //“ú‚ÌŽæ“¾
+    string D = d[2];
+    //ŒŽ‚ÌŽæ“¾
+    string M = d[1];
+    //”N‚ÌŽæ“¾
+    string Y = d[0];
+    string time = h + splitstr + m + splitstr + s;
+    return time;
+  }
+
+  string getDateTimeString(string splitstr = ":") {
+    vector<string> d = split(ofGetTimestampString(), '-');
+    //ƒ~ƒŠ•b‚ÌŽæ“¾
+    string ms = d[6];
+    //•b‚ÌŽæ“¾
+    string s = d[5];
+    //•ª‚ÌŽæ“¾
+    string m = d[4];
+    //Žž‚ÌŽæ“¾
+    string h = d[3];
+    //“ú‚ÌŽæ“¾
+    string D = d[2];
+    //ŒŽ‚ÌŽæ“¾
+    string M = d[1];
+    //”N‚ÌŽæ“¾
+    string Y = d[0];
+    string time = Y + splitstr + M + splitstr + D + splitstr + h + splitstr + m + splitstr + s;
     return time;
   }
 

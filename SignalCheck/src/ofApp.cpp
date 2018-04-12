@@ -362,6 +362,8 @@ void ofApp::draw() {
   saveGroupGui.draw();
   thresholdGroupGui.draw();
  
+  // 遅れてキャプチャとる(スペクトログラム描画後に処理しないとだめ)
+  phaseDiffViewer.saveDelayCapture();
 
   //std::cerr << "draw end " << std::endl;
 }
@@ -394,6 +396,9 @@ void ofApp::setupGui() {
   saveGroupGui.add(enableCapImg.setup(" Save CaptureImg", Const::getInstance().enableCapture));
   enableCapImg.addListener(this, &ofApp::onGuiChangeCapImg);
 
+  saveGroupGui.add(delayCapTime.setup(" Save DelayCapture Time", Const::getInstance().delayCapTime, 2, 20));
+  delayCapTime.addListener(this, &ofApp::onGuiChangeCapDelay);
+
   saveGroupGui.add(enableSaveAdi.setup(" Save ADI", Const::getInstance().enableSaveAdi));
   enableSaveAdi.addListener(this, &ofApp::onGuiChangeSaveAdi);
 
@@ -402,7 +407,7 @@ void ofApp::setupGui() {
 
 
   thresholdGroupGui.setup("Threshold");
-  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 18 * 2));
+  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 18 * 3));
   thresholdGroupGui.add(thresholdDispersion.setup(" Dispersion", Const::getInstance().thresholdDispersion, 3, 30));
   thresholdDispersion.addListener(this, &ofApp::onGuiChangeDispersion);
 
@@ -464,6 +469,12 @@ void ofApp::onGuiChangeCapImg(bool & pressed) {
   Const::getInstance().saveXml();
 }
 
+//--------------------------------------------------------------
+void ofApp::onGuiChangeCapDelay(int & n) {
+  //std::cerr << "onGuiChangeCapDelay: " <<  n << std::endl;
+  Const::getInstance().delayCapTime = n;
+  Const::getInstance().saveXml();
+}
 //--------------------------------------------------------------
 void ofApp::onGuiChangeSaveAdi(bool & pressed) {
   //std::cerr << "onGuiChangeSaveAdi: " << std::boolalpha << pressed << std::endl;

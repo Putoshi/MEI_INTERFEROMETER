@@ -9,10 +9,13 @@
 #include "PhaseDiffGraphViewer.h"
 vector<float> last4PlotsAlpha;
 vector<float> last4PlotsBeta;
+vector<string> timer;
+bool saveCapFlg;
 PhaseDiffGraphViewer::PhaseDiffGraphViewer()
 {
   dataAlpha = NULL;
   dataBeta = NULL;
+  saveCapFlg = false;
   bufferLength = 0;
   min = -1.0;
   max = 1.0;
@@ -25,6 +28,7 @@ PhaseDiffGraphViewer::PhaseDiffGraphViewer()
 
   last4PlotsAlpha.resize(4);
   last4PlotsBeta.resize(4);
+  timer.resize(0);
   swingWidthAlpha = 0;
   swingWidthBeta = 0;
 
@@ -156,6 +160,29 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
 
   dataAlpha[0] = _alpha;
   dataBeta[0] = _beta;
+
+
+  // タイマー進める
+  
+  if (timer.size() > 0) {
+    for (int i = 0; i < timer.size(); i++) {
+      
+      int cnt = ofToInt(ofSplitString(timer[i], "__")[0]);
+      //std::cerr << ofSplitString(timer[i], "__")[1] << std::endl;
+      cnt++;
+      timer[i] = ofToString(cnt) + "__" + ofSplitString(timer[i], "__")[1];
+      //std::cerr << ofToString(cnt) + ofSplitString(timer[i], "__")[1] << std::endl;
+    }
+
+    int cnt = ofToInt(ofSplitString(timer[0], "__")[0]);
+
+    if (cnt > Const::getInstance().delayCapTime / 0.025) {
+      saveCapFlg = true;
+    }
+    else {
+      saveCapFlg = false;
+    }
+  }
 }
 
 void PhaseDiffGraphViewer::draw()
@@ -219,6 +246,15 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
   ofPopStyle();
 }
 
+void PhaseDiffGraphViewer::saveDelayCapture()
+{
+  if (saveCapFlg) {
+    ScreenCapture::getInstance().saveScreenCapture("./tmp/", ofSplitString(timer[0], "__")[1] + "/delay.png");
+    timer.erase(timer.begin());
+    saveCapFlg = false;
+  }
+}
+
 void PhaseDiffGraphViewer::setSize(float _width, float _height)
 {
   width = _width;
@@ -239,6 +275,12 @@ void PhaseDiffGraphViewer::setColor(int _lineColor1, int _lineColor2)
 
 void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 {
+  bool isError = true;
+  string content = "";
+  string label = "";
+  string logAlpha = "";
+  string logBeta = "";
+
   dispersion = (float)Const::getInstance().thresholdDispersion;
   float minVAlpha = dataAlpha[0];
   float maxVAlpha = dataAlpha[0];
@@ -257,6 +299,15 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     minVBeta = std::min(minVBeta, dataBeta[i - 1]);
     maxVBeta = std::max(maxVBeta, dataBeta[i - 1]);
 
+
+    if (i > 1) {
+      logAlpha += ofToString(dataAlpha[i - 1]) + ",";
+      logBeta += ofToString(dataBeta[i - 1]) + ",";
+    }
+    else {
+      logAlpha += ofToString(dataAlpha[i - 1]);
+      logBeta += ofToString(dataBeta[i - 1]);
+    }
   }
   avgAlpha /= len;
   avgBeta /= len;
@@ -273,7 +324,10 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   float standardDeviationBeta = sqrt(totalBeta / len);
   std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
   std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Beta: " << standardDeviationBeta << std::endl;
-  string time = DateUtil::getInstance().getDateString("_");
+  string time = DateUtil::getInstance().getDateString("") + "_" + DateUtil::getInstance().getClockString("");
+
+  label += "Date,StandardDeviationAlpha,StandardDeviationBeta,";
+  content += time + "," + ofToString(standardDeviationAlpha) + "," + ofToString(standardDeviationBeta) + ",";
 
   /*if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion  && minVBeta > avgBeta - dispersion && maxVBeta < avgBeta + dispersion) {
     std::cerr << "◆流星検知    duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << std::endl;
@@ -289,7 +343,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
 
   //if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion) {
-  if (standardDeviationAlpha <= dispersion && standardDeviationBeta <= dispersion) {
+  if ((standardDeviationAlpha <= dispersion && standardDeviationBeta <= dispersion) || Const::getInstance().enableDebug) {
+    isError = false;
     std::cerr << LogUtil::getInstance().getIndentStr() + "◆流星検知　duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
 
     float theta1 = asin(avgAlpha / 180) * 180 / M_PI;
@@ -310,14 +365,23 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "方位角: " << azimuthAngle << "  仰角: " << elevationAngle << std::endl;
 
-    if (Const::getInstance().enableCapture) ScreenCapture::getInstance().saveScreenCapture("./tmp/", time);
+    label += "Duration(s),DataLength,AvgAlpha,AvgBeta,Theta1,Theta2,AzimuthAngle,ElevationAngle";
+    content += ofToString((float)len * 0.025f) + "," + ofToString(len) + "," + ofToString(avgAlpha) + "," + ofToString(avgBeta) + "," + ofToString(theta1) + "," + ofToString(theta2) + "," + ofToString(azimuthAngle) + "," + ofToString(elevationAngle);
   }
   else {
+    isError = true;
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "ばらつき多い" << "  avgAlpha:" << avgAlpha << "  min:" << minVAlpha << "  max:" << maxVAlpha << std::endl;
   }
   //std::cerr << std::endl;
 
+  if (Const::getInstance().enableDebug || !isError) {
+    // キャプチャ画像残す
+    if (Const::getInstance().enableCapture) {
+      ScreenCapture::getInstance().saveScreenCapture("./tmp/", time + "/end.png");
+      timer.push_back("0__" + time);
+    }
 
-
-  //elevation angle
+    // CSV残す
+    if (Const::getInstance().enableLogCsv) LogUtil::getInstance().saveCsv("./tmp/", time, label, content, logAlpha, logBeta);
+  }
 }
