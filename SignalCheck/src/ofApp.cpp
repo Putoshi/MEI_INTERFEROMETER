@@ -388,8 +388,8 @@ void ofApp::setupGui() {
   saveGroupGui.setup("Save Config");
   saveGroupGui.setPosition(ofPoint(1920 - 220, 40 + 18));
 
-  saveGroupGui.add(enableLogTxt.setup(" Save LogTxt", Const::getInstance().enableLogTxt));
-  enableLogTxt.addListener(this, &ofApp::onGuiChangeLogTxt);
+  saveGroupGui.add(enableLogCsv.setup(" Save LogCsv", Const::getInstance().enableLogCsv));
+  enableLogCsv.addListener(this, &ofApp::onGuiChangeLogCsv);
 
   saveGroupGui.add(enableCapImg.setup(" Save CaptureImg", Const::getInstance().enableCapture));
   enableCapImg.addListener(this, &ofApp::onGuiChangeCapImg);
@@ -397,9 +397,12 @@ void ofApp::setupGui() {
   saveGroupGui.add(enableSaveAdi.setup(" Save ADI", Const::getInstance().enableSaveAdi));
   enableSaveAdi.addListener(this, &ofApp::onGuiChangeSaveAdi);
 
+  saveGroupGui.add(enableDailyLogCsv.setup(" Save DailyLogCsv", Const::getInstance().enableDailyLogCsv));
+  enableDailyLogCsv.addListener(this, &ofApp::onGuiChangeDailyLogCsv);
+
 
   thresholdGroupGui.setup("Threshold");
-  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 18));
+  thresholdGroupGui.setPosition(ofPoint(1920 - 220, 120 + 18 * 2));
   thresholdGroupGui.add(thresholdDispersion.setup(" Dispersion", Const::getInstance().thresholdDispersion, 3, 30));
   thresholdDispersion.addListener(this, &ofApp::onGuiChangeDispersion);
 
@@ -441,9 +444,16 @@ void ofApp::onGuiChangeDebug(bool & pressed) {
 }
 
 //--------------------------------------------------------------
-void ofApp::onGuiChangeLogTxt(bool & pressed) {
-  //std::cerr << "onGuiChangeLogTxt: " << std::boolalpha << pressed << std::endl;
-  Const::getInstance().enableLogTxt = pressed;
+void ofApp::onGuiChangeLogCsv(bool & pressed) {
+  //std::cerr << "onGuiChangeLogCsv: " << std::boolalpha << pressed << std::endl;
+  Const::getInstance().enableLogCsv = pressed;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeDailyLogCsv(bool & pressed) {
+  //std::cerr << "onGuiChangeDailyLogCsv: " << std::boolalpha << pressed << std::endl;
+  Const::getInstance().enableDailyLogCsv = pressed;
   Const::getInstance().saveXml();
 }
 

@@ -85,9 +85,10 @@ private:
   ofxIntSlider frameRate;
   ofxToggle enableDebug;
   ofxIntSlider binaryOffset;
-  ofxToggle enableLogTxt;
+  ofxToggle enableLogCsv;
   ofxToggle enableCapImg;
   ofxToggle enableSaveAdi;
+  ofxToggle enableDailyLogCsv;
 
   ofxIntSlider thresholdDispersion;
   ofxIntSlider thresholdBipolar;
@@ -103,9 +104,10 @@ private:
   void setupGui();
   void onGuiChangeFrameRate(int & n);
   void onGuiChangeDebug(bool & pressed);
-  void onGuiChangeLogTxt(bool & pressed);
+  void onGuiChangeLogCsv(bool & pressed);
   void onGuiChangeCapImg(bool & pressed);
   void onGuiChangeSaveAdi(bool & pressed);
+  void onGuiChangeDailyLogCsv(bool & pressed);
   void onGuiChangeDispersion(int & n);
   void onGuiChangeBipolar(int & n);
   void onGuiChangeAntPhaseDiff0(int & n);

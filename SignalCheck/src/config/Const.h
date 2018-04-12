@@ -39,13 +39,16 @@ private:
     enableDebug = int2bool(XML.getValue("settings:debug", 0));
 
     // ログ保存
-    enableLogTxt = int2bool(XML.getValue("settings:save:txt", 0));
+    enableLogCsv = int2bool(XML.getValue("settings:save:csv", 0));
 
     // キャプ画像
     enableCapture = int2bool(XML.getValue("settings:save:captureImage", 0));
 
     // adiファイル保存
     enableSaveAdi = int2bool(XML.getValue("settings:save:adi", 0));
+
+    // デイリーのログ保存
+    enableDailyLogCsv = int2bool(XML.getValue("settings:save:dailyCsv", 0));
 
     // ノイズ判定
     thresholdMaxDuration = XML.getValue("settings:threshold:maxDuration", 30.0f);
@@ -95,9 +98,10 @@ public:
   void saveXml() {
     XML.setValue("settings:fps", frameRate);
     XML.setValue("settings:debug", bool2int(enableDebug));
-    XML.setValue("settings:save:txt", bool2int(enableLogTxt));
+    XML.setValue("settings:save:csv", bool2int(enableLogCsv));
     XML.setValue("settings:save:captureImage", bool2int(enableCapture));
     XML.setValue("settings:save:adi", bool2int(enableSaveAdi));
+    XML.setValue("settings:save:dailyCsv", bool2int(enableDailyLogCsv));
     XML.setValue("settings:threshold:maxDuration", thresholdMaxDuration);
     XML.setValue("settings:threshold:dispersion", thresholdDispersion);
     XML.setValue("settings:threshold:bipolar", thresholdBipolar);
@@ -132,13 +136,16 @@ public:
   bool enableDebug;
 
   // ログ保存
-  bool enableLogTxt;
+  bool enableLogCsv;
 
   // キャプ画像
   bool enableCapture;
 
   // adiファイルを保存する
   bool enableSaveAdi;
+
+  // 1日単位でログ保存
+  bool enableDailyLogCsv;
 
   // ノイズ判定時間
   int thresholdMaxDuration;
