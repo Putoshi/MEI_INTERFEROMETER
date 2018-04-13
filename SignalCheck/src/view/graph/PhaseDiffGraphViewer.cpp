@@ -383,6 +383,13 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
     // CSVŽc‚·
     if (Const::getInstance().enableLogCsv) LogUtil::getInstance().saveCsv(Const::getInstance().DST_PATH, time, label, content, logAlpha, logBeta);
+    
+    // Daily‚ÌCSV
+    string dateStr = ofSplitString(time, "_")[0];
+    string timeStr = ofSplitString(time, "_")[1];
+    string contentDaily = dateStr + "," + timeStr + "," + ofSplitString(content, ",")[1] + "," + ofSplitString(content, ",")[2] + "," + ofSplitString(content, ",")[3] + "," + ofSplitString(content, ",")[9] + "," + ofSplitString(content, ",")[10];
+
+    if (Const::getInstance().enableDailyLogCsv) LogUtil::getInstance().saveDailyCsv(Const::getInstance().DST_PATH, dateStr, contentDaily);
 
     // ADIŽc‚·
     if (Const::getInstance().enableSaveAdi) FileUtil::getInstance().copyFile(Const::getInstance().SRC_PATH, Const::getInstance().DST_PATH + time + "/DaqLog.bak");

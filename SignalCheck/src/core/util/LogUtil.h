@@ -57,5 +57,24 @@ public:
     //ofFile file(filePath);
     //ofBuffer buffer(file);
   }
+
+  void saveDailyCsv(string _path, string _name, string _content) {
+    string filePath = _path + _name + ".csv";
+    ofFile out(ofToDataPath(filePath));
+
+    if (!out.exists()) {
+      string label = "Date,Time,StandardDeviationAlpha,StandardDeviationBeta,Duration(s),AzimuthAngle,ElevationAngle\r\n";
+      ofBuffer ofbuf;
+      ofbuf.append(label + _content + "\r\n");
+      ofBufferToFile(ofToDataPath(filePath), ofbuf);
+    }
+    else {
+      ofBuffer ofbuf;
+      ofbuf.append(string(ofBufferFromFile(filePath)));
+      ofbuf.append(_content + "\r\n");
+      ofBufferToFile(ofToDataPath(filePath), ofbuf);
+    }
+    //std::cerr << out.exists() << std::endl;
+  }
 };
 

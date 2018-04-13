@@ -97,7 +97,7 @@ ofPixels NoiseDetect::convert(ofPixels _dat)
 
       ofColor judgeColor;
       bool isError = false;
-      if (pastTime != 0 && !Const::getInstance().enableDebug) {
+      if (pastTime != 0) {// && !Const::getInstance().enableDebug
         judgeColor = ofColor(10, 10, 10);
         isError = true;
       }
