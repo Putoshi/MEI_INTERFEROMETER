@@ -28,10 +28,9 @@ public:
 
     bool flg = file.exists();
 
-    if (flg) {
-      file.copyTo(out);
-    }
+    file.copyTo(out, true, true);
   }
+
 
 };
 

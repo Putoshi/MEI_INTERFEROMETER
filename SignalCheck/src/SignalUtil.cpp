@@ -167,6 +167,8 @@ void SignalUtil::convertSigned16bitIntEndian(std::vector<int16_t>* targetVector)
 
 bool SignalUtil::readSigned16bitIntBinary(const std::string& file_full_path, int _binIdx) {
   //std::cerr << "readSigned16bitIntBinary START" << std::endl;
+  FileUtil::getInstance().copyFile(Const::getInstance().SRC_PATH, Const::getInstance().CACHE_PATH);
+
   std::ifstream file(file_full_path, std::ios::in | std::ios::binary);
   if (!file) {
     std::cout << "Error: The file path is incorrect. There is no file." << std::endl;

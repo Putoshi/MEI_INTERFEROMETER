@@ -392,7 +392,10 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     if (Const::getInstance().enableDailyLogCsv) LogUtil::getInstance().saveDailyCsv(Const::getInstance().DST_PATH, dateStr, contentDaily);
 
     // ADIŽc‚·
-    if (Const::getInstance().enableSaveAdi) FileUtil::getInstance().copyFile(Const::getInstance().SRC_PATH, Const::getInstance().DST_PATH + time + "/DaqLog.bak");
+    if (Const::getInstance().enableSaveAdi) {
+      FileUtil::getInstance().copyFile(Const::getInstance().CACHE_PATH, Const::getInstance().DST_PATH + time + "/DaqLog.bak");
+      FileUtil::getInstance().copyFile(Const::getInstance().SRC_PATH, Const::getInstance().DST_PATH + time + "/DaqLog_next.bak");
+    }
 
   }
 }

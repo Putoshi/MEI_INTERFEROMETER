@@ -22,6 +22,11 @@ private:
     SRC_PATH = new char[src_s.size() + 1]; // メモリ確保
     std::char_traits<char>::copy(SRC_PATH, src_s.data(), src_s.size() + 1);
 
+    // 読み込み中のadiファイルのキャッシュ出力パス
+    string cache_s = XML.getValue("settings:path:cache", "./tmp/Cache/DaqLog.bak");
+    CACHE_PATH = new char[cache_s.size() + 1]; // メモリ確保
+    std::char_traits<char>::copy(CACHE_PATH, cache_s.data(), cache_s.size() + 1);
+
     // adiファイルの出力パス
     string dst_s = XML.getValue("settings:path:dest", "./tmp/");
     DST_PATH = new char[dst_s.size() + 1]; // メモリ確保
@@ -134,6 +139,9 @@ public:
   char * SRC_PATH;
 
   // 一時保存パス
+  char * CACHE_PATH;
+
+  // 出力パス
   char * DST_PATH;
 
   // 中央アンテナのチャンネル
