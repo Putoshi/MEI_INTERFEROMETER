@@ -21,7 +21,10 @@ const float FFT_SPAN = 25;								// FFTする間隔 ms
 const float SPECTROGRAM_FFT_SPAN = 500;								// FFTする間隔 ms
 
 const float lowFreq = 2000;							// FFTで切り出す周波数下限 Hz
-const float highFreq = 4000;						// FFTで切り出す周波数上限 Hz
+const float highFreq = 6000;						// FFTで切り出す周波数上限 Hz
+const float centerFreq =4000;						// FFTで切り出す周波数上限 Hz
+const float bandWidthrFreq = 2000;						// FFTで切り出す周波数上限 Hz
+
 
 const float sampleRate = N * (1000 / FFT_SPAN);
 
@@ -36,6 +39,13 @@ float signalForSpectrogram[20480];
 ofxFft * fftForSpectrogram;
 
 vector<float *> signal(CHANNELS);				// 都度読み込んで更新される信号vector
+float * eqFunction;   // Filter Function
+//vector<vector<float>> eqOutput(CHANNELS);   // Filter Function
+//vector<vector<float>> fftOutput(CHANNELS);   // Filter Function
+
+vector<float *> fftOutput(CHANNELS);
+vector<float *> eqOutput(CHANNELS);
+
 vector<SimpleGraphViewer> phaseViewer(CHANNELS);
 vector<SimpleGraphViewer> signalViewer(CHANNELS);
 
@@ -107,8 +117,16 @@ void ofApp::init() {
     phase[i].resize(fft[i]->getBinSize());
     signalafterfft[i].resize(fft[i]->getBinSize());
 
+ 
+    //eqOutput[i].resize(fft[i]->getBinSize());
+    //fftOutput[i].resize(fft[i]->getBinSize());
+
+    eqOutput[i] = new float[fft[i]->getBinSize()];
+    fftOutput[i] = new float[fft[i]->getBinSize()];
+
     free(sig);  // メモリ開放
   }
+  eqFunction = new float[fft[0]->getBinSize()];
 
   plotHeight = 100;
   marginTop = 45;
@@ -130,13 +148,49 @@ void ofApp::init() {
     signalViewer[i].setColor(COLOR_SIGNAL);
   }
 
+
+  // FILTER
+  int startIdx = roundf((lowFreq / sampleRate * 2) * fft[0]->getBinSize());
+  int endIdx = roundf((highFreq / sampleRate * 2) * fft[0]->getBinSize());
+  int centerIdx = roundf((centerFreq / sampleRate * 2) * fft[0]->getBinSize());
+  int bandwidthIdx1 = roundf(((centerFreq - bandWidthrFreq / 2) / sampleRate * 2) * fft[0]->getBinSize());
+  int bandwidthIdx2 = roundf(((centerFreq + bandWidthrFreq / 2) / sampleRate * 2) * fft[0]->getBinSize());
+  for (int i = 0; i < fft[0]->getBinSize(); ++i) {
+
+      if (startIdx <= i && endIdx >= i) {
+          //std::cerr << i << std::endl;
+          
+          //eqFunction[i] = 0;
+          //std::cerr << (i - startIdx) / (bandwidthIdx1 - startIdx) << std::endl;
+          if (bandwidthIdx1 <= i && bandwidthIdx2 >= i) {
+              eqFunction[i] = 1;
+          }
+          else {
+              if (bandwidthIdx1 > i) {
+                  eqFunction[i] = (float)(i - startIdx) / (bandwidthIdx1 - startIdx);
+                 
+              }
+              else if (bandwidthIdx2 < i) {
+                  eqFunction[i] = (float)(  (float)(endIdx - i) / (float)(endIdx - bandwidthIdx2) );
+                  //std::cerr << (float)(endIdx - i) / (float)(endIdx - bandwidthIdx2) << std::endl;
+              }
+              eqFunction[i] = eqFunction[i] * eqFunction[i];
+          }
+      }
+      else {
+          eqFunction[i] = 0;
+      }
+
+  }
+
+
   // スペクトログラムの処理
   int len = fft[0]->getBinSize() * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
   int _N = (N * (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
 
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
   spectrums = Spectrum(ofVec2f(20, 20), 0);
-  spectrums.setup(870, 255, highFreq, 3000);
+  spectrums.setup(870, 255, 4500, 3500);
 
   // 位相差 0-1
   phaseDiffViewer.setup(400);
@@ -206,6 +260,19 @@ void ofApp::fftUpdate() {
   for (int i = 0; i < CHANNELS; i++) {
 
     fft[i]->setSignal(signal[i]);
+
+    //iFFT
+    if (i < 5) {
+        memcpy(fftOutput[i], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
+
+        for (int j = 0; j < fft[i]->getBinSize(); j++) {
+            eqOutput[i][j] = fftOutput[i][j] * eqFunction[j];
+        }
+
+        fft[i]->setPolar(eqOutput[i], fft[i]->getPhase());
+        fft[i]->clampSignal();
+    }
+
 
     memcpy(&audioBins[i][0], fft[i]->getAmplitude(), sizeof(float) * fft[i]->getBinSize());
     maxValue[i] = 0;
@@ -340,7 +407,7 @@ void ofApp::draw() {
 
       // Phase
       ofPushMatrix();
-      phaseViewer[j].draw(325, marginTop + (plotHeight + 30) * j);
+      phaseViewer[j].draw(373, marginTop + (plotHeight + 30) * j);
       ofPopMatrix();
     }
   }
@@ -423,6 +490,9 @@ void ofApp::setupGui() {
 
   thresholdGroupGui.add(thresholdBipolar.setup(" Bipolar (%)", Const::getInstance().thresholdBipolar, 0, 100));
   thresholdBipolar.addListener(this, &ofApp::onGuiChangeBipolar);
+
+  thresholdGroupGui.add(thresholdAmp.setup(" Amp", Const::getInstance().thresholdAmp, 1, 20));
+  thresholdAmp.addListener(this, &ofApp::onGuiChangeAmp);
 
   thresholdGroupGui.add(antPhaseDiff0.setup(" PhaseDiff Offset 0 (deg)", Const::getInstance().antPhaseDiff[0], -180, 180));
   antPhaseDiff0.addListener(this, &ofApp::onGuiChangeAntPhaseDiff0);
@@ -525,6 +595,13 @@ void ofApp::onGuiChangeDispersion(int & n) {
 void ofApp::onGuiChangeBipolar(int & n) {
   //std::cerr << "onGuiChangeBipolar: " << n << std::endl;
   Const::getInstance().thresholdBipolar = n;
+  Const::getInstance().saveXml();
+}
+
+//--------------------------------------------------------------
+void ofApp::onGuiChangeAmp(int & n) {
+  //std::cerr << "onGuiChangeAmp: " << n << std::endl;
+  Const::getInstance().thresholdAmp = n;
   Const::getInstance().saveXml();
 }
 
@@ -641,8 +718,8 @@ void ofApp::spectrogramFftUpdate() {
   fftForSpectrogram->setSignal(signalForSpectrogram);
 
   // 指定された周波数でvectorを切り抜いちゃう
-  int startIdxForSpectrogram = roundf((3000 / sampleRate * 2) * fftForSpectrogram->getBinSize());
-  int endIdxForSpectrogram = roundf((highFreq / sampleRate * 2) * fftForSpectrogram->getBinSize());
+  int startIdxForSpectrogram = roundf((3500 / sampleRate * 2) * fftForSpectrogram->getBinSize());
+  int endIdxForSpectrogram = roundf((4500 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
 
 
@@ -665,10 +742,10 @@ void ofApp::spectrogramFftUpdate() {
 void ofApp::drawLabel() {
   ofPushMatrix();
   font.drawString("Signal 1.25V", 70, marginTop - 3);
-  font.drawString("Freq 2-4kHz", 250 - 2, marginTop - 3);
-  font.drawString("Phase +-180", 325, marginTop - 3);
+  font.drawString("Freq 2-6kHz", 250 - 2, marginTop - 3);
+  font.drawString("Phase +-180", 373, marginTop - 3);
   font.drawString("PhaseDifference +-180", 870, marginTop - 3);
-  font.drawString("Spectrogram 3-4kHz", 870, 255 - 3);
+  font.drawString("Spectrogram 3.5-4.5kHz", 870, 255 - 3);
   font.drawString("Mono Spectrogram 100Hz", 870, 255 + 500 + 25 - 3);
   font.drawString("Echo Analyze", 870, 255 + 500 + 25 * 2 + 50 - 3);
 

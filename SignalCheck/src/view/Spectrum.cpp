@@ -12,7 +12,7 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
   spectrumHeight = (int)((highFreq - lowFreq) * 0.5f);
   spectrumWidth = 600;
   FreqRange = 100.0f; // Hz
-  peekFreq = 3000.0f;
+  peekFreq = 4000.0f;
   marginY = 25;
   maxValue = 0;
   avgValue = 0;
@@ -50,7 +50,7 @@ void Spectrum::setup(float _x, float _y, float _highFreq, float _lowFreq) {
 
 
   // スペクトログラム[抽出] && ノイズ除去 初期化
-  pickupH = (int)((FreqRange / (_highFreq - _lowFreq))  * spectrumHeight);
+  pickupH = (int)((FreqRange / (4500 - 3500))  * spectrumHeight);//(int)((FreqRange / (_highFreq - _lowFreq))  * spectrumHeight);
   specPickupPix.allocate(pickupH, spectrumWidth, OF_IMAGE_GRAYSCALE);
   specPickupPix.set(0);
 
@@ -84,8 +84,8 @@ void Spectrum::draw(float _peekFreq) {
     peekFreq = _peekFreq;
   }
 
-  if (1 > peekFreq || peekFreq > 5000) {
-    peekFreq = 3000.0f;
+  if (lowFreq > peekFreq || peekFreq > highFreq) {
+    peekFreq = 4000.0f;
   }
 
   colorMapTex.draw(pos.x + spectrumWidth + 10, pos.y);
@@ -160,7 +160,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     int idx = i - (spectrumWidth * spectrumHeight - len);
     ofColor col;
 
-    col = getColorMap(vec[idx]);
+    col = getColorMap(vec[idx] * Const::getInstance().thresholdAmp);
     pixs[i * 3] = col.r;
     pixs[i * 3 + 1] = col.g;
     pixs[i * 3 + 2] = col.b;
@@ -169,7 +169,7 @@ void Spectrum::setSpectrum(vector<float> _vec) {
     int headY = i % spectrumHeight;
     //std::cerr << cleanPix.size() << std::endl;
     if (pickupIdxY - pickupH / 2 <= headY && headY < pickupIdxY + pickupH / 2) {
-      int _colgray = covertGrayScale(vec[idx]);
+      int _colgray = covertGrayScale(vec[idx] * Const::getInstance().thresholdAmp);
       specPickupPix[pickupIdx] = _colgray;
       cleanPix[pickupIdx * 3] = _colgray;
       cleanPix[pickupIdx * 3 + 1] = _colgray;

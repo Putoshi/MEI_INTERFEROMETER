@@ -120,34 +120,39 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
   }
   swingWidthBeta = widBeta / 4;
 
-  //std::cerr << swingWidth << std::endl;
+  //std::cerr << swingWidthBeta << std::endl;
 
-  if (abs(swingWidthAlpha) < 10) {
-    if (abs(abs(prevValueAlpha) - abs(_alpha)) > 90) {
-      if (_alpha > 300) {
-        _alpha -= 360;
+  if (abs(swingWidthAlpha) < 20) {
+    if (abs(_alpha - prevValueAlpha) > 150) {
+      if (_alpha > 150 || _alpha < -150) {
+        if (prevValueAlpha > 0) {
+          _alpha = abs(_alpha);
+        }
+        else {
+          _alpha = abs(_alpha) * -1;
+        }
       }
-      else if (_alpha < 300) {
-        _alpha += 360;
+      
+    }
+  }
+
+  if (abs(swingWidthBeta) < 20) {
+    if (abs(_beta - prevValueBeta) > 150) {
+      if (_beta > 150 || _beta < -150) {
+        if (prevValueBeta > 0) {
+          _beta = abs(_beta);
+        }
+        else {
+          _beta = abs(_beta) * -1;
+        }
       }
     }
   }
 
-  if (abs(swingWidthBeta) < 10) {
-    if (abs(abs(prevValueBeta) - abs(_beta)) > 90) {
-      if (_beta > 300) {
-        _beta -= 360;
-      }
-      else if (_beta < 300) {
-        _beta += 360;
-      }
-    }
-  }
-
-  last4PlotsAlpha.push_back(prevValueAlpha - _alpha);
+  last4PlotsAlpha.push_back(abs(_alpha) - abs(prevValueAlpha));
   if (last4PlotsAlpha.size() > 4) last4PlotsAlpha.erase(last4PlotsAlpha.begin());
 
-  last4PlotsBeta.push_back(prevValueBeta - _beta);
+  last4PlotsBeta.push_back(abs(_beta) - abs(prevValueBeta));
   if (last4PlotsBeta.size() > 4) last4PlotsBeta.erase(last4PlotsBeta.begin());
 
   for (int i = bufferLength - 1; i > 0; i--) {

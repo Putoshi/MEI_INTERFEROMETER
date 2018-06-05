@@ -76,6 +76,9 @@ private:
     // 2極化の閾値
     thresholdBipolar = XML.getValue("settings:threshold:bipolar", 45);
 
+    // スペクトログラムにしたときの増幅地
+    thresholdAmp = XML.getValue("settings:threshold:amp", 1);
+
     // 内部位相差
     antPhaseDiff.resize(5);
     antPhaseDiff[0] = XML.getValue("settings:antenna:phasediff0", 0);
@@ -126,6 +129,7 @@ public:
     XML.setValue("settings:threshold:dopplerShift", thresholdDopplerShift);
     XML.setValue("settings:threshold:dispersion", thresholdDispersion);
     XML.setValue("settings:threshold:bipolar", thresholdBipolar);
+    XML.setValue("settings:threshold:amp", thresholdAmp);
     XML.setValue("settings:antenna:phasediff0", antPhaseDiff[0]);
     XML.setValue("settings:antenna:phasediff1", antPhaseDiff[1]);
     XML.setValue("settings:antenna:phasediff2", antPhaseDiff[2]);
@@ -191,6 +195,9 @@ public:
 
   // 2極化の閾値
   int thresholdBipolar;
+
+  // スペクトログラムにしたときの増幅地
+  int thresholdAmp;
 
   // 内部位相差
   vector<int> antPhaseDiff;

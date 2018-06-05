@@ -96,6 +96,7 @@ private:
   ofxIntSlider thresholdDopplerShift;
   ofxIntSlider thresholdDispersion;
   ofxIntSlider thresholdBipolar;
+  ofxIntSlider thresholdAmp;
   ofxIntSlider antPhaseDiff0;
   ofxIntSlider antPhaseDiff1;
   ofxIntSlider antPhaseDiff2;
@@ -118,6 +119,7 @@ private:
   void onGuiChangeDopplerShift(int & n);
   void onGuiChangeDispersion(int & n);
   void onGuiChangeBipolar(int & n);
+  void onGuiChangeAmp(int & n);
   void onGuiChangeAntPhaseDiff0(int & n);
   void onGuiChangeAntPhaseDiff1(int & n);
   void onGuiChangeAntPhaseDiff2(int & n);
