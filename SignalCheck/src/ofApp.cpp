@@ -723,7 +723,7 @@ void ofApp::spectrogramFftUpdate() {
   int startIdxForSpectrogram = roundf((3500 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   int endIdxForSpectrogram = roundf((4500 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
-  std::cerr << fftForSpectrogram->getBinSize() << std::endl;
+  //std::cerr << fftForSpectrogram->getBinSize() << std::endl;
 
 
   float max = 0;
