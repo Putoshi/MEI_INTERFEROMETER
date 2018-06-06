@@ -189,6 +189,7 @@ void ofApp::init() {
   int _N = (N * (int)SPECTROGRAM_FFT_SPAN / FFT_SPAN);
 
   fftForSpectrogram = ofxFft::create(N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN), OF_FFT_WINDOW_RECTANGULAR);
+  //std::cerr << N * ((int)SPECTROGRAM_FFT_SPAN / FFT_SPAN) << std::endl;
   spectrums = Spectrum(ofVec2f(20, 20), 0);
   spectrums.setup(870, 255, 4500, 3500);
 
@@ -301,11 +302,12 @@ void ofApp::fftUpdate() {
   int startIdx = roundf((lowFreq / sampleRate * 2) * audioBins[0].size());
   int endIdx = roundf((highFreq / sampleRate * 2) * audioBins[0].size());
   peekFreq = (float)maxIdxForPhase / ((float)endIdx - (float)startIdx) * (highFreq - lowFreq);
+  //peekFreq = 4000;
 
-  int _loopCnt = (signalafterfft[1].size() - 1) * 2;
+  int _loopCnt = (signalafterfft[0].size() - 1) * 2;
   for (int i = 0; i < _loopCnt; i++) {
     int idx = i + _loopCnt * spectrogramTimeCnt;
-    signalForSpectrogram[idx] = signal[1][i];
+    signalForSpectrogram[idx] = signal[0][i];
   }
   //std::cerr << signalForSpectrogram[10] << std::endl;
 
@@ -419,7 +421,7 @@ void ofApp::draw() {
 
   if (isLabelVisible) drawLabel();
   drawVGA();
-
+  //std::cerr << peekFreq << std::endl;
   spectrums.draw(peekFreq);
 
   std::vector<vector<float>>().swap(drawBins); // ƒƒ‚ƒŠŠJ•ú
@@ -721,6 +723,7 @@ void ofApp::spectrogramFftUpdate() {
   int startIdxForSpectrogram = roundf((3500 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   int endIdxForSpectrogram = roundf((4500 / sampleRate * 2) * fftForSpectrogram->getBinSize());
   vector<float> vecForSpectrogram(endIdxForSpectrogram - startIdxForSpectrogram, 0);
+  std::cerr << fftForSpectrogram->getBinSize() << std::endl;
 
 
   float max = 0;

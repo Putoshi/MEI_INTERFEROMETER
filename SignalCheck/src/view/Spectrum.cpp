@@ -76,6 +76,7 @@ void Spectrum::update() {
 }
 
 void Spectrum::draw(float _peekFreq) {
+    
 
   if (peekFreq != _peekFreq) {
     peekFreq += (_peekFreq - peekFreq) / 2;
@@ -87,7 +88,7 @@ void Spectrum::draw(float _peekFreq) {
   if (lowFreq > peekFreq || peekFreq > highFreq) {
     peekFreq = 4000.0f;
   }
-
+  //std::cerr << peekFreq << std::endl;
   colorMapTex.draw(pos.x + spectrumWidth + 10, pos.y);
   drawSpectrogram();
   drawFrame();
@@ -98,18 +99,21 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   //std::cerr << "setSpectrum start " << std::endl;
   // MaxÇ∆AvgÇéÊìæ
   float _avgValue = 0;
-  float _maxValue = 0.3;
+  float _maxValue = 0;
+  //int _maxIdx = 0;
   for (int i = 0; i < vec.size(); i++)
   {
     _avgValue += vec[i];
     if (vec[i] > _maxValue) {
       _maxValue = vec[i];
+      //_maxIdx = i;
     }
   }
   avgValue = _avgValue / vec.size();
   //maxValue += (_maxValue - maxValue) / 2;
   maxValue = 0.01 * (float) Const::getInstance().thresholdBipolar;
-  //std::cerr << maxValue << std::endl;
+  //std::cerr << _maxValue/ avgValue << std::endl;
+  //std::cerr << avgValue << std::endl;
 
   unsigned char * pixels = spectrogramPix.getPixels();
   //std::cerr << "setSpectrum start2 " << std::endl;
@@ -130,6 +134,8 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   if ((peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight > 0) pickupIdxY = (peekFreq - lowFreq) / (highFreq - lowFreq) * spectrumHeight;
   if (pickupIdxY < pickupH / 2) pickupIdxY = pickupH / 2;
   if (pickupIdxY + pickupH / 2 > spectrumHeight) pickupIdxY = spectrumHeight - pickupH / 2;
+
+  //std::cerr << pickupIdxY << std::endl;
 
   int len = 500;
   int pickupIdx = 0;
@@ -159,11 +165,18 @@ void Spectrum::setSpectrum(vector<float> _vec) {
   {
     int idx = i - (spectrumWidth * spectrumHeight - len);
     ofColor col;
+    
+    //if (idx == _maxIdx) {
+    //    vec[idx+5] = 0.5;
+    //    vec[idx-5] = 0.5;
+    //}
 
     col = getColorMap(vec[idx] * Const::getInstance().thresholdAmp);
     pixs[i * 3] = col.r;
     pixs[i * 3 + 1] = col.g;
     pixs[i * 3 + 2] = col.b;
+
+   
 
     // íäèo
     int headY = i % spectrumHeight;
