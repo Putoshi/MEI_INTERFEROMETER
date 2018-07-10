@@ -404,6 +404,9 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "•ûˆÊŠp: " << azimuthAngle << "  ‹ÂŠp: " << elevationAngle << std::endl;
 
+    string cmd = "curl -X GET \"https://e49lvsoi62.execute-api.ap-northeast-1.amazonaws.com/production/city?azimuth=" + ofToString(azimuthAngle) + "\&elevation=" + ofToString(elevationAngle) + "\"";
+    system(cmd.c_str());
+
     label += "Duration(s),DataLength,AvgAlpha,AvgBeta,Theta1,Theta2,AzimuthAngle,ElevationAngle";
     content += ofToString((float)len * 0.025f) + "," + ofToString(len) + "," + ofToString(avgAlpha) + "," + ofToString(avgBeta) + "," + ofToString(theta1) + "," + ofToString(theta2) + "," + ofToString(azimuthAngle) + "," + ofToString(elevationAngle);
   }
