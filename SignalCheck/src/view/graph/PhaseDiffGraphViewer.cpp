@@ -353,7 +353,7 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   {
       for (int i = j; i<len; i++)
       {
-          if (abs(dataAlpha[j] - dataAlpha[i]) < 0)
+          if (abs(dataAlpha[j] - dataAlpha[i]) <= dispersion)
               cntA++;
       }
       if (maxA < cntA) {
@@ -368,7 +368,7 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   {
       for (int l = k; l<len; l++)
       {
-          if (abs(dataBeta[k] - dataBeta[l]) < 0)
+          if (abs(dataBeta[k] - dataBeta[l]) <= dispersion)
               cntB++;
       }
       if (maxB < cntB) {
