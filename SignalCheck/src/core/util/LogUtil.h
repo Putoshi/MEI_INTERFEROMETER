@@ -63,7 +63,7 @@ public:
     ofFile out(ofToDataPath(filePath));
 
     if (!out.exists()) {
-      string label = "Date,Time,StandardDeviationAlpha,StandardDeviationBeta,Duration(s),AzimuthAngle,ElevationAngle\r\n";
+      string label = "Date,Time,Duration(s),AzimuthAngle,ElevationAngle\r\n";
       ofBuffer ofbuf;
       ofbuf.append(label + _content + "\r\n");
       ofBufferToFile(ofToDataPath(filePath), ofbuf);

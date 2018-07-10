@@ -163,8 +163,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
   prevValueAlpha = _alpha;
   prevValueBeta = _beta;
 
-  dataAlpha[0] = _alpha;
-  dataBeta[0] = _beta;
+  dataAlpha[0] = round(_alpha);
+  dataBeta[0] = round(_beta);
 
 
   // タイマー進める
@@ -327,8 +327,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   }
   float standardDeviationAlpha = sqrt(totalAlpha / len);
   float standardDeviationBeta = sqrt(totalBeta / len);
-  std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
-  std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Beta: " << standardDeviationBeta << std::endl;
+  //std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
+  //std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Beta: " << standardDeviationBeta << std::endl;
   string time = DateUtil::getInstance().getDateString("") + "_" + DateUtil::getInstance().getClockString("");
 
   label += "Date,StandardDeviationAlpha,StandardDeviationBeta,";
@@ -346,14 +346,48 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   //minVBeta = maxVBeta = avgBeta = 14.9;
 
 
+  // 最頻値の計算
+  int maxA = 0, cntA = 0, indexA = 0;
+
+  for (int j = 0; j<len; j++, cntA = 0)
+  {
+      for (int i = j; i<len; i++)
+      {
+          if (abs(dataAlpha[j] - dataAlpha[i]) < 0)
+              cntA++;
+      }
+      if (maxA < cntA) {
+          maxA = cntA;
+          indexA = j;
+      }
+  }
+
+  int maxB = 0, cntB = 0, indexB = 0;
+
+  for (int k = 0; k<len; k++, cntB = 0)
+  {
+      for (int l = k; l<len; l++)
+      {
+          if (abs(dataBeta[k] - dataBeta[l]) < 0)
+              cntB++;
+      }
+      if (maxB < cntB) {
+          maxB = cntB;
+          indexB = k;
+      }
+  }
+
+
 
   //if (minVAlpha > avgAlpha - dispersion && maxVAlpha < avgAlpha + dispersion) {
   if ((standardDeviationAlpha <= dispersion && standardDeviationBeta <= dispersion) || Const::getInstance().enableDebug) {
     isError = false;
     std::cerr << LogUtil::getInstance().getIndentStr() + "◆流星検知　duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Alpha: " << dataAlpha[indexA] << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Beta: " << dataBeta[indexB] << std::endl;
 
-    float theta1 = asin(avgAlpha / 180) * 180 / M_PI;
-    float theta2 = asin(avgBeta / 180) * 180 / M_PI;
+    float theta1 = asin(dataAlpha[indexA] / 180) * 180 / M_PI;
+    float theta2 = asin(dataBeta[indexB] / 180) * 180 / M_PI;
 
     std::cerr << "　　　　　　　　　theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
     //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
