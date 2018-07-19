@@ -49,19 +49,19 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../of_v20180227_vs2015_release/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="../../../../workspace\oF\of_v0.9.8_vs_release/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../of_v20180227_vs2015_release/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="../../../../workspace\oF\of_v0.9.8_vs_release/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../of_v20180227_vs2015_release/libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="../../../../workspace\oF\of_v0.9.8_vs_release/libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../of_v20180227_vs2015_release/libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="../../../../workspace\oF\of_v0.9.8_vs_release/libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -95,7 +95,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxWatchFile\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -115,7 +115,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxWatchFile\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -135,7 +135,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxWatchFile\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -158,7 +158,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss;..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs;..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;src\analyze;src\config;src\core;src\core\util;src\event;src\view;src\view\graph;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\include;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\prop-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\props;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\lib\win32\.svn\tmp\text-base;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxWatchFile\src;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs;..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -190,33 +190,30 @@
     <ClCompile Include="src\view\graph\PhaseDiffGraphViewer.cpp" />
     <ClCompile Include="src\view\graph\SimpleGraphViewer.cpp" />
     <ClCompile Include="src\view\Spectrum.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxEasyFft.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFft.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftBasic.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftw.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxProcessFFT.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fft.c" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fftr.c" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxBaseGui.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxButton.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxColorPicker.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGuiGroup.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxInputField.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxLabel.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxPanel.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSlider.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSliderGroup.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxToggle.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetworkUtils.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPClient.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPManager.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPServer.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPManager.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src\ofxWatchFile.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
-    <ClCompile Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxEasyFft.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxFft.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxFftBasic.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxFftw.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxProcessFFT.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss\kiss_fft.c" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss\kiss_fftr.c" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxBaseGui.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxButton.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxGuiGroup.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxLabel.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxPanel.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxSlider.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxSliderGroup.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPClient.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPManager.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPServer.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxUDPManager.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxWatchFile\src\ofxWatchFile.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\util\FileUtil.h" />
@@ -240,37 +237,34 @@
     <ClInclude Include="src\view\graph\PhaseDiffGraphViewer.h" />
     <ClInclude Include="src\view\graph\SimpleGraphViewer.h" />
     <ClInclude Include="src\view\Spectrum.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxEasyFft.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFft.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftBasic.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxFftw.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\src\ofxProcessFFT.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\fftw\include\fftw3.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fft.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\kiss_fftr.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxFft\libs\kiss\_kiss_fft_guts.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxBaseGui.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxButton.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxColorPicker.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGui.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxGuiGroup.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxInputField.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxLabel.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxPanel.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSlider.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxSliderGroup.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxGui\src\ofxToggle.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetwork.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxNetworkUtils.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPClient.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPManager.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPServer.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxTCPSettings.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPManager.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxNetwork\src\ofxUDPSettings.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxWatchFile\src\ofxWatchFile.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
-    <ClInclude Include="..\..\..\..\of_v20180227_vs2015_release\addons\ofxXmlSettings\libs\tinyxml.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxEasyFft.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxFft.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxFftBasic.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxFftw.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\src\ofxProcessFFT.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\fftw\include\fftw3.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss\kiss_fft.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss\kiss_fftr.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxFft\libs\kiss\_kiss_fft_guts.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxBaseGui.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxButton.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxGui.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxGuiGroup.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxLabel.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxPanel.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxSlider.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxSliderGroup.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxNetwork.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPClient.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPManager.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPServer.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxTCPSettings.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxUDPManager.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxNetwork\src\ofxUDPSettings.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxWatchFile\src\ofxWatchFile.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="..\..\..\..\workspace\oF\of_v0.9.8_vs_release\addons\ofxXmlSettings\libs\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
