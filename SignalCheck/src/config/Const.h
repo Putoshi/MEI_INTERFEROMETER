@@ -36,6 +36,8 @@ private:
     CENTER_ANT = XML.getValue("settings:channel:centerAnt", 0);
     EAST_ANT = XML.getValue("settings:channel:eastAnt", 4);
     SOUTH_ANT = XML.getValue("settings:channel:southAnt", 2);
+	WEST_ANT = XML.getValue("settings:channel:westAnt", 3);
+	NORTH_ANT = XML.getValue("settings:channel:northAnt", 1);
 
     // FPS
     frameRate = XML.getValue("settings:fps", 60);
@@ -156,6 +158,12 @@ public:
 
   // 南アンテナのチャンネル
   int SOUTH_ANT;
+
+  // 西アンテナのチャンネル
+  int WEST_ANT;
+
+  // 北アンテナのチャンネル
+  int NORTH_ANT;
 
   // FPS
   int frameRate;

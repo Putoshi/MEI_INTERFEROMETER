@@ -24,7 +24,7 @@ public:
   void setup(int _bufferLength = 256, int _offset = 0);
 
   void allocate(int num);
-  void pushData(float _alpha, float _beta, float _peekFreq);
+  void pushData(float _alpha, float _beta, float _alpha5ch, float _beta5ch,  float _peekFreq);
 
   void draw();
   void draw(float posx, float posy);
@@ -44,6 +44,8 @@ private:
   int bufferLength, offset, idx;
   float* dataAlpha;
   float* dataBeta;
+  float* data5chAlpha;
+  float* data5chBeta;
   int lineColor1;
   int lineColor2;
   float swingWidthAlpha;
