@@ -244,12 +244,12 @@ void Spectrum::drawFrame() {
   ofDrawRectangle(pos.x, pos.y, spectrumWidth, spectrumHeight);
 
   // òg[íäèo]
-  ofPushStyle();
+  //ofPushStyle();
   ofNoFill();
   //ofSetColor(ofColor::white);
   ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY, spectrumWidth, pickupH);
 
-  ofPushStyle();
+  //ofPushStyle();
   ofNoFill();
 
   ofDrawRectangle(pos.x, pos.y + spectrumHeight + marginY * 2 + pickupH, spectrumWidth, pickupH);

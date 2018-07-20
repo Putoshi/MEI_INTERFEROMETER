@@ -207,7 +207,7 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
 
   if (idx < offset) return;
 
-  ofPushStyle();
+  //ofPushStyle();
   ofNoFill();
   ofSetLineWidth(0.5);
   ofSetHexColor(0x555555);
@@ -389,7 +389,36 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     float theta1 = asin(dataAlpha[indexA] / 180) * 180 / M_PI;
     float theta2 = asin(dataBeta[indexB] / 180) * 180 / M_PI;
 
-    std::cerr << "　　　　　　　　　theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
+	// 5chの処理
+	float _theta1 = asin((dataAlpha[indexA] / 5) / 180) * 180 / M_PI;
+	float _theta2 = asin((dataBeta[indexB] / 5) / 180) * 180 / M_PI;
+
+	float __theta1 = asin((dataAlpha[indexA] / 5) / 180) * 180 / M_PI;
+	float __theta2 = asin((dataBeta[indexB] / 5) / 180) * 180 / M_PI;
+
+	int _n = 0;
+	for (int n = 0; n < 5; n++)
+	{
+		__theta1 = asin((dataAlpha[indexA] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
+		/*if (abs(__theta1 - theta1) <= abs(_theta1 - theta1)) {
+			
+			_n = n;
+		}*/
+		__theta2 = asin((dataBeta[indexB] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
+		if (abs(__theta2 - theta2) <= abs(_theta2 - theta2)) {
+			_theta1 = __theta1;
+			_theta2 = __theta2;
+			_n = n;
+		}
+	}
+
+    std::cerr << "　　　　　　　　　theta1: " << _theta1 << "  theta2: " << theta2 << std::endl;
+	std::cerr << "　　　　　　　　　5ch theta1: " << _theta1 << "  5ch theta2: " << _theta2 << "  n=" << _n << std::endl;
+
+	theta1 = _theta1;
+	theta2 = _theta2;
+
+
     //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
     float azimuthAngle = atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI + 180;
     if (azimuthAngle > 180) {
