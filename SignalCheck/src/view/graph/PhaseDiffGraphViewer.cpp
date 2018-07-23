@@ -15,6 +15,8 @@ PhaseDiffGraphViewer::PhaseDiffGraphViewer()
 {
   dataAlpha = NULL;
   dataBeta = NULL;
+  data5chAlpha = NULL;
+  data5chBeta = NULL;
   saveCapFlg = false;
   bufferLength = 0;
   min = -1.0;
@@ -51,6 +53,14 @@ PhaseDiffGraphViewer::~PhaseDiffGraphViewer()
     delete dataBeta;
   }
 
+  if (data5chAlpha != NULL) {
+	  delete data5chAlpha;
+  }
+
+  if (data5chBeta != NULL) {
+	  delete data5chBeta;
+  }
+
 }
 
 void PhaseDiffGraphViewer::setup(int _bufferLength, int _offset)
@@ -72,6 +82,14 @@ void PhaseDiffGraphViewer::allocate(int num)
     delete dataBeta;
   }
 
+  if (data5chAlpha != NULL) {
+	  delete data5chAlpha;
+  }
+
+  if (data5chBeta != NULL) {
+	  delete data5chBeta;
+  }
+
   bufferLength = num;
 
   dataAlpha = new float[bufferLength];
@@ -80,9 +98,15 @@ void PhaseDiffGraphViewer::allocate(int num)
   dataBeta = new float[bufferLength];
   memset(dataBeta, 0, sizeof(float)*bufferLength);
 
+  data5chAlpha = new float[bufferLength];
+  memset(data5chAlpha, 0, sizeof(float)*bufferLength);
+
+  data5chBeta = new float[bufferLength];
+  memset(data5chBeta, 0, sizeof(float)*bufferLength);
+
 }
 
-void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
+void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, float _beta5ch, float _peekFreq)
 {
   if (peekFreq != _peekFreq) {
     peekFreq += (_peekFreq - peekFreq) / 2;
@@ -104,8 +128,16 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
   _alpha += diffSampling * (Const::getInstance().EAST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
   _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
 
-  _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().CENTER_ANT];
-  _beta += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().CENTER_ANT];
+  _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT];
+  _beta += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
+
+
+  _alpha5ch += diffSampling * (Const::getInstance().EAST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
+  _beta5ch += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
+
+  _alpha5ch += Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT];
+  _beta5ch += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
+
 
   // 位相反転の時に
   float widAlpha = 0;
@@ -158,6 +190,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
   for (int i = bufferLength - 1; i > 0; i--) {
     dataAlpha[i] = dataAlpha[i - 1];
     dataBeta[i] = dataBeta[i - 1];
+	data5chAlpha[i] = data5chAlpha[i - 1];
+	data5chBeta[i] = data5chBeta[i - 1];
   }
   idx++;
   prevValueAlpha = _alpha;
@@ -165,6 +199,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _peekFreq)
 
   dataAlpha[0] = round(_alpha);
   dataBeta[0] = round(_beta);
+  data5chAlpha[0] = round(_alpha5ch);
+  data5chBeta[0] = round(_beta5ch);
 
 
   // タイマー進める
@@ -207,7 +243,7 @@ void PhaseDiffGraphViewer::draw(float posx, float posy, float w, float h, float 
 
   if (idx < offset) return;
 
-  ofPushStyle();
+  //ofPushStyle();
   ofNoFill();
   ofSetLineWidth(0.5);
   ofSetHexColor(0x555555);
@@ -389,7 +425,36 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     float theta1 = asin(dataAlpha[indexA] / 180) * 180 / M_PI;
     float theta2 = asin(dataBeta[indexB] / 180) * 180 / M_PI;
 
-    std::cerr << "　　　　　　　　　theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
+	// 5chの処理
+	float _theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
+	float _theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
+
+	float __theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
+	float __theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
+
+	int _n = 0;
+	for (int n = 0; n < 5; n++)
+	{
+		__theta1 = asin((data5chAlpha[indexA] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
+		/*if (abs(__theta1 - theta1) <= abs(_theta1 - theta1)) {
+			
+			_n = n;
+		}*/
+		__theta2 = asin((data5chBeta[indexB] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
+		if (abs(__theta2 - theta2) <= abs(_theta2 - theta2)) {
+			_theta1 = __theta1;
+			_theta2 = __theta2;
+			_n = n;
+		}
+	}
+
+    std::cerr << "　　　　　　　　　theta1: " << _theta1 << "  theta2: " << theta2 << std::endl;
+	std::cerr << "　　　　　　　　　5ch theta1: " << _theta1 << "  5ch theta2: " << _theta2 << "  n=" << _n << std::endl;
+
+	theta1 = _theta1;
+	theta2 = _theta2;
+
+
     //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
     float azimuthAngle = atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI + 180;
     if (azimuthAngle > 180) {

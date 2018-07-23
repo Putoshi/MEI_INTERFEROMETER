@@ -66,10 +66,10 @@ void ofApp::setup() {
   ofSetFrameRate(FPS);
   ofBackground(1, 3, 5);
 
-  phaseDiffChAlpha[0] = Const::getInstance().CENTER_ANT;
-  phaseDiffChAlpha[1] = Const::getInstance().EAST_ANT;
-  phaseDiffChBeta[0] = Const::getInstance().CENTER_ANT;
-  phaseDiffChBeta[1] = Const::getInstance().SOUTH_ANT;
+  phaseDiffChAlpha[0] = Const::getInstance().EAST_ANT;
+  phaseDiffChAlpha[1] = Const::getInstance().WEST_ANT;
+  phaseDiffChBeta[0] = Const::getInstance().SOUTH_ANT;
+  phaseDiffChBeta[1] = Const::getInstance().NORTH_ANT;
 
   setupGui();
   
@@ -347,8 +347,11 @@ void ofApp::draw() {
     phaseViewer[i].pushData(phase[i][maxIdxForPhase] / M_PI);
   }
 
-  float _alpha = (phase[phaseDiffChAlpha[0]][maxIdxForPhase] - phase[phaseDiffChAlpha[1]][maxIdxForPhase]) * 180 / M_PI;
-  float _beta = (phase[phaseDiffChBeta[0]][maxIdxForPhase] - phase[phaseDiffChBeta[1]][maxIdxForPhase]) * 180 / M_PI;
+  float _alpha = (phase[phaseDiffChAlpha[1]][maxIdxForPhase] - phase[phaseDiffChAlpha[0]][maxIdxForPhase]) * 180 / M_PI;
+  float _beta = (phase[phaseDiffChBeta[1]][maxIdxForPhase] - phase[phaseDiffChBeta[0]][maxIdxForPhase]) * 180 / M_PI;
+  float _alpha5ch = (phase[phaseDiffChAlpha[1]][maxIdxForPhase] + phase[phaseDiffChAlpha[0]][maxIdxForPhase]) * 180 / M_PI;
+  float _beta5ch = (phase[phaseDiffChBeta[1]][maxIdxForPhase] + phase[phaseDiffChBeta[0]][maxIdxForPhase]) * 180 / M_PI;
+
   if (_alpha > 180) {
     _alpha = -360 + _alpha;
   }
@@ -362,7 +365,20 @@ void ofApp::draw() {
     _beta = 360 + _beta;
   }
 
-  phaseDiffViewer.pushData(_alpha, _beta, peekFreq);
+  if (_alpha5ch > 180) {
+	  _alpha5ch = -360 + _alpha5ch;
+  }
+  else if (_alpha5ch < -180) {
+	  _alpha5ch = 360 + _alpha5ch;
+  }
+  if (_beta5ch > 180) {
+	  _beta5ch = -360 + _beta5ch;
+  }
+  else if (_beta5ch < -180) {
+	  _beta5ch = 360 + _beta5ch;
+  }
+
+  phaseDiffViewer.pushData(_alpha, _beta, _alpha5ch, _beta5ch, peekFreq);
 
   string msg = ofToString((int)ofGetFrameRate()) + " fps";
   ofDrawBitmapString(msg, ofGetWidth() - 80, ofGetHeight() - 20);
