@@ -154,7 +154,7 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
 
   //std::cerr << swingWidthBeta << std::endl;
 
-  if (abs(swingWidthAlpha) < 20) {
+  /*if (abs(swingWidthAlpha) < 20) {
     if (abs(_alpha - prevValueAlpha) > 150) {
       if (_alpha > 150 || _alpha < -150) {
         if (prevValueAlpha > 0) {
@@ -179,13 +179,13 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
         }
       }
     }
-  }
+  }*/
 
-  last4PlotsAlpha.push_back(abs(_alpha) - abs(prevValueAlpha));
+  /*last4PlotsAlpha.push_back(abs(_alpha) - abs(prevValueAlpha));
   if (last4PlotsAlpha.size() > 4) last4PlotsAlpha.erase(last4PlotsAlpha.begin());
 
   last4PlotsBeta.push_back(abs(_beta) - abs(prevValueBeta));
-  if (last4PlotsBeta.size() > 4) last4PlotsBeta.erase(last4PlotsBeta.begin());
+  if (last4PlotsBeta.size() > 4) last4PlotsBeta.erase(last4PlotsBeta.begin());*/
 
   for (int i = bufferLength - 1; i > 0; i--) {
     dataAlpha[i] = dataAlpha[i - 1];
@@ -451,26 +451,31 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     std::cerr << "　　　　　　　　　theta1: " << _theta1 << "  theta2: " << theta2 << std::endl;
 	std::cerr << "　　　　　　　　　5ch theta1: " << _theta1 << "  5ch theta2: " << _theta2 << "  n=" << _n << std::endl;
 
-	theta1 = _theta1;
-	theta2 = _theta2;
+	//theta1 = _theta1;
+	//theta2 = _theta2;
 
 
     //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
-    float azimuthAngle = atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI + 180;
-    if (azimuthAngle > 180) {
+    //float azimuthAngle = atan2f(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI; //  + 180
+	float azimuthAngle = atan2f(cos((90 - theta2) / 180 * M_PI) , cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI; //  + 180
+
+	if (azimuthAngle < 0) {
+		azimuthAngle = 360 + azimuthAngle;
+	}
+    /*if (azimuthAngle > 180) {
       azimuthAngle = 360 - azimuthAngle;
     }
 
     if (azimuthAngle < -180) {
       azimuthAngle = -360 - azimuthAngle;
-    }
+    }*/
 
     float elevationAngle = acos(sqrt(pow(cos((90 - theta1) / 180 * M_PI), 2) + pow(cos((90 - theta2) / 180 * M_PI), 2))) * 180 / M_PI;
 
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "方位角: " << azimuthAngle << "  仰角: " << elevationAngle << std::endl;
 
     string cmd = "curl -X GET \"https://e49lvsoi62.execute-api.ap-northeast-1.amazonaws.com/production/city?azimuth=" + ofToString(azimuthAngle) + "\&elevation=" + ofToString(elevationAngle) + "\"";
-    system(cmd.c_str());
+    //system(cmd.c_str());
 
     label += "Duration(s),DataLength,AvgAlpha,AvgBeta,Theta1,Theta2,AzimuthAngle,ElevationAngle";
     content += ofToString((float)len * 0.025f) + "," + ofToString(len) + "," + ofToString(avgAlpha) + "," + ofToString(avgBeta) + "," + ofToString(theta1) + "," + ofToString(theta2) + "," + ofToString(azimuthAngle) + "," + ofToString(elevationAngle);
