@@ -125,17 +125,17 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
   /*
   1-5ch 12
   */
-  _alpha += diffSampling * (Const::getInstance().EAST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
+  _alpha += diffSampling * (Const::getInstance().WEST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
   _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
 
-  _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT];
+  _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT];
   _beta += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
 
 
-  _alpha5ch += diffSampling * (Const::getInstance().EAST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
+  _alpha5ch += diffSampling * (Const::getInstance().WEST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
   _beta5ch += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
 
-  _alpha5ch += Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT];
+  _alpha5ch += Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT];
   _beta5ch += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
 
 
@@ -425,38 +425,34 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     float theta1 = asin(dataAlpha[indexA] / 180) * 180 / M_PI;
     float theta2 = asin(dataBeta[indexB] / 180) * 180 / M_PI;
 
-	// 5chの処理
-	float _theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
-	float _theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
+    // 5chの処理
+    float _theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
+    float _theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
 
-	float __theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
-	float __theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
+    float __theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
+    float __theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
 
-	int _n = 0;
-	for (int n = 0; n < 5; n++)
-	{
-		__theta1 = asin((data5chAlpha[indexA] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
-		/*if (abs(__theta1 - theta1) <= abs(_theta1 - theta1)) {
-			
-			_n = n;
-		}*/
-		__theta2 = asin((data5chBeta[indexB] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
-		if (abs(__theta2 - theta2) <= abs(_theta2 - theta2)) {
-			_theta1 = __theta1;
-			_theta2 = __theta2;
-			_n = n;
-		}
-	}
+    int _n = 0;
+    for (int n = 0; n < 5; n++)
+    {
+      __theta1 = asin((data5chAlpha[indexA] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
+      __theta2 = asin((data5chBeta[indexB] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
+      if (abs(__theta2 - theta2) <= abs(_theta2 - theta2)) {
+        _theta1 = __theta1;
+        _theta2 = __theta2;
+        _n = n;
+      }
+    }
 
     std::cerr << "　　　　　　　　　theta1: " << _theta1 << "  theta2: " << theta2 << std::endl;
-	std::cerr << "　　　　　　　　　5ch theta1: " << _theta1 << "  5ch theta2: " << _theta2 << "  n=" << _n << std::endl;
+    std::cerr << "　　　　　　　　　5ch theta1: " << _theta1 << "  5ch theta2: " << _theta2 << "  n=" << _n << std::endl;
 
-	theta1 = _theta1;
-	theta2 = _theta2;
+    theta1 = _theta1;
+    theta2 = _theta2;
 
 
     //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
-    float azimuthAngle = atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI + 180;
+    float azimuthAngle = atan2(cos((90 - theta1) / 180 * M_PI) , cos((90 - theta2) / 180 * M_PI) ) * 180 / M_PI + 180;
     if (azimuthAngle > 180) {
       azimuthAngle = 360 - azimuthAngle;
     }
@@ -469,8 +465,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
     std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "方位角: " << azimuthAngle << "  仰角: " << elevationAngle << std::endl;
 
-    string cmd = "curl -X GET \"https://e49lvsoi62.execute-api.ap-northeast-1.amazonaws.com/production/city?azimuth=" + ofToString(azimuthAngle) + "\&elevation=" + ofToString(elevationAngle) + "\"";
-    system(cmd.c_str());
+    //string cmd = "curl -X GET \"https://e49lvsoi62.execute-api.ap-northeast-1.amazonaws.com/production/city?azimuth=" + ofToString(azimuthAngle) + "\&elevation=" + ofToString(elevationAngle) + "\"";
+    //system(cmd.c_str());
 
     label += "Duration(s),DataLength,AvgAlpha,AvgBeta,Theta1,Theta2,AzimuthAngle,ElevationAngle";
     content += ofToString((float)len * 0.025f) + "," + ofToString(len) + "," + ofToString(avgAlpha) + "," + ofToString(avgBeta) + "," + ofToString(theta1) + "," + ofToString(theta2) + "," + ofToString(azimuthAngle) + "," + ofToString(elevationAngle);
