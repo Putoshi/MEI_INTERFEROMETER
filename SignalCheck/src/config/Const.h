@@ -34,10 +34,10 @@ private:
 
     // É`ÉÉÉìÉlÉãÇÃê›íË
     CENTER_ANT = XML.getValue("settings:channel:centerAnt", 0);
-    EAST_ANT = XML.getValue("settings:channel:eastAnt", 4);
+    EAST_ANT = XML.getValue("settings:channel:eastAnt", 3);
     SOUTH_ANT = XML.getValue("settings:channel:southAnt", 2);
-	WEST_ANT = XML.getValue("settings:channel:westAnt", 3);
-	NORTH_ANT = XML.getValue("settings:channel:northAnt", 1);
+    WEST_ANT = XML.getValue("settings:channel:westAnt", 4);
+    NORTH_ANT = XML.getValue("settings:channel:northAnt", 1);
 
     // FPS
     frameRate = XML.getValue("settings:fps", 60);
