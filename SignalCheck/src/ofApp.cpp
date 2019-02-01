@@ -68,8 +68,8 @@ void ofApp::setup() {
 
   phaseDiffChAlpha[0] = Const::getInstance().EAST_ANT;
   phaseDiffChAlpha[1] = Const::getInstance().WEST_ANT;
-  phaseDiffChBeta[0] = Const::getInstance().SOUTH_ANT;
-  phaseDiffChBeta[1] = Const::getInstance().NORTH_ANT;
+  phaseDiffChBeta[0] = Const::getInstance().NORTH_ANT;
+  phaseDiffChBeta[1] = Const::getInstance().SOUTH_ANT;
 
   setupGui();
   
@@ -347,6 +347,7 @@ void ofApp::draw() {
     phaseViewer[i].pushData(phase[i][maxIdxForPhase] / M_PI);
   }
 
+  //東西方向がピンク 南北方向がオレンジ
   float _alpha = (phase[phaseDiffChAlpha[1]][maxIdxForPhase] - phase[phaseDiffChAlpha[0]][maxIdxForPhase]) * 180 / M_PI;
   float _beta = (phase[phaseDiffChBeta[1]][maxIdxForPhase] - phase[phaseDiffChBeta[0]][maxIdxForPhase]) * 180 / M_PI;
   float _alpha5ch = (phase[phaseDiffChAlpha[1]][maxIdxForPhase] + phase[phaseDiffChAlpha[0]][maxIdxForPhase]) * 180 / M_PI;
