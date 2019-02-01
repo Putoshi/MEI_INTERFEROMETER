@@ -35,7 +35,7 @@ public:
     return tab;
   }
 
-  void saveCsv(string _path, string _name, string _label, string _content, string _logAlpha, string _logBeta) {
+  void saveCsv(string _path, string _name, string _label, string _content, string _logAlpha, string _logBeta, string _logAlpha5ch, string _logBeta5ch) {
     string filePath = _path + _name + "/data.csv";
 
     ofBuffer ofbuf;
@@ -50,9 +50,19 @@ public:
     //for (int i = 0; i < x.size(); i++) {
     //  str = str + ofToString(x[i]) + "\r\n"; // \r\nは改行コード
     //}
-    str = _label + "\r\n" + _content + "\r\n\r\n" + "EAST Diff\r\n" + _logAlpha + "\r\n\r\nSOUTH Diff\r\n" + _logBeta + "\r\n";
+    //str = _label + "\r\n" + _content + "\r\n\r\n" + "EAST-WEST Diff\r\n" + _logAlpha + "\r\n\r\nSOUTH-NORTH Diff\r\n" + _logBeta + "\r\n";
     ofbuf.append(str);
     ofBufferToFile(ofToDataPath(filePath), ofbuf);
+
+    string filePathPhase = _path + _name + "/phase.csv";
+    ofBuffer ofbufPhase;
+    string strPhase;
+
+    strPhase = "0.5λ EAST-WEST Diff\r\n" + _logAlpha + "\r\n\r\n0.5λ SOUTH-NORTH Diff\r\n" + _logBeta + "\r\n";
+    strPhase = strPhase + "\r\n\r\n2.5λ EAST-WEST Diff\r\n" + _logAlpha5ch + "\r\n\r\n2.5λ SOUTH-NORTH Diff\r\n" + _logBeta5ch + "\r\n";
+    ofbufPhase.append(strPhase);
+    ofBufferToFile(ofToDataPath(filePathPhase), ofbufPhase);
+    
 
     //ofFile file(filePath);
     //ofBuffer buffer(file);

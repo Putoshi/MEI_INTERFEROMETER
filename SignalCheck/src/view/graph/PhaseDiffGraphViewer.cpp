@@ -325,6 +325,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   string label = "";
   string logAlpha = "";
   string logBeta = "";
+  string logAlpha5ch = "";
+  string logBeta5ch = "";
 
   dispersion = (float)Const::getInstance().thresholdDispersion;
   float minVAlpha = dataAlpha[0];
@@ -343,19 +345,25 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     avgBeta += dataBeta[i - 1];
     minVBeta = std::min(minVBeta, dataBeta[i - 1]);
     maxVBeta = std::max(maxVBeta, dataBeta[i - 1]);
-
-
-    if (i > 1) {
-      logAlpha += ofToString(dataAlpha[i - 1]) + ",";
-      logBeta += ofToString(dataBeta[i - 1]) + ",";
-    }
-    else {
-      logAlpha += ofToString(dataAlpha[i - 1]);
-      logBeta += ofToString(dataBeta[i - 1]);
-    }
   }
   avgAlpha /= len;
   avgBeta /= len;
+
+
+
+  // 位相差のデータを全部記録
+  for (int i = 0; i < bufferLength - 1; i++) {
+    logAlpha += ofToString(dataAlpha[i]) + ",";
+    logBeta += ofToString(dataBeta[i]) + ",";
+    logAlpha5ch += ofToString(data5chAlpha[i]) + ",";
+    logBeta5ch += ofToString(data5chBeta[i]) + ",";
+  }
+  logAlpha.erase(logAlpha.end() - 1);
+  logBeta.erase(logBeta.end() - 1);
+  logAlpha5ch.erase(logAlpha5ch.end() - 1);
+  logBeta5ch.erase(logBeta5ch.end() - 1);
+
+
 
   // 標準偏差
   //float standardDeviation
@@ -431,8 +439,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     std::cerr << LogUtil::getInstance().getIndentStr() + "◆流星検知　duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
     std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Alpha: " << dataAlpha[indexA] << "  回数: " << maxA << std::endl;
     std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Beta: " << dataBeta[indexB] << "  回数: " << maxB << std::endl;
-    std::cerr << LogUtil::getInstance().getIndentStr() + "Alpha: " << logAlpha << std::endl;
-    std::cerr << LogUtil::getInstance().getIndentStr() + "Beta: " << logBeta << std::endl;
+    //std::cerr << LogUtil::getInstance().getIndentStr() + "Alpha: " << logAlpha << std::endl;
+    //std::cerr << LogUtil::getInstance().getIndentStr() + "Beta: " << logBeta << std::endl;
     std::cerr << LogUtil::getInstance().getIndentStr() + "Alpha 最大: " << maxVAlpha <<  " 最小: " << minVAlpha << " 平均: " << avgAlpha << std::endl;
     std::cerr << LogUtil::getInstance().getIndentStr() + "Beta 最大: " << maxVBeta << " 最小: " << minVBeta << " 平均: " << avgBeta << std::endl;
     //std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
@@ -518,7 +526,7 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
     }
 
     // CSV残す
-    if (Const::getInstance().enableLogCsv) LogUtil::getInstance().saveCsv(Const::getInstance().DST_PATH, time, label, content, logAlpha, logBeta);
+    if (Const::getInstance().enableLogCsv) LogUtil::getInstance().saveCsv(Const::getInstance().DST_PATH, time, label, content, logAlpha, logBeta, logAlpha5ch, logBeta5ch);
     
     // DailyのCSV
     string dateStr = ofSplitString(time, "_")[0];
