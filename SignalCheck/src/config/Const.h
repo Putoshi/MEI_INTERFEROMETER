@@ -82,12 +82,11 @@ private:
     thresholdAmp = XML.getValue("settings:threshold:amp", 1);
 
     // ì‡ïîà ëäç∑
-    antPhaseDiff.resize(5);
-    antPhaseDiff[0] = XML.getValue("settings:antenna:phasediff0", 0);
-    antPhaseDiff[1] = XML.getValue("settings:antenna:phasediff1", 0);
-    antPhaseDiff[2] = XML.getValue("settings:antenna:phasediff2", 0);
-    antPhaseDiff[3] = XML.getValue("settings:antenna:phasediff3", 0);
-    antPhaseDiff[4] = XML.getValue("settings:antenna:phasediff4", 0);
+    antPhaseDiff.resize(4);
+    antPhaseDiff[0] = XML.getValue("settings:antenna:phasediff_EW_0.5", 0);
+    antPhaseDiff[1] = XML.getValue("settings:antenna:phasediff_SN_0.5", 0);
+    antPhaseDiff[2] = XML.getValue("settings:antenna:phasediff_EW_2.5", 0);
+    antPhaseDiff[3] = XML.getValue("settings:antenna:phasediff_SN_2.5", 0);
 
     //delete[] cstr; // ÉÅÉÇÉäâï˙
 
@@ -132,11 +131,10 @@ public:
     XML.setValue("settings:threshold:dispersion", thresholdDispersion);
     XML.setValue("settings:threshold:bipolar", thresholdBipolar);
     XML.setValue("settings:threshold:amp", thresholdAmp);
-    XML.setValue("settings:antenna:phasediff0", antPhaseDiff[0]);
-    XML.setValue("settings:antenna:phasediff1", antPhaseDiff[1]);
-    XML.setValue("settings:antenna:phasediff2", antPhaseDiff[2]);
-    XML.setValue("settings:antenna:phasediff3", antPhaseDiff[3]);
-    XML.setValue("settings:antenna:phasediff4", antPhaseDiff[4]);
+    XML.setValue("settings:antenna:phasediff_EW_0.5", antPhaseDiff[0]);
+    XML.setValue("settings:antenna:phasediff_SN_0.5", antPhaseDiff[1]);
+    XML.setValue("settings:antenna:phasediff_EW_2.5", antPhaseDiff[2]);
+    XML.setValue("settings:antenna:phasediff_SN_2.5", antPhaseDiff[3]);
 
     XML.save("settings.xml");
   };

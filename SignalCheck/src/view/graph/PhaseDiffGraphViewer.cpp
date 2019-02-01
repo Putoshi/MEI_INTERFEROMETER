@@ -130,8 +130,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
   _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().NORTH_ANT);
 
   //0.5λの内部位相差パラメータの計算
-  _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT];
-  _beta += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
+  _alpha += Const::getInstance().antPhaseDiff[0];
+  _beta += Const::getInstance().antPhaseDiff[1];
 
 
   //サンプリング時のズレの計算
@@ -139,8 +139,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
   _beta5ch += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().NORTH_ANT);
 
   //2.5λの内部位相差パラメータの計算
-  _alpha5ch += Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT];
-  _beta5ch += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
+  _alpha5ch += Const::getInstance().antPhaseDiff[2];
+  _beta5ch += Const::getInstance().antPhaseDiff[3];
 
 
   // 位相反転の時に

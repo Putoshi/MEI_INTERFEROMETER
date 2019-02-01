@@ -101,7 +101,6 @@ private:
   ofxIntSlider antPhaseDiff1;
   ofxIntSlider antPhaseDiff2;
   ofxIntSlider antPhaseDiff3;
-  ofxIntSlider antPhaseDiff4;
   ofxGuiGroup gui;
   ofxGuiGroup saveGroupGui;
   ofxGuiGroup thresholdGroupGui;
@@ -124,6 +123,5 @@ private:
   void onGuiChangeAntPhaseDiff1(int & n);
   void onGuiChangeAntPhaseDiff2(int & n);
   void onGuiChangeAntPhaseDiff3(int & n);
-  void onGuiChangeAntPhaseDiff4(int & n);
 
 };

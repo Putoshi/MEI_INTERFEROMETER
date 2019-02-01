@@ -513,20 +513,18 @@ void ofApp::setupGui() {
   thresholdGroupGui.add(thresholdAmp.setup(" Amp", Const::getInstance().thresholdAmp, 1, 20));
   thresholdAmp.addListener(this, &ofApp::onGuiChangeAmp);
 
-  thresholdGroupGui.add(antPhaseDiff0.setup(" PhaseDiff Offset 0 (deg)", Const::getInstance().antPhaseDiff[0], -180, 180));
+  thresholdGroupGui.add(antPhaseDiff0.setup(" PhaseDiff 0.5É… EAST-WEST (deg)", Const::getInstance().antPhaseDiff[0], 0, 360));
   antPhaseDiff0.addListener(this, &ofApp::onGuiChangeAntPhaseDiff0);
 
-  thresholdGroupGui.add(antPhaseDiff1.setup(" PhaseDiff Offset 1 (deg)", Const::getInstance().antPhaseDiff[1], -180, 180));
+  thresholdGroupGui.add(antPhaseDiff1.setup(" PhaseDiff 0.5É… SOUTH-NORTH (deg)", Const::getInstance().antPhaseDiff[1], 0, 360));
   antPhaseDiff1.addListener(this, &ofApp::onGuiChangeAntPhaseDiff1);
 
-  thresholdGroupGui.add(antPhaseDiff2.setup(" PhaseDiff Offset 2 (deg)", Const::getInstance().antPhaseDiff[2], -180, 180));
+  thresholdGroupGui.add(antPhaseDiff2.setup(" PhaseDiff 2.5É… EAST-WEST (deg)", Const::getInstance().antPhaseDiff[2], 0, 360));
   antPhaseDiff2.addListener(this, &ofApp::onGuiChangeAntPhaseDiff2);
 
-  thresholdGroupGui.add(antPhaseDiff3.setup(" PhaseDiff Offset 3 (deg)", Const::getInstance().antPhaseDiff[3], -180, 180));
+  thresholdGroupGui.add(antPhaseDiff3.setup(" PhaseDiff 2.5É… SOUTH-NORTH (deg)", Const::getInstance().antPhaseDiff[3], 0, 360));
   antPhaseDiff3.addListener(this, &ofApp::onGuiChangeAntPhaseDiff3);
 
-  thresholdGroupGui.add(antPhaseDiff4.setup(" PhaseDiff Offset 4 (deg)", Const::getInstance().antPhaseDiff[4], -180, 180));
-  antPhaseDiff4.addListener(this, &ofApp::onGuiChangeAntPhaseDiff4);
 
   
 }
@@ -649,13 +647,6 @@ void ofApp::onGuiChangeAntPhaseDiff2(int & n) {
 void ofApp::onGuiChangeAntPhaseDiff3(int & n) {
   //std::cerr << "onGuiChangeAntPhaseDiff3: " << n << std::endl;
   Const::getInstance().antPhaseDiff[3] = n;
-  Const::getInstance().saveXml();
-}
-
-//--------------------------------------------------------------
-void ofApp::onGuiChangeAntPhaseDiff4(int & n) {
-  //std::cerr << "onGuiChangeAntPhaseDiff4: " << n << std::endl;
-  Const::getInstance().antPhaseDiff[4] = n;
   Const::getInstance().saveXml();
 }
 
