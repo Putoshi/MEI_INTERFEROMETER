@@ -125,16 +125,20 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
   /*
   1-5ch 12
   */
-  _alpha += diffSampling * (Const::getInstance().WEST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
-  _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
+  //サンプリング時のズレの計算
+  _alpha += diffSampling * (Const::getInstance().WEST_ANT - Const::getInstance().EAST_ANT); //20  1-5ch 12
+  _beta += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().NORTH_ANT);
 
+  //0.5λの内部位相差パラメータの計算
   _alpha += Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT];
   _beta += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] - Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
 
 
-  _alpha5ch += diffSampling * (Const::getInstance().WEST_ANT - Const::getInstance().CENTER_ANT); //20  1-5ch 12
-  _beta5ch += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().CENTER_ANT);
+  //サンプリング時のズレの計算
+  _alpha5ch += diffSampling * (Const::getInstance().WEST_ANT - Const::getInstance().EAST_ANT); //20  1-5ch 12
+  _beta5ch += diffSampling * (Const::getInstance().SOUTH_ANT - Const::getInstance().NORTH_ANT);
 
+  //2.5λの内部位相差パラメータの計算
   _alpha5ch += Const::getInstance().antPhaseDiff[Const::getInstance().WEST_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().EAST_ANT];
   _beta5ch += Const::getInstance().antPhaseDiff[Const::getInstance().SOUTH_ANT] + Const::getInstance().antPhaseDiff[Const::getInstance().NORTH_ANT];
 
@@ -190,8 +194,8 @@ void PhaseDiffGraphViewer::pushData(float _alpha, float _beta, float _alpha5ch, 
   for (int i = bufferLength - 1; i > 0; i--) {
     dataAlpha[i] = dataAlpha[i - 1];
     dataBeta[i] = dataBeta[i - 1];
-	data5chAlpha[i] = data5chAlpha[i - 1];
-	data5chBeta[i] = data5chBeta[i - 1];
+    data5chAlpha[i] = data5chAlpha[i - 1];
+    data5chBeta[i] = data5chBeta[i - 1];
   }
   idx++;
   prevValueAlpha = _alpha;
@@ -381,6 +385,12 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   //minVAlpha = maxVAlpha = avgAlpha = -96.3; // theta1=-32.3, theta2=4.78, 方位角=171.3, 仰角=57.3
   //minVBeta = maxVBeta = avgBeta = 14.9;
 
+  //minVAlpha = maxVAlpha = avgAlpha = 138.7;
+  //minVBeta = maxVBeta = avgBeta = 66.1;
+
+  //minVAlpha = maxVAlpha = avgAlpha = -96.3;
+  //minVBeta = maxVBeta = avgBeta = 14.9;
+
 
   // 最頻値の計算
   int maxA = 0, cntA = 0, indexA = 0;
@@ -419,51 +429,74 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   if ((standardDeviationAlpha <= dispersion && standardDeviationBeta <= dispersion) || Const::getInstance().enableDebug) {
     isError = false;
     std::cerr << LogUtil::getInstance().getIndentStr() + "◆流星検知　duration: " << (float)len * 0.025f << "s: " << "  len: " << len << "  avgAlpha:" << avgAlpha << "  avgBeta:" << avgBeta << std::endl;
-    std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Alpha: " << dataAlpha[indexA] << std::endl;
-    std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Beta: " << dataBeta[indexB] << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Alpha: " << dataAlpha[indexA] << "  回数: " << maxA << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "最頻値Beta: " << dataBeta[indexB] << "  回数: " << maxB << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "Alpha: " << logAlpha << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "Beta: " << logBeta << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "Alpha 最大: " << maxVAlpha <<  " 最小: " << minVAlpha << " 平均: " << avgAlpha << std::endl;
+    std::cerr << LogUtil::getInstance().getIndentStr() + "Beta 最大: " << maxVBeta << " 最小: " << minVBeta << " 平均: " << avgBeta << std::endl;
+    //std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Alpha: " << standardDeviationAlpha << std::endl;
+    //std::cerr << LogUtil::getInstance().getIndentStr() + "標準偏差Beta: " << standardDeviationBeta << std::endl;
 
-    float theta1 = asin(dataAlpha[indexA] / 180) * 180 / M_PI;
-    float theta2 = asin(dataBeta[indexB] / 180) * 180 / M_PI;
+    // 0.5λの処理 thetaは到来角
+    //dataAlpha[indexA] = avgAlpha;
+    //dataBeta[indexB] = avgBeta;
 
-    // 5chの処理
-    float _theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
-    float _theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
+    float d = 0.5;
+    int n = 0;
+    float theta1 = asin((dataAlpha[indexA] / (2 * d * 180) - (float)n / d * M_PI / 180)) * 180 / M_PI;
+    float theta2 = asin((dataBeta[indexB] / (2 * d * 180) - (float)n / d * M_PI / 180)) * 180 / M_PI;
 
-    float __theta1 = asin((data5chAlpha[indexA] / 5) / 180) * 180 / M_PI;
-    float __theta2 = asin((data5chBeta[indexB] / 5) / 180) * 180 / M_PI;
 
+    std::cerr << "　　　　　　　　　theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
+
+    float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
+    float elevationAngle = acos(sqrt(pow(cos((90 - theta1) / 180 * M_PI), 2) + pow(cos((90 - theta2) / 180 * M_PI), 2))) * 180 / M_PI;
+
+   
+
+    // 2.5λの処理
+    float _theta1 = 0;
+    float _theta2 = 0;
+
+    float near_azimuthAngle = 9999;
+    float near_elevationAngle = 9999;
+    float __azimuthAngle = 9999;
+    float __elevationAngle = 9999;
+
+    d = 2.5;
     int _n = 0;
-    for (int n = 0; n < 5; n++)
+    for (int n = -2; n < 2 + 1; n++)
     {
-      __theta1 = asin((data5chAlpha[indexA] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
-      __theta2 = asin((data5chBeta[indexB] / 5 - (float)n / 2.5) / 180) * 180 / M_PI;
-      if (abs(__theta2 - theta2) <= abs(_theta2 - theta2)) {
-        _theta1 = __theta1;
-        _theta2 = __theta2;
+      _theta1 = asin((data5chAlpha[indexA] / (2 * d * 180) - (float)n / d * M_PI / 180)) * 180 / M_PI;
+      _theta2 = asin((data5chBeta[indexB] / (2 * d * 180) - (float)n / d * M_PI / 180)) * 180 / M_PI;
+
+     
+
+      __azimuthAngle = 180 - atan(cos((90 - _theta2) / 180 * M_PI) / cos((90 - _theta1) / 180 * M_PI)) * 180 / M_PI;
+      __elevationAngle = acos(sqrt(pow(cos((90 - _theta1) / 180 * M_PI), 2) + pow(cos((90 - _theta2) / 180 * M_PI), 2))) * 180 / M_PI;
+
+      std::cerr << "　　　　　　　　　5ch azimuthAngle: " << __azimuthAngle << "  elevationAngle: " << __elevationAngle << "  n: " << n << std::endl;
+
+      // 最も近い値を出す処理
+      if (abs(__azimuthAngle - azimuthAngle) + abs(__elevationAngle - elevationAngle) <= abs(near_azimuthAngle - azimuthAngle) + abs(near_elevationAngle - elevationAngle)) {
+        near_azimuthAngle = __azimuthAngle;
+        near_elevationAngle = __elevationAngle;
         _n = n;
       }
     }
 
-    std::cerr << "　　　　　　　　　theta1: " << _theta1 << "  theta2: " << theta2 << std::endl;
-    std::cerr << "　　　　　　　　　5ch theta1: " << _theta1 << "  5ch theta2: " << _theta2 << "  n=" << _n << std::endl;
+    std::cerr << "　　　　　　　　　azimuthAngle: " << azimuthAngle << "  elevationAngle: " << elevationAngle << std::endl;
+    std::cerr << "　　　　　　　　　5ch azimuthAngle: " << __azimuthAngle << "  elevationAngle: " << __elevationAngle << "  n: " << _n << std::endl;
 
-    theta1 = _theta1;
-    theta2 = _theta2;
-
-
-    //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
-    float azimuthAngle = atan2(cos((90 - theta1) / 180 * M_PI) , cos((90 - theta2) / 180 * M_PI) ) * 180 / M_PI + 180;
-    if (azimuthAngle > 180) {
+    //float azimuthAngle = atan2(cos((90 - theta2) / 180 * M_PI) , cos((90 - theta1) / 180 * M_PI) ) * 180 / M_PI + 180;
+    /*if (azimuthAngle > 180) {
       azimuthAngle = 360 - azimuthAngle;
     }
 
     if (azimuthAngle < -180) {
       azimuthAngle = -360 - azimuthAngle;
-    }
-
-    float elevationAngle = acos(sqrt(pow(cos((90 - theta1) / 180 * M_PI), 2) + pow(cos((90 - theta2) / 180 * M_PI), 2))) * 180 / M_PI;
-
-    std::cerr << LogUtil::getInstance().getIndentStr() + LogUtil::getInstance().getTabStr() + "方位角: " << azimuthAngle << "  仰角: " << elevationAngle << std::endl;
+    }*/
 
     //string cmd = "curl -X GET \"https://e49lvsoi62.execute-api.ap-northeast-1.amazonaws.com/production/city?azimuth=" + ofToString(azimuthAngle) + "\&elevation=" + ofToString(elevationAngle) + "\"";
     //system(cmd.c_str());
