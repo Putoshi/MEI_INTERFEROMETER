@@ -458,7 +458,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
     std::cerr << "　　　　　　　　　theta1: " << theta1 << "  theta2: " << theta2 << std::endl;
 
-    float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
+    //float azimuthAngle = 180 - atan(cos((90 - theta2) / 180 * M_PI) / cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
+    float azimuthAngle = atan2(cos((90 - theta2) / 180 * M_PI) , cos((90 - theta1) / 180 * M_PI)) * 180 / M_PI;
     float elevationAngle = acos(sqrt(pow(cos((90 - theta1) / 180 * M_PI), 2) + pow(cos((90 - theta2) / 180 * M_PI), 2))) * 180 / M_PI;
 
    
@@ -481,7 +482,8 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
 
      
 
-      __azimuthAngle = 180 - atan(cos((90 - _theta2) / 180 * M_PI) / cos((90 - _theta1) / 180 * M_PI)) * 180 / M_PI;
+      //__azimuthAngle = 180 - atan(cos((90 - _theta2) / 180 * M_PI) / cos((90 - _theta1) / 180 * M_PI)) * 180 / M_PI;
+      __azimuthAngle = atan2(cos((90 - _theta2) / 180 * M_PI) , cos((90 - _theta1) / 180 * M_PI)) * 180 / M_PI;
       __elevationAngle = acos(sqrt(pow(cos((90 - _theta1) / 180 * M_PI), 2) + pow(cos((90 - _theta2) / 180 * M_PI), 2))) * 180 / M_PI;
 
       std::cerr << "　　　　　　　　　5ch azimuthAngle: " << __azimuthAngle << "  elevationAngle: " << __elevationAngle << "  n: " << n << std::endl;
