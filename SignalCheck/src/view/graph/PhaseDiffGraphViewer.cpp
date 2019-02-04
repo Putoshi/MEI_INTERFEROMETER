@@ -393,7 +393,7 @@ void PhaseDiffGraphViewer::culcDiff(int _lifetime)
   //minVAlpha = maxVAlpha = avgAlpha = -96.3; // theta1=-32.3, theta2=4.78, •ûˆÊŠp=171.3, ‹ÂŠp=57.3
   //minVBeta = maxVBeta = avgBeta = 14.9;
 
-  //minVAlpha = maxVAlpha = avgAlpha = 138.7;
+  //minVAlpha = maxVAlpha = avgAlpha = -138.7;
   //minVBeta = maxVBeta = avgBeta = 66.1;
 
   //minVAlpha = maxVAlpha = avgAlpha = -96.3;
