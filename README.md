@@ -8,7 +8,7 @@
 
 
 ## About meteor echo interferometer
-[流星電波干渉計開発について](https://github.com/Putoshi/MEI_INTERFEROMETER/MEI_intro.pdf)
+[流星電波干渉計開発について](MEI_intro.pdf)
 
 ## collaborative research
 [新HRO干渉計システムにおけるリアルタイム解析手法の確立と流星総合
